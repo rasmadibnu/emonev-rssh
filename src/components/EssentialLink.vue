@@ -8,7 +8,7 @@
       <q-item-label>{{ title }}</q-item-label>
     </q-item-section>
   </q-item>
-  <q-expansion-item v-else class="tw-px-0" header-class="tw-px-6">
+  <q-expansion-item v-else class="!tw-px-0" header-class="tw-px-6">
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar>
