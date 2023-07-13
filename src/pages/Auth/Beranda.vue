@@ -1,6 +1,6 @@
 <template>
-  <q-page class="tw-p-8 tw-space-y-4">
-    <div class="tw-text-3xl">Beranda</div>
+  <q-page class="tw-p-6">
+    <div class="tw-text-3xl tw-mb-4">Beranda</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Informasi</q-card-section

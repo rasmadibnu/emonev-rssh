@@ -1,6 +1,6 @@
 <template>
-  <q-page class="tw-p-8 tw-space-y-4">
-    <div class="tw-text-3xl">Penginputan</div>
+  <q-page class="tw-p-6">
+    <div class="tw-text-3xl tw-mb-4">Penginputan</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
@@ -12,7 +12,29 @@
               <tr class="q-tr--no-hover">
                 <td :class="inp.class">{{ inp.code }}</td>
                 <td :class="inp.class">{{ inp.label }}</td>
-                <td>
+                <td class="md:tw-block tw-hidden">
+                  <q-select
+                    dense
+                    filled
+                    v-if="inp.type == 'select'"
+                    v-model="inp.value"
+                    :label="inp.placeholder"
+                    :options="inp.options"
+                  ></q-select>
+                  <q-input
+                    v-else-if="inp.type == 'text'"
+                    dense
+                    filled
+                    mask="###.###.###.###.###.###.###.###.###.###"
+                    reverse-fill-mask
+                    unmasked-value
+                    prefix="Rp"
+                    v-model="inp.value"
+                  />
+                </td>
+              </tr>
+              <tr class="tw-table-row md:tw-hidden">
+                <td colspan="100%">
                   <q-select
                     dense
                     filled

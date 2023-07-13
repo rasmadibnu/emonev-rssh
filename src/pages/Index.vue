@@ -1,14 +1,14 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="tw-font-['Sen']">
-    <q-header reveal class="bg-white text-primary">
+  <q-layout v-scroll="onScroll" view="hHh lpR fFf" class="tw-font-['Sen']">
+    <q-header reveal v-model="isReveal" class="bg-white text-primary">
       <q-toolbar>
         <div
           class="tw-font-bold tw-py-3 text-center tw-flex tw-justify-center tw-flex-col tw-w-full"
         >
-          <div class="tw-text-2xl">
+          <div class="tw-text-4xl">
             <span class="text-secondary">e</span>Monev
           </div>
-          <div class="tw-uppercase tw-text-md text-center">
+          <div class="tw-uppercase tw-text-xs md:tw-text-lg text-center">
             Electronic Monitoring Evaluasi dan Sinkronisasi Capaian Program<br />
             Pengendalian Penyakit RPJMN
           </div>
@@ -105,12 +105,11 @@
     </q-page-container>
   </q-layout>
 </template>
-<style>
-.my-select .q-field__native,
-.q-field__prefix,
-.q-field__suffix,
-.q-field__input,
-.q-field__append > .q-icon {
+<style lang="scss" scoped>
+.my-select :deep(.q-field__native) {
+  color: white;
+}
+.my-select :deep(.q-icon) {
   color: white;
 }
 </style>
@@ -384,6 +383,7 @@ export default defineComponent({
     ];
 
     return {
+      isReveal: ref(true),
       series: [
         {
           data: [0, 14.3, 41.9, 25.7, 40],
@@ -554,6 +554,15 @@ export default defineComponent({
       },
       tahun: ref("Tahun 2023"),
     };
+  },
+  methods: {
+    onScroll(position) {
+      if (position > 100) {
+        this.isReveal = false;
+      } else {
+        this.isReveal = true;
+      }
+    },
   },
 });
 </script>

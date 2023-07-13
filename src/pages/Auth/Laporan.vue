@@ -1,7 +1,7 @@
 <template>
-  <q-page class="tw-p-8 tw-space-y-4">
-    <div class="tw-text-3xl">Laporan</div>
-    <q-card flat>
+  <q-page class="tw-p-6">
+    <div class="tw-text-3xl tw-mb-4">Laporan</div>
+    <q-card flat class="tw-mb-6">
       <q-card-section class="text-primary tw-font-bold">
         Informasi
       </q-card-section>
@@ -24,7 +24,50 @@
       <q-card-section class="text-primary tw-font-bold">
         Rekapitulasi Belanja ATM
       </q-card-section>
-      <q-card-section> </q-card-section>
+      <q-card-section>
+        <q-markup-table dense flat bordered separator="cell">
+          <thead>
+            <tr class="text-center">
+              <td rowspan="2">No</td>
+              <td rowspan="2">Provinsi</td>
+              <td rowspan="2">Kabupaten / Kota</td>
+              <td colspan="4" class="text-center">
+                UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
+              </td>
+              <td rowspan="2">Total ATM Provinsi</td>
+              <td colspan="4" class="text-center">
+                Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
+              </td>
+            </tr>
+            <tr class="text-center">
+              <td>AIDS</td>
+              <td>TBC</td>
+              <td>MALARIA</td>
+              <td>Total ATM</td>
+              <td>AIDS</td>
+              <td>TBC</td>
+              <td>MALARIA</td>
+              <td>Total ATM</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="index in 15" v-bind:key="index">
+              <td>{{ index }}</td>
+              <td>Bali</td>
+              <td>Denpasar</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+              <td>Rp 1.200.000.000</td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card-section>
     </q-card>
   </q-page>
 </template>

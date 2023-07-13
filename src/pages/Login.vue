@@ -13,12 +13,12 @@
           box-shadow: rgba(0, 0, 0, 0.5) 0 0 0 1000000px inset;
         "
       >
-        <div class="tw-text-2xl tw-font-bold tw-text-white">
+        <div class="md:tw-text-2xl tw-text-md tw-font-bold tw-text-white">
           Resilient and Sustainable System for Health (RSSH)<br />AIDS -
           Tuberculosis - Malaria (ATM)
         </div>
-        <q-card style="min-width: 400px">
-          <q-card-section class="tw-mt-4 tw-my-4 text-primary">
+        <q-card class="tw-w-80 md:tw-w-96">
+          <q-card-section class="tw-mt-4 md:tw-my-4 text-primary">
             <div class="tw-text-3xl tw-font-bold">
               <span class="text-secondary">e</span>Monev
             </div>
@@ -59,7 +59,7 @@
         <q-btn
           flat
           label="Lihat Dashabord"
-          :to="{ name: 'index' }"
+          :to="{ name: 'dashboard' }"
           no-caps
           color="white"
         />

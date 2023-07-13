@@ -1,5 +1,5 @@
 <template>
-  <q-item :to="{ name: link }">
+  <q-item v-if="childs.length < 1" clickable :to="{ name: link }">
     <q-item-section v-if="icon" avatar>
       <vx-icon :iconName="icon" :size="24" />
     </q-item-section>
@@ -8,6 +8,27 @@
       <q-item-label>{{ title }}</q-item-label>
     </q-item-section>
   </q-item>
+  <q-expansion-item v-else class="tw-px-0" header-class="tw-px-6">
+    <template v-slot:header>
+      <q-item-section avatar>
+        <q-avatar>
+          <vx-icon :iconName="icon" :size="24" />
+        </q-avatar>
+      </q-item-section>
+
+      <q-item-section class="tw-pl-2">
+        {{ title }}
+      </q-item-section>
+    </template>
+    <q-list>
+      <essential-link
+        class="tw-px-16"
+        v-for="child in childs"
+        v-bind="child"
+        v-bind:key="child"
+      />
+    </q-list>
+  </q-expansion-item>
 </template>
 
 <script>
@@ -36,6 +57,10 @@ export default defineComponent({
     icon: {
       type: String,
       default: "",
+    },
+    childs: {
+      type: Array,
+      default: () => [],
     },
   },
 });

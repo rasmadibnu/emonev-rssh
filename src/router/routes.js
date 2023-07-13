@@ -1,6 +1,6 @@
 const routes = [
   {
-    path: "/beranda",
+    path: "/dashboard",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
