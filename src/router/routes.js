@@ -4,17 +4,36 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "/beranda",
+        path: "beranda",
         component: () => import("pages/Auth/Beranda.vue"),
         name: "beranda",
       },
+
       {
-        path: "/penginputan",
+        path: "profile",
+        component: () => import("pages/Auth/Profile.vue"),
+        name: "profile",
+      },
+      {
+        path: "administrator",
+        component: () => import("pages/Auth/Administrator/Index.vue"),
+        name: "administrator",
+        children: [
+          {
+            path: "users",
+            component: () => import("pages/Auth/Administrator/Users.vue"),
+            name: "users",
+          },
+        ],
+      },
+
+      {
+        path: "penginputan",
         component: () => import("pages/Auth/Penginputan.vue"),
         name: "penginputan",
       },
       {
-        path: "/laporan",
+        path: "laporan",
         component: () => import("pages/Auth/Laporan.vue"),
         name: "laporan",
       },

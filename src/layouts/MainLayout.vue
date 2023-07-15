@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="tw-font-['Sen']">
+  <q-layout view="lHh Lpr lFf">
     <q-header reveal>
       <q-toolbar class="tw-py-2.5">
         <q-btn
@@ -19,9 +19,71 @@
           dense
           flat
           color="white"
+          v-if="!$q.platform.is.mobile"
           @click="$q.fullscreen.toggle()"
-          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-        />
+        >
+          <q-avatar size="sm">
+            <q-icon
+              :name="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+            />
+          </q-avatar>
+        </q-btn>
+        <q-btn dense flat>
+          <q-avatar size="sm">
+            <q-img src="~assets/profile.svg" />
+          </q-avatar>
+          <q-menu class="tw-shadow-none tw-border tw-rounded-lg">
+            <q-list>
+              <q-item>
+                <q-item-section avatar>
+                  <q-img src="~assets/profile.svg" />
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label>Richard Petersen</q-item-label>
+                  <q-item-label caption lines="2"
+                    >richard@simadinkes.org</q-item-label
+                  >
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-ripple :to="{ name: 'profile' }">
+                <q-item-section avatar>
+                  <VxIcon
+                    iconName="ProfileCircle"
+                    class="tw-text-gray-500"
+                    :size="22"
+                  />
+                </q-item-section>
+
+                <q-item-section>Pengaturan Akun</q-item-section>
+              </q-item>
+              <q-item clickable v-ripple :to="{ name: 'users' }">
+                <q-item-section avatar>
+                  <VxIcon
+                    iconName="Setting2"
+                    class="tw-text-gray-500"
+                    :size="22"
+                  />
+                </q-item-section>
+
+                <q-item-section>Administrator</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item
+                clickable
+                v-ripple
+                @click="confirm_logout = true"
+                class="text-negative"
+              >
+                <q-item-section avatar>
+                  <VxIcon iconName="Logout" :size="22" />
+                </q-item-section>
+
+                <q-item-section>Logout</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -44,7 +106,7 @@
           v-bind="link"
         />
 
-        <q-item
+        <!-- <q-item
           clickable
           @click="confirm_logout = true"
           class="tw-px-8 text-negative"
@@ -56,7 +118,7 @@
           <q-item-section>
             <q-item-label>Logout</q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item> -->
       </q-list>
     </q-drawer>
 
@@ -117,38 +179,38 @@ const linksList = [
     icon: "Printer",
     link: "#",
   },
-  {
-    title: "Management",
-    icon: "Setting4",
-    link: "#",
-    childs: [
-      {
-        title: "Pengguna",
-        icon: "Profile2User",
-        link: "#",
-      },
-      {
-        title: "Group",
-        icon: "Category2",
-        link: "#",
-      },
-      {
-        title: "Role",
-        icon: "UserOctagon",
-        link: "#",
-      },
-      {
-        title: "Provinsi",
-        icon: "Map",
-        link: "#",
-      },
-      {
-        title: "Kabupaten / Kota",
-        icon: "Map1",
-        link: "#",
-      },
-    ],
-  },
+  // {
+  //   title: "Management",
+  //   icon: "Setting4",
+  //   link: "#",
+  //   childs: [
+  //     {
+  //       title: "Pengguna",
+  //       icon: "Profile2User",
+  //       link: "#",
+  //     },
+  //     {
+  //       title: "Group",
+  //       icon: "Category2",
+  //       link: "#",
+  //     },
+  //     {
+  //       title: "Role",
+  //       icon: "UserOctagon",
+  //       link: "#",
+  //     },
+  //     {
+  //       title: "Provinsi",
+  //       icon: "Map",
+  //       link: "#",
+  //     },
+  //     {
+  //       title: "Kabupaten / Kota",
+  //       icon: "Map1",
+  //       link: "#",
+  //     },
+  //   ],
+  // },
 ];
 
 export default defineComponent({

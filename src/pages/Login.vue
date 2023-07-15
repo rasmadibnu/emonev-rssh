@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="tw-font-['Sen']">
+  <q-layout>
     <q-page-container>
       <q-page
         class="flex flex-center text-flex tw-flex-col tw-text-center tw-space-y-8"

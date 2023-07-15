@@ -1,5 +1,5 @@
 <template>
-  <q-layout v-scroll="onScroll" view="hHh lpR fFf" class="tw-font-['Sen']">
+  <q-layout v-scroll="onScroll" view="hHh lpR fFf">
     <q-header reveal v-model="isReveal" class="bg-white text-primary">
       <q-toolbar>
         <div
