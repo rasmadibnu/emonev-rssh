@@ -11,9 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Electronic Monitoring & Evaluation System
-        </q-toolbar-title>
+        <q-toolbar-title> Monitoring & Evaluation System </q-toolbar-title>
 
         <q-btn
           dense

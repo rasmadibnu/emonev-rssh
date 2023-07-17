@@ -9,7 +9,7 @@
             <span class="text-secondary">e</span>Monev
           </div>
           <div class="tw-uppercase tw-text-xs md:tw-text-lg text-center">
-            Electronic Monitoring Evaluasi dan Sinkronisasi Capaian Program<br />
+            Monitoring Evaluasi dan Sinkronisasi Capaian Program<br />
             Pengendalian Penyakit RPJMN
           </div>
         </div>
@@ -32,7 +32,7 @@
               ></apex>
             </q-card-section>
           </q-card>
-          <q-card flat>
+          <!-- <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
               Rekapitulasi Anggaran ATM {{ tahun }}
             </q-card-section>
@@ -44,7 +44,7 @@
                 :series="series2"
               ></apex>
             </q-card-section>
-          </q-card>
+          </q-card> -->
           <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
               Persentase Anggaran ATM Terhadap Bidang Kesehatan
