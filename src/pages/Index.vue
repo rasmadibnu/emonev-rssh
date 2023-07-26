@@ -9,8 +9,8 @@
             <span class="text-secondary">e</span>Monev
           </div>
           <div class="tw-uppercase tw-text-xs md:tw-text-lg text-center">
-            Monitoring Evaluasi dan Sinkronisasi Capaian Program<br />
-            Pengendalian Penyakit RPJMN
+            Sistem Informasi ADINKES<br />
+            Monitoring Evaluasi Capaian RSSH - ATM
           </div>
         </div>
       </q-toolbar>
@@ -53,21 +53,35 @@
               <apex
                 type="bar"
                 height="350"
-                :options="chartOptions3"
-                :series="series3"
+                :options="chartOptionsPercentage"
+                :series="seriesPercentage"
+                ref="chartPercentage"
               ></apex>
             </q-card-section>
           </q-card>
           <q-card flat>
-            <q-card-section class="text-primary tw-text-xl">
-              Persentase Anggaran ATM Terhadap Bidang Kesehatan provinsi Bali
+            <q-card-section class="tw-flex tw-justify-between tw-items-center">
+              <div class="text-primary tw-text-xl">
+                Persentase Anggaran ATM Terhadap Bidang Kesehatan Provinsi
+              </div>
+              <q-select
+                :options="list_province"
+                label="Provinsi"
+                v-model="province"
+                map-options
+                emit-value
+                use-input
+                @filter="filterProvince"
+                @update:model-value="findProvince"
+              />
             </q-card-section>
             <q-card-section class="q-pt-none">
               <apex
                 type="bar"
                 height="350"
-                :options="chartOptions4"
-                :series="series4"
+                :options="chartOptionsProvince"
+                :series="seriesProvince"
+                ref="chartProvince"
               ></apex>
             </q-card-section>
           </q-card>
@@ -85,16 +99,18 @@
                 <span class="tw-text-gray-400">Tahun Terpilih</span> /
                 <q-select
                   class="my-select"
-                  :options="['Tahun 2023', 'Tahun 2022']"
-                  v-model="tahun"
+                  :options="list_year"
+                  v-model="year"
                   borderless
                   dense
+                  map-options
+                  emit-value
                 />
               </div>
               <q-btn
                 color="secondary"
-                label="Masuk"
-                :to="{ name: 'login' }"
+                :label="authStore.token ? 'Dashabord' : 'Masuk'"
+                :to="{ name: authStore.token ? 'beranda' : 'login' }"
                 unelevated
                 no-caps
               />
@@ -114,12 +130,14 @@
 }
 </style>
 <script>
+import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 import Apex from "vue3-apexcharts";
 
 export default defineComponent({
   components: { Apex },
   setup() {
+    const authStore = useAuthStore();
     const provinsi = [
       {
         nama: "Aceh",
@@ -383,6 +401,7 @@ export default defineComponent({
     ];
 
     return {
+      authStore,
       isReveal: ref(true),
       series: [
         {
@@ -469,19 +488,13 @@ export default defineComponent({
           opacity: 1,
         },
       },
-      series3: [
+      seriesPercentage: [
         {
-          data: sortedByHighestAvg.map((e) => e.average),
+          name: "Presentase",
+          data: [],
         },
       ],
-      chartOptions3: {
-        yaxis: {
-          labels: {
-            formatter: function (value) {
-              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            },
-          },
-        },
+      chartOptionsPercentage: {
         chart: {
           type: "bar",
           height: 350,
@@ -495,35 +508,44 @@ export default defineComponent({
           },
         },
         dataLabels: {
-          enabled: false,
+          formatter: function (value) {
+            return `${parseFloat(value).toFixed(2)}%`;
+          },
         },
         stroke: {
           show: true,
           width: 2,
           colors: ["transparent"],
         },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return `${parseFloat(value).toFixed(2)}%`;
+            },
+          },
+        },
         xaxis: {
-          categories: sortedByHighestAvg.map((e) => e.nama),
+          categories: [],
         },
         fill: {
           opacity: 1,
         },
       },
-      series4: [
+      seriesProvince: ref([
         {
           name: "AIDS",
-          data: kabupatenKotaBali.map((e) => e.budget.aids),
+          data: [],
         },
         {
           name: "TBC",
-          data: kabupatenKotaBali.map((e) => e.budget.tbc),
+          data: [],
         },
         {
           name: "MALARIA",
-          data: kabupatenKotaBali.map((e) => e.budget.malaria),
+          data: [],
         },
-      ],
-      chartOptions4: {
+      ]),
+      chartOptionsProvince: ref({
         chart: {
           type: "bar",
           height: 350,
@@ -537,10 +559,19 @@ export default defineComponent({
           },
         },
         dataLabels: {
-          enabled: false,
+          formatter: function (value) {
+            return `${parseFloat(value).toFixed(2)}%`;
+          },
+        },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return `${parseFloat(value).toFixed(2)}%`;
+            },
+          },
         },
         xaxis: {
-          categories: kabupatenKotaBali.map((e) => e.nama),
+          categories: [],
         },
         fill: {
           opacity: 1,
@@ -551,17 +582,120 @@ export default defineComponent({
             vertical: 20,
           },
         },
-      },
-      tahun: ref("Tahun 2023"),
+      }),
+      year: ref(null),
+
+      list_year: ref([]),
+      options_province: ref([]),
+      list_province: ref([]),
+      province: ref(null),
     };
   },
+  mounted() {
+    this.getYear();
+  },
   methods: {
+    getYear() {
+      this.$api
+        .get("/forms?Limit=-")
+        .then((res) => {
+          this.list_year = res.data.data.Rows.map((year) => {
+            return { label: year.Year, value: year.ID };
+          });
+          return this.list_year;
+        })
+        .then((res) => {
+          const nowYear = new Date().getFullYear();
+          const findYear = res.find((year) => year.label == nowYear);
+          if (findYear) {
+            this.year = findYear.value;
+          } else {
+            this.year = res[0].value;
+          }
+          this.getPrecentage(this.year);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     onScroll(position) {
       if (position > 100) {
         this.isReveal = false;
       } else {
         this.isReveal = true;
       }
+    },
+
+    getPrecentage(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      this.$api
+        .get("/result/" + findYear.label + "/percentage")
+        .then((res) => {
+          this.seriesPercentage[0].data = res.data.data.map(
+            (e) => e.percentage
+          );
+          this.chartOptionsPercentage.xaxis.categories = res.data.data.map(
+            (e) => e.name
+          );
+
+          this.options_province = res.data.data.map((e) => {
+            return { label: e.name, value: e.id };
+          });
+          this.list_province = this.options_province;
+          return res;
+        })
+        .then((res) => {
+          this.$refs.chartPercentage.refresh();
+          this.province = this.list_province[0].value;
+          this.findProvince(this.list_province[0].value);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    filterProvince(val, update) {
+      if (val === "") {
+        update(() => {
+          this.list_province = this.options_province;
+        });
+        return;
+      }
+
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list_province = this.options_province.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+
+    findProvince(val) {
+      const findYear = this.list_year.find((year) => year.value == this.year);
+      return this.$api
+        .get("/result/" + findYear.label + "/percentage/" + val)
+        .then((res) => {
+          this.chartOptionsProvince.xaxis.categories = res.data.data.map(
+            (province) => province.name
+          );
+          this.seriesProvince[0].data = res.data.data.map(
+            (province) => province.percentage.aids
+          );
+          this.seriesProvince[1].data = res.data.data.map(
+            (province) => province.percentage.malaria
+          );
+          this.seriesProvince[2].data = res.data.data.map(
+            (province) => province.percentage.tbc
+          );
+
+          return res;
+        })
+        .then((res) => {
+          this.$refs.chartProvince.refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 });

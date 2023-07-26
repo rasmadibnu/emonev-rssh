@@ -1,8 +1,8 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Pengguna</div>
+    <div class="tw-text-3xl tw-mb-4">Permission</div>
     <q-card flat>
-      <q-card-section class="tw-flex tw-justify-between tw-items-center">
+      <q-card-section class="text-primary tw-font-bold">
         <q-btn outline no-caps color="primary" @click="openDialog(null)">
           <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
           Tambah
@@ -16,8 +16,7 @@
           :loading="loading"
           :rows="rows"
           :columns="columns"
-          @request="getData"
-          v-model:pagination="pagination"
+          :pagination="{ rowsPerPage: 10 }"
         >
           <template #top>
             <div class="tw-flex tw-justify-between tw-w-full">
@@ -77,7 +76,7 @@
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
-        <div class="text-h6">{{ !is_edit ? "Tambah" : "Ubah" }} Pengguna</div>
+        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Permission</div>
         <q-space />
         <q-btn flat round dense v-close-popup>
           <vx-icon iconName="CloseCircle" :size="20" />
@@ -85,13 +84,7 @@
       </q-card-section>
 
       <q-form @submit.prevent="submit">
-        <q-card-section class="tw-grid tw-grid-cols-2 tw-gap-x-4 tw-gap-y-2">
-          <q-input
-            v-model="form.Username"
-            filled
-            label="ID Pengguna"
-            :rules="[(val) => !!val || 'Field harus diisi']"
-          />
+        <q-card-section class="tw-space-y-2">
           <q-input
             v-model="form.Name"
             filled
@@ -99,72 +92,10 @@
             :rules="[(val) => !!val || 'Field harus diisi']"
           />
           <q-input
-            v-model="form.Email"
+            v-model="form.Description"
             filled
-            label="E-Mail"
-            :rules="[
-              (val) => !!val || 'Field harus diisi',
-              (val) =>
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || 'E-Mail tidak valid',
-            ]"
-            lazy-rules
-          />
-          <q-select
-            filled
-            v-model.number="form.GroupID"
-            :options="list_group"
-            map-options
-            emit-value
-            label="Group"
-          >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.label }}</q-item-label>
-                  <q-item-label v-if="scope.opt.details" caption
-                    >{{
-                      scope.opt.details
-                        .map((regen) => regen.RegencyCity.Name)
-                        .slice(
-                          0,
-                          scope.opt.details.length > 2
-                            ? 2
-                            : scope.opt.details.length
-                        )
-                        .join(", ")
-                    }}{{
-                      scope.opt.details.length > 2 ? "..." : ""
-                    }}</q-item-label
-                  >
-                </q-item-section>
-              </q-item>
-            </template></q-select
-          >
-          <q-input
-            v-if="!is_edit"
-            v-model="form.Password"
-            type="password"
-            filled
-            label="Password"
-            :rules="[(val) => !!val || 'Field harus diisi']"
-          />
-          <q-input
-            v-else
-            v-model="form.Password"
-            type="password"
-            filled
-            label="Password"
-          />
-          <q-input
-            v-model="form.ConfirmPassword"
-            :disable="form.Password == null"
-            type="password"
-            filled
-            label="Konfirmasi Password"
-            :rules="[
-              (val) =>
-                val === form.Password || 'Konfirmasi password tidak sama',
-            ]"
+            label="Deskripsi"
+            type="textarea"
           />
         </q-card-section>
 
@@ -218,12 +149,8 @@ import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 
 const initial_form = {
-  Username: null,
-  GroupID: null,
   Name: null,
-  Email: null,
-  Password: null,
-  ConfirmPassword: null,
+  Description: null,
 };
 
 export default defineComponent({
@@ -244,17 +171,10 @@ export default defineComponent({
         sortable: true,
       },
       {
-        name: "Username",
-        label: "ID Pengguna",
+        name: "Deskripsi",
+        label: "Deskripsi",
         align: "left",
-        field: "Username",
-        sortable: true,
-      },
-      {
-        name: "Email",
-        label: "E-Mail",
-        align: "left",
-        field: "Email",
+        field: "Description",
         sortable: true,
       },
 
@@ -280,67 +200,47 @@ export default defineComponent({
       loading: ref(false),
       id: ref(""),
       form: ref(structuredClone(initial_form)),
-
-      list_group: ref([]),
     };
   },
   mounted() {
-    this.$refs.tableRef.requestServerInteraction();
-    this.getGroup();
+    // this.$refs.tableRef.requestServerInteraction();
+    this.getData();
   },
   methods: {
-    getData(props) {
+    getData() {
       this.loading = true;
-      this.pagination = props?.pagination;
+      // this.pagination = props?.pagination;
 
-      const params = new URLSearchParams();
-      const data = {
-        params: params,
-      };
-      let { page, rowsPerPage, rowsNumber } = props.pagination;
+      // const params = new URLSearchParams();
+      // const data = {
+      //   params: params,
+      // };
+      // let { page, rowsPerPage, rowsNumber } = props.pagination;
 
-      if (rowsPerPage == 0) {
-        page = 1;
-        rowsPerPage = rowsNumber;
-      }
+      // if (rowsPerPage == 0) {
+      //   page = 1;
+      //   rowsPerPage = rowsNumber;
+      // }
 
-      if (this.totalPages < page) {
-        page = this.totalPages;
-      }
+      // if (this.totalPages < page) {
+      //   page = this.totalPages;
+      // }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
+      // params.append("Limit", rowsPerPage);
+      // params.append("Page", page);
 
       this.$api
-        .get("/users", data)
+        .get("/permissions")
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data;
+          // this.pagination.rowsNumber = response.data.data.TotalRows;
+          // this.totalPages = response.data.data.TotalPages;
 
           this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.loading = false;
-        });
-    },
-    getGroup() {
-      this.$api
-        .get(
-          '/groups?Limit=-&Relation={"Name": "Details.RegencyCity.Province"}'
-        )
-        .then((res) => {
-          this.list_group = res.data.data.Rows.map((group) => {
-            return {
-              value: group.ID,
-              label: group.Name,
-              details: group.Details,
-            };
-          });
-        })
-        .catch((err) => {
-          console.log(err);
         });
     },
 
@@ -365,13 +265,13 @@ export default defineComponent({
       this.loading = true;
       if (!this.is_edit) {
         this.$api
-          .post("/auth/register", {
+          .post("/permissions", {
             ...this.form,
             CreatedBy: this.user.Username,
           })
           .then((res) => {
             this.$q.notify({
-              message: "User berhasil ditambahkan",
+              message: "Permission berhasil ditambahkan",
               color: "positive",
             });
             this.closeDialog();
@@ -383,13 +283,13 @@ export default defineComponent({
           });
       } else {
         this.$api
-          .put("/users/" + this.id, {
+          .put("/permissions/" + this.id, {
             ...this.form,
             UpdateBy: this.user.Username,
           })
           .then((res) => {
             this.$q.notify({
-              message: "User berhasil diubah",
+              message: "Permission berhasil diubah",
               color: "positive",
             });
             this.closeDialog();
@@ -407,10 +307,10 @@ export default defineComponent({
     },
     deleteData() {
       this.$api
-        .delete("/users/" + this.id)
+        .delete("/permissions/" + this.id)
         .then((res) => {
           this.$q.notify({
-            message: "User berhasil dihapus",
+            message: "Permission berhasil dihapus",
             color: "positive",
           });
           this.$refs.tableRef.requestServerInteraction();

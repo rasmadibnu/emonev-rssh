@@ -32,19 +32,19 @@
           </q-avatar>
           <q-menu class="tw-shadow-none tw-border tw-rounded-lg">
             <q-list>
-              <q-item>
+              <q-item clickable v-ripple :to="{ name: 'profile' }">
                 <q-item-section avatar>
                   <q-img src="~assets/profile.svg" />
                 </q-item-section>
 
                 <q-item-section>
-                  <q-item-label>Richard Petersen</q-item-label>
-                  <q-item-label caption lines="2"
-                    >richard@simadinkes.org</q-item-label
-                  >
+                  <q-item-label>{{ authStore.user.Name }}</q-item-label>
+                  <q-item-label caption lines="2">{{
+                    authStore.user.Email
+                  }}</q-item-label>
                 </q-item-section>
               </q-item>
-              <q-item clickable v-ripple :to="{ name: 'profile' }">
+              <!-- <q-item clickable v-ripple :to="{ name: 'profile' }">
                 <q-item-section avatar>
                   <VxIcon
                     iconName="ProfileCircle"
@@ -54,8 +54,8 @@
                 </q-item-section>
 
                 <q-item-section>Pengaturan Akun</q-item-section>
-              </q-item>
-              <q-item clickable v-ripple :to="{ name: 'users' }">
+              </q-item> -->
+              <!-- <q-item clickable v-ripple :to="{ name: 'users' }">
                 <q-item-section avatar>
                   <VxIcon
                     iconName="Setting2"
@@ -65,7 +65,7 @@
                 </q-item-section>
 
                 <q-item-section>Administrator</q-item-section>
-              </q-item>
+              </q-item> -->
               <q-separator />
               <q-item
                 clickable
@@ -94,15 +94,56 @@
         </div>
       </router-link>
 
-      <q-list>
-        <q-separator class="tw-mb-3" />
+      <q-separator class="tw-mb-3" />
 
-        <EssentialLink
-          class="tw-px-8 tw-text-gray-400"
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+      <div class="tw-flex tw-items-center tw-gap-4 tw-px-4" v-if="loading">
+        <q-spinner color="primary" size="2em" />
+        <p>Loading menu...</p>
+      </div>
+      <q-list v-else>
+        <template v-if="!is_administrator">
+          <EssentialLink
+            class="tw-px-8 tw-text-gray-400"
+            v-for="link in essentialLinks"
+            :key="link.ID"
+            v-bind="link"
+          />
+          <q-item
+            clickable
+            class="tw-px-8 tw-text-gray-400"
+            @click="is_administrator = true"
+          >
+            <q-item-section avatar>
+              <vx-icon iconName="Setting2" :size="24" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Administrator</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+        <template v-else>
+          <q-item
+            clickable
+            class="tw-px-2 text-primary"
+            @click="is_administrator = false"
+          >
+            <q-item-section avatar>
+              <vx-icon iconName="ArrowLeft2" :size="24" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Administrator</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <essential-link
+            class="tw-px-8 tw-text-gray-400"
+            v-for="menu in menu_administrator"
+            v-bind="menu"
+            v-bind:key="menu"
+          />
+        </template>
 
         <!-- <q-item
           clickable
@@ -121,7 +162,7 @@
     </q-drawer>
 
     <q-page-container class="tw-bg-gray-50">
-      <router-view />
+      <router-view :user="authStore.user" />
     </q-page-container>
     <q-dialog v-model="confirm_logout">
       <q-card style="width: 400px">
@@ -138,13 +179,7 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Tidak" no-caps v-close-popup />
-          <q-btn
-            flat
-            label="Ya"
-            color="negative"
-            no-caps
-            :to="{ name: 'login' }"
-          />
+          <q-btn flat label="Ya" color="negative" no-caps @click="logout" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -155,60 +190,44 @@
 import { defineComponent, ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import VxIcon from "src/components/VxIcon.vue";
+import { useAuthStore } from "src/stores/auth";
 
-const linksList = [
+const menu_administrator = [
   {
-    title: "Beranda",
-    icon: "Activity",
-    link: "beranda",
+    Name: "Pengguna",
+    Icon: "Profile2User",
+    Url: "users",
   },
   {
-    title: "Penginputan",
-    icon: "Additem",
-    link: "penginputan",
+    Name: "Group",
+    Icon: "Category2",
+    Url: "group",
   },
   {
-    title: "Laporan",
-    icon: "Chart",
-    link: "laporan",
+    Name: "Roles",
+    Icon: "UserOctagon",
+    Url: "roles",
   },
   {
-    title: "Cetak Laporan",
-    icon: "Printer",
-    link: "#",
+    Name: "Permissions",
+    Icon: "GridLock",
+    Url: "permissions",
   },
-  // {
-  //   title: "Management",
-  //   icon: "Setting4",
-  //   link: "#",
-  //   childs: [
-  //     {
-  //       title: "Pengguna",
-  //       icon: "Profile2User",
-  //       link: "#",
-  //     },
-  //     {
-  //       title: "Group",
-  //       icon: "Category2",
-  //       link: "#",
-  //     },
-  //     {
-  //       title: "Role",
-  //       icon: "UserOctagon",
-  //       link: "#",
-  //     },
-  //     {
-  //       title: "Provinsi",
-  //       icon: "Map",
-  //       link: "#",
-  //     },
-  //     {
-  //       title: "Kabupaten / Kota",
-  //       icon: "Map1",
-  //       link: "#",
-  //     },
-  //   ],
-  // },
+  {
+    Name: "Menu",
+    Icon: "HambergerMenu",
+    Url: "menu",
+  },
+  {
+    Name: "Provinsi",
+    Icon: "Map",
+    Url: "provinsi",
+  },
+  {
+    Name: "Kabupaten / Kota",
+    Icon: "Map1",
+    Url: "regencies",
+  },
 ];
 
 export default defineComponent({
@@ -220,16 +239,45 @@ export default defineComponent({
   },
 
   setup() {
+    const authStore = useAuthStore();
     const leftDrawerOpen = ref(false);
 
     return {
-      essentialLinks: linksList,
+      authStore,
+      essentialLinks: ref([]),
       leftDrawerOpen,
       confirm_logout: ref(false),
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
+      is_administrator: ref(false),
+      menu_administrator,
+
+      loading: ref(false),
     };
+  },
+  mounted() {
+    this.getMenu();
+  },
+  methods: {
+    getMenu() {
+      this.loading = true;
+      this.$api
+        .get("/menus?Code=transaksi")
+        .then((res) => {
+          this.essentialLinks = res.data.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
+    },
+    logout() {
+      localStorage.removeItem("token");
+      this.authStore.token = null;
+      this.$router.push({ name: "login" });
+    },
   },
 });
 </script>

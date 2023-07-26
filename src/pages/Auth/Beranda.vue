@@ -6,7 +6,7 @@
         Informasi</q-card-section
       >
       <q-card-section class="q-pt-none">
-        Selamat Datang, Petersen Richards!
+        Selamat Datang, {{ user?.Name }}!
       </q-card-section>
     </q-card>
   </q-page>
@@ -16,6 +16,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  props: ["user"],
   name: "IndexPage",
 });
 </script>

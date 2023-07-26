@@ -10,7 +10,7 @@
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
-          box-shadow: rgba(0, 0, 0, 0.5) 0 0 0 1000000px inset;
+          box-shadow: rgba(36, 55, 99, 0.5) 0 0 0 1000000px inset;
         "
       >
         <div class="md:tw-text-2xl tw-text-md tw-font-bold tw-text-white">
@@ -23,38 +23,56 @@
               <span class="text-secondary">e</span>Monev
             </div>
           </q-card-section>
-          <q-card-section class="tw-space-y-3">
-            <div class="text-left">ID Pengguna</div>
-            <q-input filled placeholder="Masukan ID Pengguna Anda">
-              <template v-slot:prepend>
-                <div class="bg-white tw-p-2 tw-rounded-md text-primary">
-                  <vx-icon iconName="User" :size="20" />
-                </div>
-              </template>
-            </q-input>
-            <div class="text-left">Passowrd</div>
-            <q-input filled placeholder="Masukan password anda" type="password">
-              <template v-slot:prepend>
-                <div class="bg-white tw-p-2 tw-rounded-md text-primary">
-                  <vx-icon iconName="Lock1" :size="20" />
-                </div>
-              </template>
-            </q-input>
-            <div>
-              <q-btn
-                label="Masuk"
-                class="tw-w-full tw-rounded-md tw-my-2"
-                unelevated
-                color="primary"
-                no-caps
-                :to="{ name: 'beranda' }"
-              />
-            </div>
+          <q-form @submit.prevent="login">
+            <q-card-section class="tw-space-y-1">
+              <div class="tw-space-y-1">
+                <div class="text-left">ID Pengguna</div>
+                <q-input
+                  filled
+                  v-model="username"
+                  placeholder="Masukan ID Pengguna Anda"
+                  :rules="[(val) => !!val || 'Field ini harus diisi']"
+                >
+                  <template v-slot:prepend>
+                    <div class="bg-white tw-p-2 tw-rounded-md text-primary">
+                      <vx-icon iconName="User" :size="20" />
+                    </div>
+                  </template>
+                </q-input>
+              </div>
+              <div class="tw-space-y-1">
+                <div class="text-left">Password</div>
+                <q-input
+                  filled
+                  v-model="password"
+                  placeholder="Masukan password anda"
+                  type="password"
+                  :rules="[(val) => !!val || 'Field ini harus diisi']"
+                >
+                  <template v-slot:prepend>
+                    <div class="bg-white tw-p-2 tw-rounded-md text-primary">
+                      <vx-icon iconName="Lock1" :size="20" />
+                    </div>
+                  </template>
+                </q-input>
+              </div>
+              <div>
+                <q-btn
+                  type="submit"
+                  label="Masuk"
+                  class="tw-w-full tw-rounded-md tw-my-2"
+                  unelevated
+                  color="primary"
+                  no-caps
+                  :loading="loading"
+                />
+              </div>
 
-            <footer class="text-center tw-py-3">
-              {{ new Date().getFullYear() }} © Copyright All Right Reserved
-            </footer>
-          </q-card-section>
+              <footer class="text-center tw-py-3">
+                {{ new Date().getFullYear() }} © Copyright All Right Reserved
+              </footer>
+            </q-card-section>
+          </q-form>
         </q-card>
         <q-btn
           flat
@@ -68,11 +86,47 @@
   </q-layout>
 </template>
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import VxIcon from "src/components/VxIcon.vue";
+import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   components: { VxIcon },
-  setup() {},
+  setup() {
+    const authStore = useAuthStore();
+    return {
+      authStore,
+      loading: ref(false),
+
+      username: ref(""),
+      password: ref(""),
+    };
+  },
+  methods: {
+    login() {
+      this.loading = true;
+      this.$api
+        .post("/auth/login", {
+          username: this.username,
+          password: this.password,
+        })
+        .then((response) => {
+          this.loading = false;
+          localStorage.setItem("token", response.data.data);
+          this.authStore.token = response.data.data;
+          this.authStore.getUser();
+          this.$router.push({ name: "beranda" });
+        })
+        .catch((error) => {
+          var message;
+          if (error?.response?.status == 404) {
+            message = "ID atau Password salah";
+          } else {
+            message = error?.message;
+          }
+          this.$q.notify({ message: message, color: "negative" });
+        });
+    },
+  },
 });
 </script>

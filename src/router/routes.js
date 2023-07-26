@@ -1,7 +1,19 @@
+const requireAuth = (to, from, next) => {
+  var token =
+    localStorage.getItem("token") == null
+      ? null
+      : JSON.parse(atob(localStorage.getItem("token").split(".")[1]));
+  if (token === null) {
+    next("/login");
+  }
+  next();
+};
+
 const routes = [
   {
     path: "/dashboard",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
     children: [
       {
         path: "beranda",
@@ -14,28 +26,66 @@ const routes = [
         component: () => import("pages/Auth/Profile.vue"),
         name: "profile",
       },
+
+      // Penginputan
       {
-        path: "administrator",
-        component: () => import("pages/Auth/Administrator/Index.vue"),
-        name: "administrator",
-        children: [
-          {
-            path: "users",
-            component: () => import("pages/Auth/Administrator/Users.vue"),
-            name: "users",
-          },
-        ],
+        path: "penginputan",
+        component: () => import("pages/Auth/Penginputan/Index.vue"),
+        name: "penginputan-index",
+      },
+      {
+        path: "penginputan/create",
+        component: () => import("pages/Auth/Penginputan/Create.vue"),
+        name: "penginputan-create",
+      },
+      {
+        path: "penginputan/:id/edit",
+        component: () => import("pages/Auth/Penginputan/Edit.vue"),
+        name: "penginputan-edit",
       },
 
       {
-        path: "penginputan",
-        component: () => import("pages/Auth/Penginputan.vue"),
-        name: "penginputan",
+        path: "laporan",
+        component: () => import("src/pages/Auth/Laporan.vue"),
+        name: "laporan",
+      },
+
+      // Adminsitrator
+
+      {
+        path: "users",
+        component: () => import("pages/Auth/Administrator/Users.vue"),
+        name: "users",
       },
       {
-        path: "laporan",
-        component: () => import("pages/Auth/Laporan.vue"),
-        name: "laporan",
+        path: "roles",
+        component: () => import("pages/Auth/Administrator/Roles.vue"),
+        name: "roles",
+      },
+      {
+        path: "permissions",
+        component: () => import("pages/Auth/Administrator/Permissions.vue"),
+        name: "permissions",
+      },
+      {
+        path: "group",
+        component: () => import("pages/Auth/Administrator/Group.vue"),
+        name: "group",
+      },
+      {
+        path: "menu",
+        component: () => import("pages/Auth/Administrator/Menu.vue"),
+        name: "menu",
+      },
+      {
+        path: "provinsi",
+        component: () => import("pages/Auth/Administrator/Provinsi.vue"),
+        name: "provinsi",
+      },
+      {
+        path: "regency-cities",
+        component: () => import("pages/Auth/Administrator/Regencies.vue"),
+        name: "regencies",
       },
     ],
   },

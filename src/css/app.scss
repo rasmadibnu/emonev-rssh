@@ -7,3 +7,12 @@
 * {
   font-family: "Sen";
 }
+
+.q-table thead {
+  background-color: #0000001f;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
+.q-table thead th {
+  font-weight: 600;
+}

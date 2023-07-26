@@ -1,29 +1,29 @@
 <template>
-  <q-item v-if="childs.length < 1" clickable :to="{ name: link }">
-    <q-item-section v-if="icon" avatar>
-      <vx-icon :iconName="icon" :size="24" />
+  <q-item v-if="Childs.length < 1" clickable :to="{ name: Url }">
+    <q-item-section v-if="Icon" avatar>
+      <vx-icon :iconName="Icon" :size="24" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label>{{ Name }}</q-item-label>
     </q-item-section>
   </q-item>
   <q-expansion-item v-else class="!tw-px-0" header-class="tw-px-6">
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar>
-          <vx-icon :iconName="icon" :size="24" />
+          <vx-icon :iconName="Icon" :size="24" />
         </q-avatar>
       </q-item-section>
 
       <q-item-section class="tw-pl-2">
-        {{ title }}
+        {{ Name }}
       </q-item-section>
     </template>
     <q-list>
       <essential-link
         class="tw-px-16"
-        v-for="child in childs"
+        v-for="child in Childs"
         v-bind="child"
         v-bind:key="child"
       />
@@ -39,26 +39,21 @@ export default defineComponent({
   components: { VxIcon },
   name: "EssentialLink",
   props: {
-    title: {
+    Name: {
       type: String,
       required: true,
     },
 
-    caption: {
-      type: String,
-      default: "",
-    },
-
-    link: {
+    Url: {
       type: String,
       default: "#",
     },
 
-    icon: {
+    Icon: {
       type: String,
       default: "",
     },
-    childs: {
+    Childs: {
       type: Array,
       default: () => [],
     },
