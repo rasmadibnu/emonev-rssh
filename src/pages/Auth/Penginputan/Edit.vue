@@ -48,6 +48,7 @@
                   <q-select
                     dense
                     filled
+                    ref="selectRegency"
                     v-model="regency"
                     label="Pilih Kabupaten Kota"
                     :options="list_regency"
@@ -168,7 +169,21 @@ export default defineComponent({
   },
   methods: {
     getData() {
-      return this.$api.get();
+      return this.$api
+        .get(
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}`
+        )
+        .then((res) => {
+          this.year = res.data.data.FormID;
+          this.regency = res.data.data.RegencyCityID;
+          this.$refs.selectRegency.$el.click();
+          this.fields = res.data.data.FieldResponse.map((e) => {
+            return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getYear() {
       this.loading = true;
@@ -238,19 +253,20 @@ export default defineComponent({
         RegencyCityID: this.regency,
         FieldResponse: this.fields.map((filed) => {
           return {
-            FieldID: filed.ID,
+            ID: filed.ResponseFieldID,
+            FormResponseID: parseInt(this.$route.params.id),
             Value: filed.Value,
           };
         }),
       };
       this.$api
-        .post("form-responses", payload)
+        .put("form-responses/" + this.$route.params.id, payload)
         .then((res) => {
           this.$q.notify({
             message: "Data berhasil tersimpan",
             color: "positive",
           });
-          this.getForm(this.year);
+          this.loading = false;
         })
         .catch((err) => {
           console.log(err);

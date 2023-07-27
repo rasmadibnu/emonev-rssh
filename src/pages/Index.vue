@@ -17,7 +17,7 @@
     </q-header>
 
     <q-page-container class="tw-bg-gray-50">
-      <q-page class="tw-pt-24">
+      <q-page class="tw-pt-28">
         <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
           <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
@@ -115,6 +115,14 @@
                 no-caps
               />
             </div>
+            <q-tabs v-model="tab" align="justify" no-caps class="text-white">
+              <q-tab name="Dashboard1" label="Dashboard 1" />
+              <q-tab name="Dashboard2" label="Dashboard 2" />
+
+              <q-tab name="Dashboard3" label="Dashboard 3" />
+
+              <q-tab name="Dashboard4" label="Dashboard 4" />
+            </q-tabs>
           </div>
         </q-page-sticky>
       </q-page>
@@ -589,6 +597,7 @@ export default defineComponent({
       options_province: ref([]),
       list_province: ref([]),
       province: ref(null),
+      tab: ref("Dashboard1"),
     };
   },
   mounted() {
