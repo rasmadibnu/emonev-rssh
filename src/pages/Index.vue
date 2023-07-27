@@ -17,7 +17,7 @@
     </q-header>
 
     <q-page-container class="tw-bg-gray-50">
-      <q-page class="tw-pt-28">
+      <q-page class="tw-pt-34">
         <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
           <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
