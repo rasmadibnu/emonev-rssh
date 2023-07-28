@@ -75,15 +75,29 @@
                   <q-select
                     dense
                     filled
-                    v-model="year"
-                    label="Pilih Tahun"
-                    :options="list_year"
+                    v-model="regency"
+                    label="Pilih Kabupaten Kota"
+                    :options="list_regency"
+                    @filter="filterRegency"
+                    use-input
                     map-options
                     emit-value
-                    :rules="[(val) => !!val || 'Field ini wajib diisi']"
-                  />
+                    :rules="[(val) => !!val]"
+                  >
+                    <template v-slot:option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section>
+                          <q-item-label>{{ scope.opt.label }}</q-item-label>
+                          <q-item-label caption>{{
+                            scope.opt.province
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
                 </td>
               </tr>
+
               <tr class="q-tr--no-hover">
                 <td colspan="100%">
                   <q-separator class="tw-w-full" />

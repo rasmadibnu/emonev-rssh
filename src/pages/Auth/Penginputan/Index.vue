@@ -89,6 +89,7 @@
                         v-ripple
                         class="text-negative"
                         @click="confirmDelete(props.row.ID)"
+                        disable
                       >
                         <q-item-section avatar>
                           <vx-icon iconName="Trash" :size="20" />
