@@ -18,21 +18,23 @@
 
     <q-page-container class="tw-bg-gray-50">
       <q-page class="tw-pt-36">
-        <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
-          <q-card flat>
-            <q-card-section class="text-primary tw-text-xl">
-              Persentase capaian kemitraan untuk ATM
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-              <apex
-                type="bar"
-                height="250"
-                :options="chartOptions"
-                :series="series"
-              ></apex>
-            </q-card-section>
-          </q-card>
-          <!-- <q-card flat>
+        <q-tab-panels v-model="tab" animated class="tw-bg-gray-50">
+          <q-tab-panel name="Dashboard1">
+            <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
+              <q-card flat>
+                <q-card-section class="text-primary tw-text-xl">
+                  Persentase capaian kemitraan untuk ATM
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex
+                    type="bar"
+                    height="250"
+                    :options="chartOptions"
+                    :series="series"
+                  ></apex>
+                </q-card-section>
+              </q-card>
+              <!-- <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
               Rekapitulasi Anggaran ATM {{ tahun }}
             </q-card-section>
@@ -45,50 +47,58 @@
               ></apex>
             </q-card-section>
           </q-card> -->
-          <q-card flat>
-            <q-card-section class="text-primary tw-text-xl">
-              Persentase Anggaran ATM Terhadap Bidang Kesehatan
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-              <apex
-                type="bar"
-                height="350"
-                :options="chartOptionsPercentage"
-                :series="seriesPercentage"
-                ref="chartPercentage"
-              ></apex>
-            </q-card-section>
-          </q-card>
-          <q-card flat>
-            <q-card-section class="tw-flex tw-justify-between tw-items-center">
-              <div class="text-primary tw-text-xl">
-                Persentase Anggaran ATM Terhadap Bidang Kesehatan Provinsi
-              </div>
-              <q-select
-                :options="list_province"
-                label="Provinsi"
-                v-model="province"
-                map-options
-                emit-value
-                use-input
-                @filter="filterProvince"
-                @update:model-value="findProvince"
-              />
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-              <apex
-                type="bar"
-                height="350"
-                :options="chartOptionsProvince"
-                :series="seriesProvince"
-                ref="chartProvince"
-              ></apex>
-            </q-card-section>
-          </q-card>
-          <footer class="text-center tw-py-10">
-            {{ new Date().getFullYear() }} © Copyright All Right Reserved
-          </footer>
-        </div>
+              <q-card flat>
+                <q-card-section class="text-primary tw-text-xl">
+                  Persentase Anggaran ATM Terhadap Bidang Kesehatan
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex
+                    type="bar"
+                    height="350"
+                    :options="chartOptionsPercentage"
+                    :series="seriesPercentage"
+                    ref="chartPercentage"
+                  ></apex>
+                </q-card-section>
+              </q-card>
+              <q-card flat>
+                <q-card-section
+                  class="tw-flex tw-justify-between tw-items-center"
+                >
+                  <div class="text-primary tw-text-xl">
+                    Persentase Anggaran ATM Terhadap Bidang Kesehatan Provinsi
+                  </div>
+                  <q-select
+                    :options="list_province"
+                    label="Provinsi"
+                    v-model="province"
+                    map-options
+                    emit-value
+                    use-input
+                    @filter="filterProvince"
+                    @update:model-value="findProvince"
+                  />
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex
+                    type="bar"
+                    height="350"
+                    :options="chartOptionsProvince"
+                    :series="seriesProvince"
+                    ref="chartProvince"
+                  ></apex>
+                </q-card-section>
+              </q-card>
+              <footer class="text-center tw-py-10">
+                {{ new Date().getFullYear() }} © Copyright All Right Reserved
+              </footer>
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel name="Dashboard2">
+            <div class="text-center tw-text-2xl">On Progress</div>
+          </q-tab-panel>
+        </q-tab-panels>
 
         <q-page-sticky class="tw-z-50" expand position="top">
           <div class="bg-primary tw-w-full">
@@ -116,12 +126,12 @@
               />
             </div>
             <q-tabs v-model="tab" align="justify" no-caps class="text-white">
-              <q-tab name="Dashboard1" label="Dashboard 1" />
-              <q-tab name="Dashboard2" label="Dashboard 2" />
+              <q-tab name="Dashboard1" label="Rekapitulasi Anggaran ATM" />
+              <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
 
-              <q-tab name="Dashboard3" label="Dashboard 3" />
+              <!-- <q-tab name="Dashboard3" label="Dashboard 3" />
 
-              <q-tab name="Dashboard4" label="Dashboard 4" />
+              <q-tab name="Dashboard4" label="Dashboard 4" /> -->
             </q-tabs>
           </div>
         </q-page-sticky>

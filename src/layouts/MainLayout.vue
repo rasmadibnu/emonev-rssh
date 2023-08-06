@@ -104,7 +104,7 @@
         <template v-if="!is_administrator">
           <EssentialLink
             class="tw-px-8 tw-text-gray-400"
-            v-for="link in essentialLinks"
+            v-for="link in authStore.menus.filter((e) => e.Code == 'transaksi')"
             :key="link.ID"
             v-bind="link"
           />
@@ -112,6 +112,10 @@
             clickable
             class="tw-px-8 tw-text-gray-400"
             @click="is_administrator = true"
+            v-if="
+              authStore.menus.filter((e) => e.Code == 'administrator').length >
+              0
+            "
           >
             <q-item-section avatar>
               <vx-icon iconName="Setting2" :size="24" />
@@ -139,7 +143,9 @@
 
           <essential-link
             class="tw-px-8 tw-text-gray-400"
-            v-for="menu in menu_administrator"
+            v-for="menu in authStore.menus.filter(
+              (e) => e.Code == 'administrator'
+            )"
             v-bind="menu"
             v-bind:key="menu"
           />
@@ -244,35 +250,18 @@ export default defineComponent({
 
     return {
       authStore,
-      essentialLinks: ref([]),
       leftDrawerOpen,
       confirm_logout: ref(false),
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       is_administrator: ref(false),
-      menu_administrator,
 
       loading: ref(false),
     };
   },
-  mounted() {
-    this.getMenu();
-  },
+  mounted() {},
   methods: {
-    getMenu() {
-      this.loading = true;
-      this.$api
-        .get("/menus?Code=transaksi")
-        .then((res) => {
-          this.essentialLinks = res.data.data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          this.loading = false;
-          console.log(err);
-        });
-    },
     logout() {
       localStorage.removeItem("token");
       this.authStore.token = null;

@@ -1,3 +1,5 @@
+import { useAuthStore } from "src/stores/auth";
+
 const requireAuth = (to, from, next) => {
   var token =
     localStorage.getItem("token") == null
@@ -6,6 +8,12 @@ const requireAuth = (to, from, next) => {
   if (token === null) {
     next("/login");
   }
+  const auth = useAuthStore();
+  // if (auth.checkMenu(to.name)) {
+  //   next();
+  // } else {
+  //   next("/not-found");
+  // }
   next();
 };
 

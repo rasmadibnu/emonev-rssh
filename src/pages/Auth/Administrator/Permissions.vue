@@ -275,7 +275,7 @@ export default defineComponent({
               color: "positive",
             });
             this.closeDialog();
-            this.$refs.tableRef.requestServerInteraction();
+            this.getData();
           })
           .catch((err) => {
             this.closeDialog();
@@ -293,7 +293,7 @@ export default defineComponent({
               color: "positive",
             });
             this.closeDialog();
-            this.$refs.tableRef.requestServerInteraction();
+            this.getData();
           })
           .catch((err) => {
             this.closeDialog();
@@ -313,7 +313,7 @@ export default defineComponent({
             message: "Permission berhasil dihapus",
             color: "positive",
           });
-          this.$refs.tableRef.requestServerInteraction();
+          this.getData();
           this.confirm = false;
         })
         .catch((err) => {

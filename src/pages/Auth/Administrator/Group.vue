@@ -457,7 +457,7 @@ export default defineComponent({
           })
           .then((res) => {
             this.$q.notify({
-              message: "Role berhasil ditambahkan",
+              message: "Group berhasil ditambahkan",
               color: "positive",
             });
             this.closeDialog();
@@ -496,7 +496,7 @@ export default defineComponent({
         .delete("/groups/" + this.id)
         .then((res) => {
           this.$q.notify({
-            message: "Role berhasil dihapus",
+            message: "Group berhasil dihapus",
             color: "positive",
           });
           this.$refs.tableRef.requestServerInteraction();

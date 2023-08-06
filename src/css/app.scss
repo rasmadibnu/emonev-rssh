@@ -1,11 +1,14 @@
 // app global css in SCSS form
-@import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap");
+
 * {
   font-family: "Sen";
+
+  @apply tw-scrollbar-thin tw-scrollbar-thumb-secondary/50 tw-scrollbar-track-transparent tw-scrollbar-thumb-rounded-xl;
 }
 
 .q-table thead {

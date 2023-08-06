@@ -124,6 +124,7 @@ export default defineComponent({
           } else {
             message = error?.message;
           }
+          this.loading = false;
           this.$q.notify({ message: message, color: "negative" });
         });
     },

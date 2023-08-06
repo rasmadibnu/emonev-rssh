@@ -5,6 +5,10 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: localStorage.getItem("token"),
     user: null,
+    menus: [],
+    province: null,
+    provinces: [],
+    regency: [],
   }),
   getters: {
     token_data() {
@@ -26,18 +30,81 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     getUser() {
+      this.province = null;
+      this.provinces = [];
+      this.regency = [];
       api
         .get(
           "users/" +
             this.token_data.ID +
-            '?Relation={"Name": "Group.Details.RegencyCity.Province"}'
+            '?Relations={"Name":"Group.Details.RegencyCity.Province"}&Relations={"Name":"Roles.Menus.Childs.Childs.Childs.Childs.Childs.Childs"}'
         )
         .then((res) => {
           this.user = res.data.data;
         })
+        .then((res) => {
+          this.setMenus();
+          this.setProvince();
+        })
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    getMenuChild(childs) {
+      let ids = [];
+      for (const child of childs) {
+        ids.push(child);
+        if (child.Childs.length > 0) {
+          ids = ids.concat(getAllIds(child.Childs));
+        }
+      }
+      return ids;
+    },
+
+    checkMenu(name) {
+      return this.menus.map((e) => e.Url).includes(name);
+    },
+
+    setMenus() {
+      this.user.Roles.map((e) => {
+        this.menus = this.menus.concat(this.getMenuChild(e.Menus));
+      });
+    },
+
+    setProvince() {
+      const uniqueSet = new Set(
+        this.user.Group.Details.map((item) => item["ProvinceID"])
+      );
+      this.provinces = Array.from(uniqueSet)
+        .map((uniqueValue) =>
+          this.user.Group.Details.find(
+            (item) => item["ProvinceID"] === uniqueValue
+          )
+        )
+        .map((item) => {
+          return {
+            value: item.ProvinceID,
+            label: item.RegencyCity.Province.LongName,
+          };
+        });
+
+      if (this.provinces.length == 1) {
+        this.province = this.provinces[0];
+        this.setRegencies(this.provinces[0].value);
+      }
+    },
+
+    setRegencies(province) {
+      this.regency = this.user.Group.Details.filter(
+        (item) => item.ProvinceID === province
+      ).map((regency) => {
+        return {
+          label: regency.RegencyCity.Name,
+          value: regency.RegencyCityID,
+          province: regency.RegencyCity.Province.LongName,
+        };
+      });
     },
   },
 });

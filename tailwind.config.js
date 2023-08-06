@@ -4,7 +4,13 @@ module.exports = {
   prefix: "tw-",
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#243763",
+        secondary: "#ff6e31",
+        accent: "#9384d1",
+      },
+    },
   },
   variants: {
     extend: {
@@ -13,5 +19,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

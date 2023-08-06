@@ -3,7 +3,7 @@
     <div class="tw-text-3xl tw-mb-4">Role</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
-        <q-btn outline no-caps color="primary" @click="openDialog(null)">
+        <q-btn outline no-caps color="primary" @click="openFormDialog(null)">
           <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
           Tambah
         </q-btn>
@@ -43,7 +43,20 @@
                       clickable
                       v-ripple
                       class="text-primary"
-                      @click="openDialog(props.row)"
+                      @click="openMenuDialog(props.row)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="HambergerMenu" :size="20" />
+                      </q-item-section>
+
+                      <q-item-section>Menu</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      @click="openFormDialog(props.row)"
                     >
                       <q-item-section avatar>
                         <vx-icon iconName="Edit" :size="20" />
@@ -74,6 +87,35 @@
     </q-card>
   </q-page>
 
+  <q-dialog v-model="menu_dialog">
+    <q-card style="min-width: 600px">
+      <q-card-section class="row items-center">
+        <div class="text-h6">Menu</div>
+        <q-space />
+        <q-btn flat round dense v-close-popup>
+          <vx-icon iconName="CloseCircle" :size="20" />
+        </q-btn>
+      </q-card-section>
+      <q-card-section class="q-py-none">
+        <div class="tw-text-lg tw-mb-4">
+          Role: <span class="tw-font-semibold">{{ form?.Name }}</span>
+        </div>
+        <q-tree
+          :nodes="menus"
+          v-model:ticked="menus_ticked"
+          node-key="ID"
+          label-key="Name"
+          children-key="Childs"
+          default-expand-all
+          tickStrategy="leaf"
+        />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="Batal" color="negative" no-caps v-close-popup />
+        <q-btn flat label="Tambah" no-caps @click="assignMenu" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
@@ -105,7 +147,7 @@
             label="Batal"
             no-caps
             flat
-            @click="closeDialog"
+            @click="closeFormDialog"
             color="negative"
           />
           <q-btn
@@ -134,8 +176,8 @@
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn flat label="Cancel" no-caps v-close-popup />
-        <q-btn flat label="Yes" color="negative" no-caps @click="deleteData" />
+        <q-btn flat label="Tidak" no-caps v-close-popup />
+        <q-btn flat label="Ya" color="negative" no-caps @click="deleteData" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -201,10 +243,15 @@ export default defineComponent({
       loading: ref(false),
       id: ref(""),
       form: ref(structuredClone(initial_form)),
+
+      menu_dialog: ref(false),
+      menus: ref([]),
+      menus_ticked: ref([]),
     };
   },
   mounted() {
     this.$refs.tableRef.requestServerInteraction();
+    this.getMenu();
   },
   methods: {
     getData(props) {
@@ -228,6 +275,10 @@ export default defineComponent({
 
       params.append("Limit", rowsPerPage);
       params.append("Page", page);
+      params.append(
+        "Relations",
+        '{"Name": "Menus.Childs.Childs.Childs.Childs"}'
+      );
 
       this.$api
         .get("/roles", data)
@@ -244,19 +295,24 @@ export default defineComponent({
         });
     },
 
-    openDialog(data) {
+    getMenu() {
+      return this.$api.get("/menus").then((res) => {
+        this.menus = res.data.data;
+      });
+    },
+
+    openFormDialog(data) {
       if (!data) {
         this.form = { ...initial_form };
         this.is_edit = false;
       } else {
         this.is_edit = true;
         this.id = data.ID;
-        delete data.Password;
         this.form = { ...data };
       }
       this.form_dialog = true;
     },
-    closeDialog() {
+    closeFormDialog() {
       this.form = { ...initial_form };
       this.form_dialog = false;
       this.loading = false;
@@ -274,11 +330,11 @@ export default defineComponent({
               message: "Role berhasil ditambahkan",
               color: "positive",
             });
-            this.closeDialog();
+            this.closeFormDialog();
             this.$refs.tableRef.requestServerInteraction();
           })
           .catch((err) => {
-            this.closeDialog();
+            this.closeFormDialog();
             console.log(err);
           });
       } else {
@@ -292,11 +348,11 @@ export default defineComponent({
               message: "Role berhasil diubah",
               color: "positive",
             });
-            this.closeDialog();
+            this.closeFormDialog();
             this.$refs.tableRef.requestServerInteraction();
           })
           .catch((err) => {
-            this.closeDialog();
+            this.closeFormDialog();
             console.log(err);
           });
       }
@@ -319,6 +375,42 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
           this.confirm = false;
+        });
+    },
+
+    getAllIds(childs) {
+      let ids = [];
+      for (const child of childs) {
+        ids.push(child.ID);
+        if (child.Childs.length > 0) {
+          ids = ids.concat(getAllIds(child.Childs));
+        }
+      }
+      return ids;
+    },
+
+    openMenuDialog(data) {
+      this.menus_ticked = [];
+      this.menus_ticked = this.getAllIds(data.Menus);
+      this.id = data.ID;
+      this.form = { ...data };
+      this.menu_dialog = true;
+    },
+
+    assignMenu() {
+      this.$api
+        .post("roles/menus/assign", {
+          Menus: this.menus_ticked.map((e) => {
+            return { RoleID: this.id, MenuID: e };
+          }),
+        })
+        .then((res) => {
+          this.$q.notify({
+            message: "Menu berhasil ditambahkan",
+            color: "positive",
+          });
+          this.$refs.tableRef.requestServerInteraction();
+          this.menu_dialog = false;
         });
     },
   },

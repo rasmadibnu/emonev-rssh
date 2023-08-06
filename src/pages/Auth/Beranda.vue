@@ -184,7 +184,7 @@
         </q-list>
       </div>
     </q-card>
-    <q-card id="chart" flat class="tw-mt-4">
+    <!-- <q-card id="chart" flat class="tw-mt-4">
       <q-card-section>
         <apex-chart
           type="bar"
@@ -193,7 +193,7 @@
           :series="series"
         ></apex-chart>
       </q-card-section>
-    </q-card>
+    </q-card> -->
   </q-page>
 </template>
 

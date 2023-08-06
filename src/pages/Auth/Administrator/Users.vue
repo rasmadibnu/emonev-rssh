@@ -3,7 +3,7 @@
     <div class="tw-text-3xl tw-mb-4">Pengguna</div>
     <q-card flat>
       <q-card-section class="tw-flex tw-justify-between tw-items-center">
-        <q-btn outline no-caps color="primary" @click="openDialog(null)">
+        <q-btn outline no-caps color="primary" @click="openFormDialog(null)">
           <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
           Tambah
         </q-btn>
@@ -43,7 +43,20 @@
                       clickable
                       v-ripple
                       class="text-primary"
-                      @click="openDialog(props.row)"
+                      @click="openRoleDialog(props.row)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="UserOctagon" :size="20" />
+                      </q-item-section>
+
+                      <q-item-section>Roles</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      @click="openFormDialog(props.row)"
                     >
                       <q-item-section avatar>
                         <vx-icon iconName="Edit" :size="20" />
@@ -74,6 +87,35 @@
     </q-card>
   </q-page>
 
+  <q-dialog v-model="role_dialog">
+    <q-card style="min-width: 600px">
+      <q-card-section class="row items-center">
+        <div class="text-h6">Role</div>
+        <q-space />
+        <q-btn flat round dense v-close-popup>
+          <vx-icon iconName="CloseCircle" :size="20" />
+        </q-btn>
+      </q-card-section>
+      <q-card-section class="q-py-none">
+        <div class="tw-text-lg tw-mb-4">
+          Pengguna: <span class="tw-font-semibold">{{ form?.Name }}</span>
+        </div>
+        <q-table
+          flat
+          :rows="roles"
+          :columns="columns_roles"
+          v-model:selected="role_selected"
+          row-key="ID"
+          selection="multiple"
+        >
+        </q-table>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="Batal" color="negative" no-caps v-close-popup />
+        <q-btn flat label="Tambah" no-caps @click="assignRole" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
@@ -173,7 +215,7 @@
             label="Batal"
             no-caps
             flat
-            @click="closeDialog"
+            @click="closeFormDialog"
             color="negative"
           />
           <q-btn
@@ -264,6 +306,16 @@ export default defineComponent({
         align: "right",
       },
     ];
+
+    const columns_roles = [
+      {
+        name: "Name",
+        label: "Role",
+        align: "left",
+        field: "Name",
+        sortable: true,
+      },
+    ];
     return {
       rows: ref([]),
       columns,
@@ -282,11 +334,17 @@ export default defineComponent({
       form: ref(structuredClone(initial_form)),
 
       list_group: ref([]),
+
+      role_dialog: ref(false),
+      columns_roles,
+      roles: ref([]),
+      role_selected: ref([]),
     };
   },
   mounted() {
     this.$refs.tableRef.requestServerInteraction();
     this.getGroup();
+    this.getRole();
   },
   methods: {
     getData(props) {
@@ -310,6 +368,7 @@ export default defineComponent({
 
       params.append("Limit", rowsPerPage);
       params.append("Page", page);
+      params.append("Relations", '{"Name": "Roles.Menus"}');
 
       this.$api
         .get("/users", data)
@@ -343,8 +402,18 @@ export default defineComponent({
           console.log(err);
         });
     },
+    getRole() {
+      return this.$api
+        .get('/roles?Limit-&Relations={"Name": "Menus"}')
+        .then((res) => {
+          this.roles = res.data.data.Rows;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 
-    openDialog(data) {
+    openFormDialog(data) {
       if (!data) {
         this.form = { ...initial_form };
         this.is_edit = false;
@@ -356,7 +425,7 @@ export default defineComponent({
       }
       this.form_dialog = true;
     },
-    closeDialog() {
+    closeFormDialog() {
       this.form = { ...initial_form };
       this.form_dialog = false;
       this.loading = false;
@@ -374,11 +443,11 @@ export default defineComponent({
               message: "User berhasil ditambahkan",
               color: "positive",
             });
-            this.closeDialog();
+            this.closeFormDialog();
             this.$refs.tableRef.requestServerInteraction();
           })
           .catch((err) => {
-            this.closeDialog();
+            this.closeFormDialog();
             console.log(err);
           });
       } else {
@@ -392,11 +461,11 @@ export default defineComponent({
               message: "User berhasil diubah",
               color: "positive",
             });
-            this.closeDialog();
+            this.closeFormDialog();
             this.$refs.tableRef.requestServerInteraction();
           })
           .catch((err) => {
-            this.closeDialog();
+            this.closeFormDialog();
             console.log(err);
           });
       }
@@ -419,6 +488,32 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
           this.confirm = false;
+        });
+    },
+
+    openRoleDialog(data) {
+      this.id = data.ID;
+      delete data.Password;
+      this.form = { ...data };
+      this.role_selected = [];
+      this.role_selected = data.Roles;
+      this.role_dialog = true;
+    },
+
+    assignRole() {
+      this.$api
+        .post("users/roles/assign", {
+          Roles: this.role_selected.map((e) => {
+            return { UserID: this.id, RoleID: e.ID };
+          }),
+        })
+        .then((res) => {
+          this.$q.notify({
+            message: "Role berhasil ditambahkan",
+            color: "positive",
+          });
+          this.$refs.tableRef.requestServerInteraction();
+          this.role_dialog = false;
         });
     },
   },
