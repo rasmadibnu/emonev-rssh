@@ -30,9 +30,6 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     getUser() {
-      this.province = null;
-      this.provinces = [];
-      this.regency = [];
       api
         .get(
           "users/" +
@@ -67,12 +64,15 @@ export const useAuthStore = defineStore("auth", {
     },
 
     setMenus() {
+      this.menus = [];
       this.user.Roles.map((e) => {
         this.menus = this.menus.concat(this.getMenuChild(e.Menus));
       });
     },
 
     setProvince() {
+      this.province = null;
+      this.provinces = [];
       const uniqueSet = new Set(
         this.user.Group.Details.map((item) => item["ProvinceID"])
       );
@@ -96,6 +96,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     setRegencies(province) {
+      this.regency = [];
       this.regency = this.user.Group.Details.filter(
         (item) => item.ProvinceID === province
       ).map((regency) => {
