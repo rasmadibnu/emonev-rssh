@@ -6,7 +6,7 @@
         Informasi Personal</q-card-section
       >
       <q-card-section
-        class="q-pt-none tw-grid tw-grid-cols-4 tw-items-center tw-gap-8"
+        class="q-pt-none tw-grid md:tw-grid-cols-4 tw-grid-cols-1 tw-items-center md:tw-gap-8 tw-gap-2"
       >
         <div>Nama Lengkap</div>
         <q-input filled dense />

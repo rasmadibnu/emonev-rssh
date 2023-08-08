@@ -13,8 +13,10 @@
             <div class="tw-flex tw-gap-2">
               <div class="tw-mt-0.5">
                 <q-btn outline no-caps color="primary">
-                  <vx-icon iconName="Export" class="tw-mr-2" :size="20" />
-                  Export Excel
+                  <div class="tw-flex">
+                    <vx-icon iconName="Export" class="tw-mr-2" :size="20" />
+                    <div class="tw-line-clamp-1">Export Excel</div>
+                  </div>
                 </q-btn>
               </div>
               <q-select

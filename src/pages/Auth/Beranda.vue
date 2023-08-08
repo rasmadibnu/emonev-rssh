@@ -60,36 +60,39 @@
         </q-card-section>
       </q-card>
     </div>
-    <q-card flat class="tw-mt-4 tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+    <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
       <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
         <div class="tw-text-xl tw-font-semibold">Progress Penginputan</div>
         <q-select
           v-model="year"
-          :options="['2023']"
+          :options="list_year"
+          dense
           label="Tahun"
           class="tw-w-44"
+          map-options
+          emit-value
         />
       </div>
-      <q-table flat class="tw-col-span-8" :columns="columns" :rows="province">
+      <q-table flat class="tw-col-span-8" :columns="columns" :rows="progress">
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
-              {{ props.row.nama }}
+              {{ props.row.Name }}
             </q-td>
             <td>
               <q-badge
                 label="Completed"
-                v-if="props.row.progress == props.row.jumlahKabupatenKota"
+                v-if="props.row.Status == 'Completed'"
                 color="positive"
               />
               <q-badge
                 label="Belum Input"
-                v-else-if="props.row.progress == 0"
+                v-else-if="props.row.Status == 'Belum Input'"
                 color="negative"
               />
               <q-badge
                 label="Progress"
-                v-else-if="props.row.progress < props.row.jumlahKabupatenKota"
+                v-else-if="props.row.Status == 'Progress'"
                 color="secondary"
               />
             </td>
@@ -98,17 +101,13 @@
                 style="font-size: 0.8em"
                 class="tw-mt-1 tw-mr-2 text-primary"
               >
-                {{
-                  parseFloat(
-                    (props.row.progress / props.row.jumlahKabupatenKota) * 100
-                  ).toFixed(0) + "%"
-                }}
+                {{ parseFloat(props.row.Progress * 100).toFixed(0) + "%" }}
               </div>
               <q-linear-progress
                 rounded
                 stripe
                 size="25px"
-                :value="props.row.progress / props.row.jumlahKabupatenKota"
+                :value="props.row.Progress"
                 color="accent"
                 class="q-mt-sm"
               >
@@ -117,14 +116,14 @@
                     color="white"
                     text-color="accent"
                     :label="
-                      props.row.progress + '/' + props.row.jumlahKabupatenKota
+                      props.row.JumlahInput + '/' + props.row.Regencies.length
                     "
                   />
                 </div>
               </q-linear-progress>
             </q-td>
             <q-td>
-              {{ moment(props.row.lastUpdate).format("YYYY-MM-DD hh:mm:ss") }}
+              {{ moment(props.row.UpdatedAt).format("YYYY-MM-DD hh:mm:ss") }}
             </q-td>
           </q-tr>
         </template>
@@ -149,7 +148,11 @@
             </q-item-section>
 
             <div side class="tw-text-right">
-              <div class="tw-text-lg tw-font-semibold">20</div>
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress.filter((e) => e.Status == "Completed").length
+                }}
+              </div>
               <div>Completed</div>
             </div>
           </q-item>
@@ -161,7 +164,9 @@
             </q-item-section>
 
             <div side class="tw-text-right">
-              <div class="tw-text-lg tw-font-semibold">12</div>
+              <div class="tw-text-lg tw-font-semibold">
+                {{ this.progress.filter((e) => e.Status == "Progress").length }}
+              </div>
               <div>Progress</div>
             </div>
           </q-item>
@@ -177,7 +182,11 @@
             </q-item-section>
 
             <div side class="tw-text-right">
-              <div class="tw-text-lg tw-font-semibold">12</div>
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress.filter((e) => e.Status == "Belum Input").length
+                }}
+              </div>
               <div>Belum Input</div>
             </div>
           </q-item>
@@ -198,7 +207,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import VxIcon from "src/components/VxIcon.vue";
 import ApexChart from "vue3-apexcharts";
 import moment from "moment";
@@ -465,7 +474,10 @@ export default defineComponent({
       moment,
       columns,
       province,
-      year: "2023",
+      year: ref(null),
+
+      list_year: ref([]),
+      progress: ref([]),
       series: [
         {
           name: "Net Profit",
@@ -526,8 +538,8 @@ export default defineComponent({
         },
       },
 
-      series2: [getRandomNumber(100)],
-      chartOptions2: {
+      series2: ref([0]),
+      chartOptions2: ref({
         chart: {
           type: "radialBar",
           offsetY: -20,
@@ -563,9 +575,77 @@ export default defineComponent({
         },
 
         colors: ["#243763"],
-        labels: ["22 / 34"],
-      },
+        labels: ["- / -"],
+      }),
     };
+  },
+  mounted() {
+    this.getYear();
+  },
+  methods: {
+    getYear() {
+      this.$api
+        .get("/forms?Limit=-")
+        .then((res) => {
+          this.list_year = res.data.data.Rows.map((year) => {
+            return { label: year.Year, value: year.ID };
+          });
+          return this.list_year;
+        })
+        .then((res) => {
+          const nowYear = new Date().getFullYear();
+          const findYear = res.find((year) => year.label == nowYear);
+          if (findYear) {
+            this.year = findYear.value;
+          } else {
+            this.year = res[0].value;
+          }
+          this.getProgess(this.year);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getProgess(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      return this.$api
+        .get("/forms/" + findYear.label + "/progress")
+        .then((res) => {
+          this.progress = res.data.data.map((e) => {
+            var jumlah_input = e.Regencies.filter(
+              (r) => r.IsInput == true
+            ).length;
+            var status = "";
+            if (jumlah_input == 0) {
+              status = "Belum Input";
+            } else if (jumlah_input < e.Regencies.length) {
+              status = "Progress";
+            } else if (jumlah_input >= e.Regencies.length) {
+              status = "Completed";
+            }
+            return {
+              ...e,
+              Status: status,
+              Progress: jumlah_input / e.Regencies.length,
+              JumlahInput: jumlah_input,
+            };
+          });
+
+          var jumlah_completed = this.progress.filter(
+            (e) => e.Status == "Completed"
+          ).length;
+          this.series2[0] = parseFloat(
+            jumlah_completed / this.progress.length
+          ).toFixed(0);
+
+          this.chartOptions2.labels[0] = [
+            jumlah_completed + " / " + this.progress.length,
+          ];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 });
 </script>

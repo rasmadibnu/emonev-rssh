@@ -63,7 +63,7 @@
               </q-card>
               <q-card flat>
                 <q-card-section
-                  class="tw-flex tw-justify-between tw-items-center"
+                  class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
                 >
                   <div class="text-primary tw-text-xl">
                     Persentase Anggaran ATM Terhadap Bidang Kesehatan Provinsi

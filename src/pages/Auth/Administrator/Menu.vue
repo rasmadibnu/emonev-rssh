@@ -45,7 +45,7 @@
   </q-page>
 
   <q-dialog v-model="form_dialog">
-    <q-card style="min-width: 600px">
+    <q-card style="width: 600px">
       <q-card-section class="row items-center">
         <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Menu</div>
         <q-space />
@@ -55,9 +55,11 @@
       </q-card-section>
 
       <q-form @submit.prevent="submit">
-        <q-card-section class="tw-grid tw-grid-cols-6 tw-gap-x-4 tw-gap-y-2">
+        <q-card-section
+          class="tw-grid md:tw-grid-cols-6 tw-grid-cols-1 tw-gap-x-4 tw-gap-y-2"
+        >
           <q-select
-            class="tw-col-span-6"
+            class="md:tw-col-span-6"
             :options="menu_list"
             emit-value
             map-options
@@ -72,27 +74,28 @@
             filled
             label="Nama"
             :rules="[(val) => !!val || 'Field harus diisi']"
-            class="tw-col-span-2"
+            class="md:tw-col-span-2"
           />
           <q-input
             v-model="form.Code"
             filled
             label="Code"
-            class="tw-col-span-2"
+            class="md:tw-col-span-2"
+            hint=""
           />
           <q-input
             v-model="form.Url"
             filled
             label="URL"
             :rules="[(val) => !!val || 'Field harus diisi']"
-            class="tw-col-span-2"
+            class="md:tw-col-span-2"
           />
           <q-input
             v-model="form.Icon"
             filled
             label="Icon"
             :rules="[(val) => !!val || 'Field harus diisi']"
-            class="tw-col-span-3"
+            class="md:tw-col-span-3"
           />
           <q-input
             v-model.number="form.Index"
@@ -101,7 +104,7 @@
             reverse-fill-mask
             label="Urutan"
             :rules="[(val) => !!val || 'Field harus diisi']"
-            class="tw-col-span-3"
+            class="md:tw-col-span-3"
           />
         </q-card-section>
 

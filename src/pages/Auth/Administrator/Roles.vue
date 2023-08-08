@@ -88,7 +88,7 @@
   </q-page>
 
   <q-dialog v-model="menu_dialog">
-    <q-card style="min-width: 600px">
+    <q-card style="width: 600px">
       <q-card-section class="row items-center">
         <div class="text-h6">Menu</div>
         <q-space />
@@ -117,7 +117,7 @@
     </q-card>
   </q-dialog>
   <q-dialog v-model="form_dialog">
-    <q-card style="min-width: 600px">
+    <q-card style="width: 600px">
       <q-card-section class="row items-center">
         <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Role</div>
         <q-space />

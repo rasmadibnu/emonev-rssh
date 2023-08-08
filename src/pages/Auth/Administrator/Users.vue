@@ -88,7 +88,7 @@
   </q-page>
 
   <q-dialog v-model="role_dialog">
-    <q-card style="min-width: 600px">
+    <q-card style="width: 600px">
       <q-card-section class="row items-center">
         <div class="text-h6">Role</div>
         <q-space />
@@ -117,7 +117,7 @@
     </q-card>
   </q-dialog>
   <q-dialog v-model="form_dialog">
-    <q-card style="min-width: 600px">
+    <q-card style="width: 600px">
       <q-card-section class="row items-center">
         <div class="text-h6">{{ !is_edit ? "Tambah" : "Ubah" }} Pengguna</div>
         <q-space />
@@ -127,7 +127,9 @@
       </q-card-section>
 
       <q-form @submit.prevent="submit">
-        <q-card-section class="tw-grid tw-grid-cols-2 tw-gap-x-4 tw-gap-y-2">
+        <q-card-section
+          class="tw-grid md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-x-4 tw-gap-y-2"
+        >
           <q-input
             v-model="form.Username"
             filled
@@ -158,6 +160,7 @@
             map-options
             emit-value
             label="Group"
+            hint=""
           >
             <template v-slot:option="scope">
               <q-item v-bind="scope.itemProps">
@@ -196,6 +199,7 @@
             type="password"
             filled
             label="Password"
+            hint=""
           />
           <q-input
             v-model="form.ConfirmPassword"

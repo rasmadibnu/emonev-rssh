@@ -9,7 +9,7 @@ import { useAuthStore } from "src/stores/auth";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "https://api-monev.taxacode.com:8443/api/v1",
+  baseURL: process.env.API_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
