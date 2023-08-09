@@ -61,34 +61,7 @@
                   ></apex>
                 </q-card-section>
               </q-card>
-              <q-card flat>
-                <q-card-section
-                  class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
-                >
-                  <div class="text-primary tw-text-xl">
-                    Persentase Anggaran ATM Terhadap Bidang Kesehatan Provinsi
-                  </div>
-                  <q-select
-                    :options="list_province"
-                    label="Provinsi"
-                    v-model="province"
-                    map-options
-                    emit-value
-                    use-input
-                    @filter="filterProvince"
-                    @update:model-value="findProvince"
-                  />
-                </q-card-section>
-                <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="350"
-                    :options="chartOptionsProvince"
-                    :series="seriesProvince"
-                    ref="chartProvince"
-                  ></apex>
-                </q-card-section>
-              </q-card>
+
               <footer class="text-center tw-py-10">
                 {{ new Date().getFullYear() }} © Copyright All Right Reserved
               </footer>
@@ -96,7 +69,43 @@
           </q-tab-panel>
 
           <q-tab-panel name="Dashboard2">
-            <div class="text-center tw-text-2xl">On Progress</div>
+            <q-card flat class="tw-mb-20">
+              <q-card-section
+                class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
+              >
+                <div class="text-primary tw-text-xl">
+                  Budget Anggaran ATM Terhadap Bidang Kesehatan Provinsi
+                </div>
+                <q-select
+                  :options="list_province"
+                  label="Provinsi"
+                  v-model="province"
+                  map-options
+                  emit-value
+                  use-input
+                  @filter="filterProvince"
+                  @update:model-value="updateProvince"
+                />
+              </q-card-section>
+              <q-card-section class="q-pt-none">
+                <apex
+                  type="bar"
+                  height="350"
+                  :options="chartOptionsProvince"
+                  :series="seriesProvince"
+                  ref="chartProvince"
+                ></apex>
+              </q-card-section>
+              <q-card-section class="q-pt-none">
+                <q-table
+                  flat
+                  :rows="province_table"
+                  hide-pagination
+                  :columns="province_table_column"
+                >
+                </q-table>
+              </q-card-section>
+            </q-card>
           </q-tab-panel>
         </q-tab-panels>
 
@@ -156,270 +165,50 @@ export default defineComponent({
   components: { Apex },
   setup() {
     const authStore = useAuthStore();
-    const provinsi = [
-      {
-        nama: "Aceh",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Bali",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Bangka Belitung",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Banten",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Bengkulu",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Gorontalo",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Jambi",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Jawa Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Jawa Tengah",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Jawa Timur",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kalimantan Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kalimantan Selatan",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kalimantan Tengah",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kalimantan Timur",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kalimantan Utara",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Kepulauan Riau",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Lampung",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Maluku",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Maluku Utara",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Nusa Tenggara Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Nusa Tenggara Timur",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Papua",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Papua Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Riau",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sulawesi Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sulawesi Selatan",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sulawesi Tengah",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sulawesi Tenggara",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sulawesi Utara",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sumatera Barat",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sumatera Selatan",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Sumatera Utara",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-      {
-        nama: "Yogyakarta",
-        budget: getRandomBudget(),
-        average: getRandomAverage(),
-      },
-    ];
 
-    function getRandomBudget() {
-      return Math.floor(Math.random() * 9000000000) + 1000000000;
+    function suffix(amount) {
+      if (amount >= 1e12) {
+        return (amount / 1e12).toFixed(2) + " T";
+      } else if (amount >= 1e9) {
+        return (amount / 1e9).toFixed(2) + " M";
+      } else if (amount >= 1e6) {
+        return (amount / 1e6).toFixed(2) + " jt";
+      } else {
+        return amount.toFixed(2);
+      }
     }
 
-    function getRandomAverage() {
-      const min = 0.1;
-      const max = 4.0;
-      const randomValue = Math.random() * (max - min) + min;
-      const roundedValue = randomValue.toFixed(2);
-      return parseFloat(roundedValue);
+    function rupiah(number) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(number);
     }
 
-    const sortedByHighestBudget = structuredClone(provinsi).sort(
-      (a, b) => b.budget - a.budget
-    );
-    const sortedByHighestAvg = structuredClone(provinsi).sort(
-      (a, b) => b.average - a.average
-    );
-
-    const kabupatenKotaBali = [
+    const province_table_column = [
       {
-        nama: "Kabupaten Badung",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
+        name: "name",
+        label: "",
+        field: "Name",
+        align: "left",
+        sortable: true,
       },
       {
-        nama: "Kabupaten Bangli",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
+        name: "bidkes",
+        label: "Anggaran ATM Bidang Kesehatan",
+        field: (row) => rupiah(row.Bidkes),
+        sortable: true,
       },
       {
-        nama: "Kabupaten Buleleng",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kabupaten Gianyar",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kabupaten Jembrana",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kabupaten Karangasem",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kabupaten Klungkung",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kabupaten Tabanan",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
-      },
-      {
-        nama: "Kota Denpasar",
-        budget: {
-          aids: getRandomAverage(),
-          tbc: getRandomAverage(),
-          malaria: getRandomAverage(),
-        },
+        name: "other",
+        label: "Anggaran ATM Sumber Lain",
+        field: (row) => rupiah(row.Other),
+        sortable: true,
       },
     ];
-
     return {
       authStore,
+      province_table_column,
       isReveal: ref(true),
       series: [
         {
@@ -464,46 +253,6 @@ export default defineComponent({
             "Dana Desa",
             "SK (Forum Kemitraan)",
           ],
-        },
-      },
-      series2: [
-        {
-          data: sortedByHighestBudget.map((e) => e.budget),
-        },
-      ],
-      chartOptions2: {
-        yaxis: {
-          labels: {
-            formatter: function (value) {
-              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            },
-          },
-        },
-        chart: {
-          type: "bar",
-          height: 350,
-        },
-        colors: ["#243763"],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "55%",
-            endingShape: "rounded",
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ["transparent"],
-        },
-        xaxis: {
-          categories: sortedByHighestBudget.map((e) => e.nama),
-        },
-        fill: {
-          opacity: 1,
         },
       },
       seriesPercentage: [
@@ -578,13 +327,13 @@ export default defineComponent({
         },
         dataLabels: {
           formatter: function (value) {
-            return `${parseFloat(value).toFixed(2)}%`;
+            return suffix(value);
           },
         },
         yaxis: {
           labels: {
             formatter: function (value) {
-              return `${parseFloat(value).toFixed(2)}%`;
+              return suffix(value);
             },
           },
         },
@@ -608,6 +357,7 @@ export default defineComponent({
       list_province: ref([]),
       province: ref(null),
       tab: ref("Dashboard1"),
+      province_table: ref([]),
     };
   },
   mounted() {
@@ -666,7 +416,7 @@ export default defineComponent({
         .then((res) => {
           this.$refs.chartPercentage.refresh();
           this.province = this.list_province[0].value;
-          this.findProvince(this.list_province[0].value);
+          this.updateProvince(this.list_province[0].value);
         })
         .catch((err) => {
           console.log(err);
@@ -689,6 +439,11 @@ export default defineComponent({
       });
     },
 
+    updateProvince(val) {
+      this.findProvince(val);
+      this.findProvinceTable(val);
+    },
+
     findProvince(val) {
       const findYear = this.list_year.find((year) => year.value == this.year);
       return this.$api
@@ -698,19 +453,32 @@ export default defineComponent({
             (province) => province.name
           );
           this.seriesProvince[0].data = res.data.data.map(
-            (province) => province.percentage.aids
+            (province) => province.budget.AIDS
           );
           this.seriesProvince[1].data = res.data.data.map(
-            (province) => province.percentage.malaria
+            (province) => province.budget.Malaria
           );
           this.seriesProvince[2].data = res.data.data.map(
-            (province) => province.percentage.tbc
+            (province) => province.budget.TBC
           );
 
+          console.log(this.seriesProvince);
           return res;
         })
         .then((res) => {
           this.$refs.chartProvince.refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    findProvinceTable(val) {
+      const findYear = this.list_year.find((year) => year.value == this.year);
+      return this.$api
+        .get("/result/" + findYear.label + "/detail/" + val)
+        .then((res) => {
+          this.province_table = res.data.data;
         })
         .catch((err) => {
           console.log(err);

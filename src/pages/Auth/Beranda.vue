@@ -122,9 +122,9 @@
                 </div>
               </q-linear-progress>
             </q-td>
-            <q-td>
+            <!-- <q-td>
               {{ moment(props.row.UpdatedAt).format("YYYY-MM-DD hh:mm:ss") }}
-            </q-td>
+            </q-td> -->
           </q-tr>
         </template>
       </q-table>
@@ -238,13 +238,13 @@ export default defineComponent({
         field: "Progress",
         sortable: true,
       },
-      {
-        name: "Last Update",
-        align: "left",
-        label: "Last Update",
-        field: "Last Update",
-        sortable: true,
-      },
+      // {
+      //   name: "Last Update",
+      //   align: "left",
+      //   label: "Last Update",
+      //   field: "Last Update",
+      //   sortable: true,
+      // },
     ];
 
     const province = [

@@ -171,7 +171,7 @@
                     />
                   </td>
                 </tr>
-                <tr class="tw-table-row md:tw-hidden">
+                <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
                   <td colspan="100%">
                     <q-input
                       v-if="inp.Type == 'currency'"
@@ -183,6 +183,11 @@
                       v-model="inp.Value"
                       :rules="[(val) => !!val && inp.IsRequired]"
                     />
+                  </td>
+                </tr>
+                <tr class="q-tr--no-hover" v-if="inp.Dividen">
+                  <td colspan="100%">
+                    <q-separator />
                   </td>
                 </tr>
               </template>
@@ -232,6 +237,9 @@ export default defineComponent({
       fields: ref([]),
       loading: ref(false),
     };
+  },
+  beforeMount() {
+    this.auth.province = null;
   },
   mounted() {
     this.getYear();
