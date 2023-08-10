@@ -155,6 +155,11 @@
                 </td>
               </tr>
               <template v-for="inp in fields" v-bind:key="inp.ID">
+                <tr class="q-tr--no-hover" v-if="inp.Dividen">
+                  <td colspan="100%">
+                    <q-separator />
+                  </td>
+                </tr>
                 <tr class="q-tr--no-hover">
                   <td :class="inp.class">{{ inp.Code }}</td>
                   <td :class="inp.class">{{ inp.Label }}</td>
@@ -183,11 +188,6 @@
                       v-model="inp.Value"
                       :rules="[(val) => !!val && inp.IsRequired]"
                     />
-                  </td>
-                </tr>
-                <tr class="q-tr--no-hover" v-if="inp.Dividen">
-                  <td colspan="100%">
-                    <q-separator />
                   </td>
                 </tr>
               </template>
