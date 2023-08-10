@@ -103,6 +103,7 @@
                     :rows="province_table"
                     hide-pagination
                     :columns="province_table_column"
+                    table-header-class="bg-secondary text-white"
                   >
                   </q-table>
                 </q-card-section>
