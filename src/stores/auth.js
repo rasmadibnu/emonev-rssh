@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     getUser() {
-      api
+      return api
         .get(
           "users/" +
             this.token_data.ID +
