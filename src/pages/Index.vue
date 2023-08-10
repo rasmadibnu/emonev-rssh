@@ -49,7 +49,7 @@
           </q-card> -->
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Presentase Anggaran ATM Terhadap Bidang Kesehatan
+                  Anggaran ATM Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <apex
@@ -75,7 +75,7 @@
                   class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
                 >
                   <div class="text-primary tw-text-xl">
-                    Presentase Anggaran ATM Provinsi
+                    Anggaran ATM Provinsi
                   </div>
                   <q-select
                     :options="list_province"
@@ -132,7 +132,7 @@
               </div>
               <q-btn
                 color="secondary"
-                :label="authStore.token ? 'Dashabord' : 'Masuk'"
+                :label="authStore.token ? 'Dashboard' : 'Masuk'"
                 :to="{ name: authStore.token ? 'beranda' : 'login' }"
                 unelevated
                 no-caps
