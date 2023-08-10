@@ -49,7 +49,7 @@
           </q-card> -->
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Persentase Anggaran ATM Terhadap Bidang Kesehatan
+                  Presentase Anggaran ATM Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <apex
@@ -69,43 +69,45 @@
           </q-tab-panel>
 
           <q-tab-panel name="Dashboard2">
-            <q-card flat class="tw-mb-20">
-              <q-card-section
-                class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
-              >
-                <div class="text-primary tw-text-xl">
-                  Budget Anggaran ATM Terhadap Bidang Kesehatan Provinsi
-                </div>
-                <q-select
-                  :options="list_province"
-                  label="Provinsi"
-                  v-model="province"
-                  map-options
-                  emit-value
-                  use-input
-                  @filter="filterProvince"
-                  @update:model-value="updateProvince"
-                />
-              </q-card-section>
-              <q-card-section class="q-pt-none">
-                <apex
-                  type="bar"
-                  height="350"
-                  :options="chartOptionsProvince"
-                  :series="seriesProvince"
-                  ref="chartProvince"
-                ></apex>
-              </q-card-section>
-              <q-card-section class="q-pt-none">
-                <q-table
-                  flat
-                  :rows="province_table"
-                  hide-pagination
-                  :columns="province_table_column"
+            <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
+              <q-card flat class="tw-mb-20">
+                <q-card-section
+                  class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
                 >
-                </q-table>
-              </q-card-section>
-            </q-card>
+                  <div class="text-primary tw-text-xl">
+                    Presentase Anggaran ATM Provinsi
+                  </div>
+                  <q-select
+                    :options="list_province"
+                    label="Provinsi"
+                    v-model="province"
+                    map-options
+                    emit-value
+                    use-input
+                    @filter="filterProvince"
+                    @update:model-value="updateProvince"
+                  />
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex
+                    type="bar"
+                    height="350"
+                    :options="chartOptionsProvince"
+                    :series="seriesProvince"
+                    ref="chartProvince"
+                  ></apex>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <q-table
+                    flat
+                    :rows="province_table"
+                    hide-pagination
+                    :columns="province_table_column"
+                  >
+                  </q-table>
+                </q-card-section>
+              </q-card>
+            </div>
           </q-tab-panel>
         </q-tab-panels>
 
@@ -276,7 +278,7 @@ export default defineComponent({
         },
         dataLabels: {
           formatter: function (value) {
-            return `${parseFloat(value).toFixed(2)}%`;
+            return suffix(value);
           },
         },
         stroke: {
@@ -287,7 +289,7 @@ export default defineComponent({
         yaxis: {
           labels: {
             formatter: function (value) {
-              return `${parseFloat(value).toFixed(2)}%`;
+              return suffix(value);
             },
           },
         },
@@ -327,13 +329,13 @@ export default defineComponent({
         },
         dataLabels: {
           formatter: function (value) {
-            return suffix(value);
+            return `${parseFloat(value).toFixed(2)}%`;
           },
         },
         yaxis: {
           labels: {
             formatter: function (value) {
-              return suffix(value);
+              return `${parseFloat(value).toFixed(2)}%`;
             },
           },
         },
@@ -381,7 +383,7 @@ export default defineComponent({
           } else {
             this.year = res[0].value;
           }
-          this.getPrecentage(this.year);
+          this.getBudget(this.year);
         })
         .catch((err) => {
           console.log(err);
@@ -395,14 +397,12 @@ export default defineComponent({
       }
     },
 
-    getPrecentage(val) {
+    getBudget(val) {
       const findYear = this.list_year.find((year) => year.value == val);
       this.$api
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
-          this.seriesPercentage[0].data = res.data.data.map(
-            (e) => e.percentage
-          );
+          this.seriesPercentage[0].data = res.data.data.map((e) => e.budget);
           this.chartOptionsPercentage.xaxis.categories = res.data.data.map(
             (e) => e.name
           );
@@ -453,13 +453,13 @@ export default defineComponent({
             (province) => province.name
           );
           this.seriesProvince[0].data = res.data.data.map(
-            (province) => province.budget.AIDS
+            (province) => province.percentage.AIDS
           );
           this.seriesProvince[1].data = res.data.data.map(
-            (province) => province.budget.Malaria
+            (province) => province.percentage.Malaria
           );
           this.seriesProvince[2].data = res.data.data.map(
-            (province) => province.budget.TBC
+            (province) => province.percentage.TBC
           );
 
           console.log(this.seriesProvince);
