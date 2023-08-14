@@ -162,36 +162,110 @@
                     <q-separator />
                   </td>
                 </tr>
-                <tr class="q-tr--no-hover">
-                  <td :class="inp.class">{{ inp.Code }}</td>
-                  <td :class="inp.class">{{ inp.Label }}</td>
-                  <td class="md:tw-block tw-hidden">
-                    <q-input
-                      v-if="inp.Type == 'currency'"
-                      dense
-                      filled
-                      mask="###,###,###,###,###,###,###,###,###,###"
-                      reverse-fill-mask
-                      prefix="Rp"
-                      v-model="inp.Value"
-                      :rules="[(val) => !!val && inp.IsRequired]"
-                    />
-                  </td>
-                </tr>
-                <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                  <td colspan="100%">
-                    <q-input
-                      v-if="inp.Type == 'currency'"
-                      dense
-                      filled
-                      mask="###,###,###,###,###,###,###,###,###,###"
-                      reverse-fill-mask
-                      prefix="Rp"
-                      v-model="inp.Value"
-                      :rules="[(val) => !!val && inp.IsRequired]"
-                    />
-                  </td>
-                </tr>
+                <template v-if="inp.Type != 'file'">
+                  <tr class="q-tr--no-hover">
+                    <td :class="inp.class">{{ inp.Code }}</td>
+                    <td :class="inp.class">{{ inp.Label }}</td>
+                    <td class="md:tw-block tw-hidden">
+                      <q-input
+                        v-if="inp.Type == 'currency'"
+                        dense
+                        filled
+                        mask="###,###,###,###,###,###,###,###,###,###"
+                        reverse-fill-mask
+                        prefix="Rp"
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      />
+                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
+                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
+                        <q-radio
+                          v-model="inp.Value"
+                          val="Tidak"
+                          label="Tidak"
+                        />
+                      </div>
+                      <q-file
+                        v-else-if="inp.Type == 'file'"
+                        dense
+                        filled
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
+                    <td colspan="100%">
+                      <q-input
+                        v-if="inp.Type == 'currency'"
+                        dense
+                        filled
+                        mask="###,###,###,###,###,###,###,###,###,###"
+                        reverse-fill-mask
+                        prefix="Rp"
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      />
+                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
+                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
+                        <q-radio
+                          v-model="inp.Value"
+                          val="Tidak"
+                          label="Tidak"
+                        />
+                      </div>
+                      <q-file
+                        v-else-if="inp.Type == 'file'"
+                        dense
+                        filled
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                </template>
+                <template
+                  v-else-if="
+                    inp.Type == 'file' && fields[index - 1].Value == 'Ya'
+                  "
+                >
+                  <tr class="q-tr--no-hover">
+                    <td :class="inp.class">{{ inp.Code }}</td>
+                    <td :class="inp.class">{{ inp.Label }}</td>
+                    <td class="md:tw-block tw-hidden">
+                      <q-file
+                        dense
+                        filled
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
+                    <td colspan="100%">
+                      <q-file
+                        dense
+                        filled
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                </template>
               </template>
             </tbody>
           </q-markup-table>

@@ -161,6 +161,8 @@
             emit-value
             label="Group"
             hint=""
+            @filter="filterGroup"
+            use-input
           >
             <template v-slot:option="scope">
               <q-item v-bind="scope.itemProps">
@@ -337,6 +339,7 @@ export default defineComponent({
       id: ref(""),
       form: ref(structuredClone(initial_form)),
 
+      options_gorup: ref([]),
       list_group: ref([]),
 
       role_dialog: ref(false),
@@ -401,6 +404,8 @@ export default defineComponent({
               details: group.Details,
             };
           });
+
+          this.options_gorup = this.list_group;
         })
         .catch((err) => {
           console.log(err);
@@ -519,6 +524,22 @@ export default defineComponent({
           this.$refs.tableRef.requestServerInteraction();
           this.role_dialog = false;
         });
+    },
+
+    filterGroup(val, update) {
+      if (val === "") {
+        update(() => {
+          this.list_group = this.options_gorup;
+        });
+        return;
+      }
+
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list_group = this.options_gorup.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
     },
   },
 });

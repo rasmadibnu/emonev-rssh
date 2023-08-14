@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Penginputan</div>
+    <div class="tw-text-3xl tw-mb-4">Survey</div>
     <q-card flat>
       <q-card-section>
         <div class="tw-flex tw-justify-end tw-items-center tw-mb-4">
@@ -8,7 +8,7 @@
             outline
             no-caps
             color="primary"
-            :to="{ name: 'penginputan-create' }"
+            :to="{ name: 'survey-create' }"
           >
             <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
             Tambah
@@ -263,7 +263,7 @@ export default defineComponent({
       params.append("Relation", '{"Name": "Form"}');
       params.append("Relation", '{"Name": "RegencyCity.Province"}');
       params.append("Relation", '{"Name": "FieldResponse.Field"}');
-      params.append("Filters", '{"Type": "budget"}');
+      params.append("Filters", '{"Type": "survey"}');
 
       this.$api
         .get("/form-responses", data)

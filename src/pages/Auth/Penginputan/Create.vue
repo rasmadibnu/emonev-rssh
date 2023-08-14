@@ -248,7 +248,7 @@ export default defineComponent({
     getYear() {
       this.loading = true;
       this.$api
-        .get("/forms?Limit=-")
+        .get('/forms?Limit=-&Filters={"Type": "budget"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -299,7 +299,7 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '?Relation={"Name": "Fields"}')
+        .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;

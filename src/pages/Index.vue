@@ -370,7 +370,7 @@ export default defineComponent({
   methods: {
     getYear() {
       this.$api
-        .get("/forms?Limit=-")
+        .get('/forms?Limit=-&Filters={"Type": "budget"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };

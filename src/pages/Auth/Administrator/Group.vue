@@ -180,6 +180,17 @@
         >
           <q-badge :key="index" :label="item.RegencyCity.Name" />
         </q-virtual-scroll> -->
+        <q-input
+          v-model="filter"
+          class="tw-mb-3"
+          dense
+          placeholder="Cari..."
+          filled
+        >
+          <template #prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
         <q-scroll-area style="height: 50vh" class="tw-w-full">
           <q-table
             dense
@@ -189,12 +200,14 @@
             :loading="loadingRegency"
             :rows="rowsRegency"
             :columns="columnsRegency"
-            @request="getDataRegency"
-            v-model:pagination="paginationRegency"
             v-model:selected="selectedRegency"
             selection="multiple"
             row-key="ID"
+            :filter="filter"
+            :pagination="{ rowsPerPage: 50 }"
           >
+            <!-- v-model:pagination="paginationRegency" -->
+            <!-- @request="getDataRegency" -->
             <template #top>
               <div class="tw-flex tw-justify-between tw-w-full">
                 <!-- <q-input dense placeholder="Search..." v-model="search" filled>
@@ -387,10 +400,13 @@ export default defineComponent({
       totalPagesRegency: ref(0),
       selectedRegency: ref([]),
       selectedGroup: ref({}),
+
+      filter: ref(""),
     };
   },
   mounted() {
     this.$refs.tableRef.requestServerInteraction();
+    this.getDataRegency();
   },
   methods: {
     getData(props) {
@@ -510,29 +526,29 @@ export default defineComponent({
 
     getDataRegency(props) {
       this.loadingRegency = true;
-      this.paginationRegency = props?.pagination;
+      // this.paginationRegency = props?.pagination;
 
-      const params = new URLSearchParams();
-      const data = {
-        params: params,
-      };
-      let { page, rowsPerPage, rowsNumber } = props.pagination;
+      // const params = new URLSearchParams();
+      // const data = {
+      //   params: params,
+      // };
+      // let { page, rowsPerPage, rowsNumber } = props.pagination;
 
-      if (rowsPerPage == 0) {
-        page = 1;
-        rowsPerPage = rowsNumber;
-      }
+      // if (rowsPerPage == 0) {
+      //   page = 1;
+      //   rowsPerPage = rowsNumber;
+      // }
 
-      if (this.totalPagesRegency < page) {
-        page = this.totalPagesRegency;
-      }
+      // if (this.totalPagesRegency < page) {
+      //   page = this.totalPagesRegency;
+      // }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
-      params.append("Relations", '{"Name":"Province"}');
+      // params.append("Limit", rowsPerPage);
+      // params.append("Page", page);
+      // params.append("Relations", '{"Name":"Province"}');
 
       this.$api
-        .get("/regency-cities", data)
+        .get('/regency-cities?Limit=-&Relations={"Name":"Province"}')
         .then((response) => {
           this.rowsRegency = response.data.data.Rows;
           this.paginationRegency.rowsNumber = response.data.data.TotalRows;

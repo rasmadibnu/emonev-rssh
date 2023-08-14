@@ -52,6 +52,23 @@ const routes = [
         name: "penginputan-edit",
       },
 
+      // Survey
+      {
+        path: "survey",
+        component: () => import("pages/Auth/Survey/Index.vue"),
+        name: "survey-index",
+      },
+      {
+        path: "survey/create",
+        component: () => import("pages/Auth/Survey/Create.vue"),
+        name: "survey-create",
+      },
+      {
+        path: "survey/:id/edit",
+        component: () => import("pages/Auth/Survey/Edit.vue"),
+        name: "survey-edit",
+      },
+
       {
         path: "laporan",
         component: () => import("src/pages/Auth/Laporan.vue"),

@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Edit Penginputan</div>
+    <div class="tw-text-3xl tw-mb-4">Buat Survey</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
@@ -46,7 +46,6 @@
                 <td>Pilih Provinsi</td>
                 <td class="md:tw-block tw-hidden">
                   <q-select
-                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -76,7 +75,6 @@
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
                   <q-select
-                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -156,42 +154,116 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
-              <template v-for="inp in fields" v-bind:key="inp.ID">
+              <template v-for="(inp, index) in fields" v-bind:key="inp.ID">
                 <tr class="q-tr--no-hover" v-if="inp.Dividen">
                   <td colspan="100%">
                     <q-separator />
                   </td>
                 </tr>
-                <tr class="q-tr--no-hover">
-                  <td :class="inp.class">{{ inp.Code }}</td>
-                  <td :class="inp.class">{{ inp.Label }}</td>
-                  <td class="md:tw-block tw-hidden">
-                    <q-input
-                      v-if="inp.Type == 'currency'"
-                      dense
-                      filled
-                      mask="###,###,###,###,###,###,###,###,###,###"
-                      reverse-fill-mask
-                      prefix="Rp"
-                      v-model="inp.Value"
-                      :rules="[(val) => !!val && inp.IsRequired]"
-                    />
-                  </td>
-                </tr>
-                <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                  <td colspan="100%">
-                    <q-input
-                      v-if="inp.Type == 'currency'"
-                      dense
-                      filled
-                      mask="###,###,###,###,###,###,###,###,###,###"
-                      reverse-fill-mask
-                      prefix="Rp"
-                      v-model="inp.Value"
-                      :rules="[(val) => !!val && inp.IsRequired]"
-                    />
-                  </td>
-                </tr>
+                <template v-if="inp.Type != 'file'">
+                  <tr class="q-tr--no-hover">
+                    <td :class="inp.class">{{ inp.Code }}</td>
+                    <td :class="inp.class">{{ inp.Label }}</td>
+                    <td class="md:tw-block tw-hidden">
+                      <q-input
+                        v-if="inp.Type == 'currency'"
+                        dense
+                        filled
+                        mask="###,###,###,###,###,###,###,###,###,###"
+                        reverse-fill-mask
+                        prefix="Rp"
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      />
+                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
+                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
+                        <q-radio
+                          v-model="inp.Value"
+                          val="Tidak"
+                          label="Tidak"
+                        />
+                      </div>
+                      <q-file
+                        v-else-if="inp.Type == 'file'"
+                        dense
+                        filled
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
+                    <td colspan="100%">
+                      <q-input
+                        v-if="inp.Type == 'currency'"
+                        dense
+                        filled
+                        mask="###,###,###,###,###,###,###,###,###,###"
+                        reverse-fill-mask
+                        prefix="Rp"
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      />
+                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
+                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
+                        <q-radio
+                          v-model="inp.Value"
+                          val="Tidak"
+                          label="Tidak"
+                        />
+                      </div>
+                      <q-file
+                        v-else-if="inp.Type == 'file'"
+                        dense
+                        filled
+                        v-model="inp.Value"
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                </template>
+                <template
+                  v-else-if="
+                    inp.Type == 'file' && fields[index - 1].Value == 'Ya'
+                  "
+                >
+                  <tr class="q-tr--no-hover">
+                    <td :class="inp.class">{{ inp.Code }}</td>
+                    <td :class="inp.class">{{ inp.Label }}</td>
+                    <td class="md:tw-block tw-hidden">
+                      <q-file
+                        dense
+                        filled
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
+                    <td colspan="100%">
+                      <q-file
+                        dense
+                        filled
+                        :rules="[(val) => !!val && inp.IsRequired]"
+                      >
+                        <template #prepend>
+                          <q-icon name="attach_file" />
+                        </template>
+                      </q-file>
+                    </td>
+                  </tr>
+                </template>
               </template>
             </tbody>
           </q-markup-table>
@@ -222,7 +294,6 @@
 <script>
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
-
 export default defineComponent({
   props: ["user"],
   setup() {
@@ -231,43 +302,27 @@ export default defineComponent({
       auth,
       list_year: ref([]),
       year: ref(null),
-      list_province: ref([]),
-      province: ref(null),
       list_regency: ref([]),
       regency: ref(null),
+
+      list_province: ref([]),
+      province: ref(null),
+
       fields: ref([]),
       loading: ref(false),
     };
   },
+  beforeMount() {
+    this.auth.province = null;
+  },
   mounted() {
-    this.getData();
     this.getYear();
   },
   methods: {
-    getData() {
-      return this.$api
-        .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
-        )
-        .then((res) => {
-          this.year = res.data.data.FormID;
-          this.regency = res.data.data.RegencyCityID;
-          this.list_province = this.auth.provinces;
-          this.auth.province = res.data.data.RegencyCity.ProvinceID;
-          this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
-          this.list_regency = this.auth.regency;
-          this.fields = res.data.data.FieldResponse.map((e) => {
-            return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "budget"}')
+        .get('/forms?Limit=-&Filters={"Type": "survey"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -318,7 +373,7 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/budget?Relation={"Name": "Fields"}')
+        .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;
@@ -341,20 +396,19 @@ export default defineComponent({
         RegencyCityID: this.regency,
         FieldResponse: this.fields.map((filed) => {
           return {
-            ID: filed.ResponseFieldID,
-            FormResponseID: parseInt(this.$route.params.id),
+            FieldID: filed.ID,
             Value: filed.Value,
           };
         }),
       };
       this.$api
-        .put("form-responses/" + this.$route.params.id, payload)
+        .post("form-responses", payload)
         .then((res) => {
           this.$q.notify({
             message: "Data berhasil tersimpan",
             color: "positive",
           });
-          this.loading = false;
+          this.getForm(this.year);
         })
         .catch((err) => {
           console.log(err);
