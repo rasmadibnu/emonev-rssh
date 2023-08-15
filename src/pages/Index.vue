@@ -31,6 +31,7 @@
                     height="250"
                     :options="chartOptions"
                     :series="series"
+                    ref="chartPartnership"
                   ></apex>
                 </q-card-section>
               </q-card>
@@ -128,6 +129,7 @@
                   dense
                   map-options
                   emit-value
+                  @update:model-value="onUpdateYear"
                 />
               </div>
               <q-btn
@@ -214,15 +216,23 @@ export default defineComponent({
       authStore,
       province_table_column,
       isReveal: ref(true),
-      series: [
+      series: ref([
         {
-          data: [0, 14.3, 41.9, 25.7, 40],
+          name: "Jumlah",
+          data: [],
         },
-      ],
-      chartOptions: {
+      ]),
+      chartOptions: ref({
         chart: {
           type: "bar",
           height: 350,
+        },
+        tooltip: {
+          enabled: true,
+          followCursor: true,
+          y: {
+            formatter: (value) => parseFloat(value).toFixed(0),
+          },
         },
         colors: ["#FF6E31"],
         plotOptions: {
@@ -250,15 +260,14 @@ export default defineComponent({
           enabled: false,
         },
         xaxis: {
-          categories: [
-            "BLT",
-            "SKPD Non Dinkes",
-            "CSR",
-            "Dana Desa",
-            "SK (Forum Kemitraan)",
-          ],
+          labels: {
+            formatter: function (value) {
+              return `${parseFloat(value).toFixed(0)}`;
+            },
+          },
+          categories: [],
         },
-      },
+      }),
       seriesPercentage: [
         {
           name: "Presentase",
@@ -385,7 +394,9 @@ export default defineComponent({
           } else {
             this.year = res[0].value;
           }
-          this.getBudget(this.year);
+        })
+        .then(() => {
+          this.onUpdateYear();
         })
         .catch((err) => {
           console.log(err);
@@ -464,7 +475,6 @@ export default defineComponent({
             (province) => province.percentage.TBC
           );
 
-          console.log(this.seriesProvince);
           return res;
         })
         .then((res) => {
@@ -485,6 +495,29 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    findPartnership(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      this.$api
+        .get("/forms/" + findYear.label + "/partnership")
+        .then((res) => {
+          this.series[0].data = res.data.data.map((data) => data.Value);
+          this.chartOptions.xaxis.categories = res.data.data.map(
+            (data) => data.Name
+          );
+        })
+        .then(() => {
+          this.$refs.chartPartnership.refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    onUpdateYear() {
+      this.getBudget(this.year);
+      this.findPartnership(this.year);
     },
   },
 });
