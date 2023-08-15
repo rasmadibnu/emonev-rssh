@@ -238,11 +238,11 @@ export default defineComponent({
       loading: ref(false),
     };
   },
-  beforeMount() {
-    this.auth.province = null;
-  },
   mounted() {
     this.getYear();
+    if (this.auth.provinces.lenth > 1) {
+      this.auth.province = null;
+    }
   },
   methods: {
     getYear() {
@@ -299,7 +299,7 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
+        .get("/forms/" + year + '/budget?Relation={"Name": "Fields"}')
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;

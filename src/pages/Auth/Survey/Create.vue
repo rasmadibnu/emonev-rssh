@@ -53,11 +53,11 @@
                     :options="list_province"
                     @filter="filterProvince"
                     @update:model-value="auth.setRegencies"
-                    :disable="auth.provinces.length == 1"
                     use-input
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    :disable="auth.provinces.length == 1"
                   >
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
@@ -82,11 +82,11 @@
                     :options="list_province"
                     @filter="filterProvince"
                     @update:model-value="auth.setRegencies"
-                    :disable="auth.provinces.length == 1"
                     use-input
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    :disable="auth.provinces.length == 1"
                   />
                 </td>
               </tr>
@@ -273,7 +273,7 @@
               color="primary"
               unelevated
               label="Kembali"
-              :to="{ name: 'penginputan-index' }"
+              :to="{ name: 'survey-index' }"
               no-caps
               :loading="loading"
             />
@@ -312,11 +312,11 @@ export default defineComponent({
       loading: ref(false),
     };
   },
-  beforeMount() {
-    this.auth.province = null;
-  },
   mounted() {
     this.getYear();
+    if (this.auth.provinces.lenth > 1) {
+      this.auth.province = null;
+    }
   },
   methods: {
     getYear() {

@@ -275,7 +275,7 @@
               color="primary"
               unelevated
               label="Kembali"
-              :to="{ name: 'penginputan-index' }"
+              :to="{ name: 'survey-index' }"
               no-caps
               :loading="loading"
             />
@@ -392,7 +392,7 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/budget?Relation={"Name": "Fields"}')
+        .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;

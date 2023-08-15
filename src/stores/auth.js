@@ -68,6 +68,8 @@ export const useAuthStore = defineStore("auth", {
       this.user.Roles.map((e) => {
         this.menus = this.menus.concat(this.getMenuChild(e.Menus));
       });
+
+      this.menus = this.menus.sort((a, b) => a.Ord - b.Ord);
     },
 
     setProvince() {
