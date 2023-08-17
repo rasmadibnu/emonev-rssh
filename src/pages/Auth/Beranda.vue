@@ -2,60 +2,22 @@
   <q-page class="tw-p-6">
     <div class="tw-text-3xl tw-mb-4">Beranda</div>
     <div class="tw-grid md:tw-grid-cols-3 tw-gap-4">
-      <q-card flat class="tw-rounded-lg">
+      <q-card v-for="item in count" :key="item" flat class="tw-rounded-lg">
         <q-card-section class="tw-group tw-flex tw-justify-between">
           <q-avatar
-            color="primary"
             size="50px"
+            :style="{ backgroundColor: item.Color }"
             class="tw-transition-all tw-duration-300 tw-transform group-hover:tw-rotate-12"
           >
             <vx-icon
-              iconName="Profile2User"
+              :iconName="item.Icon"
               class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out"
               :size="'24'"
             />
           </q-avatar>
           <div class="tw-text-right">
-            <p class="tw-text-2xl tw-font-semibold">1,257</p>
-            <p>Pengguna</p>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card flat class="tw-rounded-lg">
-        <q-card-section class="tw-group tw-flex tw-justify-between">
-          <q-avatar
-            color="secondary"
-            size="50px"
-            class="tw-transition-all tw-duration-300 tw-transform group-hover:tw-rotate-12"
-          >
-            <vx-icon
-              iconName="Map"
-              class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out"
-              :size="'24'"
-            />
-          </q-avatar>
-          <div class="tw-text-right">
-            <p class="tw-text-2xl tw-font-semibold">34</p>
-            <p>Provinsi</p>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card flat class="tw-rounded-lg">
-        <q-card-section class="tw-group tw-flex tw-justify-between">
-          <q-avatar
-            color="accent"
-            size="50px"
-            class="tw-transition-all tw-duration-300 tw-transform group-hover:tw-rotate-12"
-          >
-            <vx-icon
-              iconName="Map1"
-              class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out"
-              :size="'24'"
-            />
-          </q-avatar>
-          <div class="tw-text-right">
-            <p class="tw-text-2xl tw-font-semibold">515</p>
-            <p>Kabupaten Kota</p>
+            <p class="tw-text-2xl tw-font-semibold">{{ item.Value }}</p>
+            <p>{{ item.Name }}</p>
           </div>
         </q-card-section>
       </q-card>
@@ -247,237 +209,14 @@ export default defineComponent({
       // },
     ];
 
-    const province = [
-      {
-        nama: "Aceh",
-        progress: getRandomNumber(23),
-        jumlahKabupatenKota: 23,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sumatera Utara",
-        progress: getRandomNumber(33),
-        jumlahKabupatenKota: 33,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sumatera Barat",
-        progress: getRandomNumber(12),
-        jumlahKabupatenKota: 12,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Riau",
-        progress: getRandomNumber(10),
-        jumlahKabupatenKota: 10,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Jambi",
-        progress: getRandomNumber(9),
-        jumlahKabupatenKota: 9,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sumatera Selatan",
-        progress: getRandomNumber(16),
-        jumlahKabupatenKota: 16,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Bengkulu",
-        progress: getRandomNumber(9),
-        jumlahKabupatenKota: 9,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Lampung",
-        progress: getRandomNumber(15),
-        jumlahKabupatenKota: 15,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kepulauan Bangka Belitung",
-        progress: getRandomNumber(6),
-        jumlahKabupatenKota: 6,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kepulauan Riau",
-        progress: getRandomNumber(5),
-        jumlahKabupatenKota: 5,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "DKI Jakarta",
-        progress: getRandomNumber(6),
-        jumlahKabupatenKota: 6,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Jawa Barat",
-        progress: getRandomNumber(27),
-        jumlahKabupatenKota: 27,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Jawa Tengah",
-        progress: getRandomNumber(35),
-        jumlahKabupatenKota: 35,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "D.I. Yogyakarta",
-        progress: getRandomNumber(4),
-        jumlahKabupatenKota: 4,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Jawa Timur",
-        progress: getRandomNumber(38),
-        jumlahKabupatenKota: 38,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Banten",
-        progress: getRandomNumber(4),
-        jumlahKabupatenKota: 4,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Bali",
-        progress: getRandomNumber(9),
-        jumlahKabupatenKota: 9,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Nusa Tenggara Barat",
-        progress: getRandomNumber(8),
-        jumlahKabupatenKota: 8,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Nusa Tenggara Timur",
-        progress: getRandomNumber(21),
-        jumlahKabupatenKota: 21,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kalimantan Barat",
-        progress: getRandomNumber(14),
-        jumlahKabupatenKota: 14,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kalimantan Tengah",
-        progress: getRandomNumber(13),
-        jumlahKabupatenKota: 13,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kalimantan Selatan",
-        progress: getRandomNumber(11),
-        jumlahKabupatenKota: 11,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kalimantan Timur",
-        progress: getRandomNumber(10),
-        jumlahKabupatenKota: 10,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Kalimantan Utara",
-        progress: getRandomNumber(4),
-        jumlahKabupatenKota: 4,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sulawesi Utara",
-        progress: getRandomNumber(11),
-        jumlahKabupatenKota: 11,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sulawesi Tengah",
-        progress: getRandomNumber(9),
-        jumlahKabupatenKota: 9,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sulawesi Selatan",
-        progress: getRandomNumber(21),
-        jumlahKabupatenKota: 21,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sulawesi Tenggara",
-        progress: getRandomNumber(8),
-        jumlahKabupatenKota: 8,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Gorontalo",
-        progress: getRandomNumber(5),
-        jumlahKabupatenKota: 5,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Sulawesi Barat",
-        progress: getRandomNumber(6),
-        jumlahKabupatenKota: 6,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Maluku",
-        progress: getRandomNumber(9),
-        jumlahKabupatenKota: 9,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Maluku Utara",
-        progress: getRandomNumber(8),
-        jumlahKabupatenKota: 8,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Papua Barat",
-        progress: getRandomNumber(12),
-        jumlahKabupatenKota: 12,
-        lastUpdate: getRandomTime(),
-      },
-      {
-        nama: "Papua",
-        progress: getRandomNumber(29),
-        jumlahKabupatenKota: 29,
-        lastUpdate: getRandomTime(),
-      },
-    ];
-
-    function getRandomNumber(max) {
-      return Math.floor(Math.random() * (max + 1));
-    }
-
-    function getRandomTime() {
-      const currentDate = new Date();
-      const randomHour = Math.floor(Math.random() * 24); // Angka acak antara 0 hingga 23
-      const randomMinute = Math.floor(Math.random() * 60); // Angka acak antara 0 hingga 59
-      const randomSecond = Math.floor(Math.random() * 60); // Angka acak antara 0 hingga 59
-
-      // Set waktu acak ke tanggal saat ini
-      currentDate.setHours(randomHour, randomMinute, randomSecond, 0);
-
-      return currentDate;
-    }
-
     return {
       moment,
       columns,
-      province,
       year: ref(null),
 
       list_year: ref([]),
       progress: ref([]),
+      count: ref([]),
       series: [
         {
           name: "Net Profit",
@@ -581,6 +320,7 @@ export default defineComponent({
   },
   mounted() {
     this.getYear();
+    this.getDashboard();
   },
   methods: {
     getYear() {
@@ -645,6 +385,12 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    getDashboard() {
+      return this.$api.get("/result/summary").then((res) => {
+        this.count = res.data.data;
+      });
     },
   },
 });
