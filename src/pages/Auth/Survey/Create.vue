@@ -194,11 +194,12 @@
                         auto-upload
                         field-name="data_file"
                         @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Unggah Lampiran"
                       />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%">
+                    <td colspan="100%" style="height: 100%">
                       <q-input
                         v-if="inp.Type == 'currency'"
                         dense
@@ -228,6 +229,7 @@
                         auto-upload
                         field-name="data_file"
                         @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Unggah Lampiran"
                       />
                     </td>
                   </tr>
@@ -255,11 +257,12 @@
                         auto-upload
                         field-name="data_file"
                         @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Unggah Lampiran"
                       />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%">
+                    <td colspan="100%" style="height: 100%">
                       <q-uploader
                         :url="$api_url + '/attachments'"
                         :headers="[
@@ -274,6 +277,7 @@
                         auto-upload
                         field-name="data_file"
                         @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Unggah Lampiran"
                       />
                     </td>
                   </tr>

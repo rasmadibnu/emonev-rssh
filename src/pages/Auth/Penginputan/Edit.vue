@@ -247,7 +247,7 @@ export default defineComponent({
     getData() {
       return this.$api
         .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}&Relations={"Name": "Form"}`
         )
         .then((res) => {
           this.year = res.data.data.FormID;

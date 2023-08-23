@@ -156,7 +156,7 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
-              <template v-for="inp in fields" v-bind:key="inp.ID">
+              <template v-for="(inp, index) in fields" v-bind:key="inp.ID">
                 <tr class="q-tr--no-hover" v-if="inp.Dividen">
                   <td colspan="100%">
                     <q-separator />
@@ -181,21 +181,40 @@
                         <q-radio v-model="inp.Value" val="1" label="Ya" />
                         <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
-                      <q-file
+                      <q-uploader
                         v-else-if="inp.Type == 'file'"
-                        dense
-                        filled
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Ubah Lampiran"
+                      />
+                      <q-btn
+                        v-if="inp.Type == 'file' && inp.Value != ''"
+                        as="a"
+                        target="_blank"
+                        color="secondary"
+                        padding="0"
+                        class="tw-mt-2"
+                        :href="$api_url.split('/api/v1')[0] + inp.Value"
+                        label="Lampiran yang diunggah"
+                        icon="attachment"
+                        no-caps
+                        flat
+                      />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%">
+                    <td colspan="100%" style="height: 100%">
                       <q-input
                         v-if="inp.Type == 'currency'"
                         dense
@@ -210,51 +229,110 @@
                         <q-radio v-model="inp.Value" val="1" label="Ya" />
                         <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
-                      <q-file
+                      <q-uploader
                         v-else-if="inp.Type == 'file'"
-                        dense
-                        filled
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Ubah Lampiran"
+                      />
+                      <q-btn
+                        v-if="inp.Type == 'file' && inp.Value != ''"
+                        as="a"
+                        target="_blank"
+                        color="secondary"
+                        padding="0"
+                        class="tw-mt-2"
+                        :href="$api_url.split('/api/v1')[0] + inp.Value"
+                        label="Lampiran yang diunggah"
+                        icon="attachment"
+                        no-caps
+                        flat
+                      />
                     </td>
                   </tr>
                 </template>
                 <template
                   v-else-if="
-                    inp.Type == 'file' && fields[index - 1].Value == 'Ya'
+                    inp.Type == 'file' && fields[index - 1].Value == '1'
                   "
                 >
                   <tr class="q-tr--no-hover">
                     <td :class="inp.class">{{ inp.Code }}</td>
                     <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden">
-                      <q-file
-                        dense
-                        filled
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                    <td class="md:tw-block tw-hidden" style="height: 100%">
+                      <q-uploader
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Ubah Lampiran"
+                      />
+                      <q-btn
+                        v-if="inp.Type == 'file' && inp.Value != ''"
+                        as="a"
+                        target="_blank"
+                        color="secondary"
+                        padding="0"
+                        class="tw-mt-2"
+                        :href="$api_url.split('/api/v1')[0] + inp.Value"
+                        label="Lampiran yang diunggah"
+                        icon="attachment"
+                        no-caps
+                        flat
+                      />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%">
-                      <q-file
-                        dense
-                        filled
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                    <td colspan="100%" style="height: 100%">
+                      <q-uploader
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                        label="Ubah Lampiran"
+                      />
+                      <q-btn
+                        v-if="inp.Type == 'file' && inp.Value != ''"
+                        as="a"
+                        target="_blank"
+                        color="secondary"
+                        padding="0"
+                        class="tw-mt-2"
+                        :href="$api_url.split('/api/v1')[0] + inp.Value"
+                        label="Lampiran yang diunggah"
+                        icon="attachment"
+                        no-caps
+                        flat
+                      />
                     </td>
                   </tr>
                 </template>
@@ -333,7 +411,7 @@ export default defineComponent({
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "budget"}')
+        .get('/forms?Limit=-&Filters={"Type": "survey"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -425,6 +503,10 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    onFileUploaded(info, index) {
+      this.fields[index].Value = JSON.parse(info.xhr.response).data.Url;
     },
   },
 });
