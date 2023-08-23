@@ -73,7 +73,7 @@
                         v-ripple
                         class="text-primary"
                         :to="{
-                          name: 'penginputan-edit',
+                          name: 'survey-edit',
                           params: { id: props.row.ID },
                         }"
                       >
@@ -148,11 +148,13 @@
 import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 import moment from "moment";
+import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   props: ["user"],
   components: { VxIcon },
   setup() {
+    const auth = useAuthStore();
     const columns = [
       {
         name: "index",
@@ -218,6 +220,7 @@ export default defineComponent({
       },
     ];
     return {
+      auth,
       moment,
       columnsDetail,
       rows: ref([]),
@@ -260,10 +263,16 @@ export default defineComponent({
       params.append("Limit", rowsPerPage);
       params.append("Page", page);
       params.append("Relation", '{"Name": "User"}');
-      params.append("Relation", '{"Name": "Form"}');
+      params.append(
+        "Relation",
+        '{"Name": "Form", "Filters":{"Type": "survey"}}'
+      );
       params.append("Relation", '{"Name": "RegencyCity.Province"}');
       params.append("Relation", '{"Name": "FieldResponse.Field"}');
-      params.append("Filters", '{"Type": "survey"}');
+      params.append(
+        "Filters",
+        '{"RegencyCityID": [' + this.auth.regency_ids + "]}"
+      );
 
       this.$api
         .get("/form-responses", data)

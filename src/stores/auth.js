@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", {
     province: null,
     provinces: [],
     regency: [],
+    regency_ids: [],
   }),
   getters: {
     token_data() {
@@ -38,6 +39,9 @@ export const useAuthStore = defineStore("auth", {
         )
         .then((res) => {
           this.user = res.data.data;
+          this.regency_ids = res.data.data.Group.Details.map(
+            (e) => e.RegencyCityID
+          );
         })
         .then((res) => {
           this.setMenus();

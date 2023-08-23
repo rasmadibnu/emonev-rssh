@@ -176,12 +176,8 @@
                         :rules="[(val) => !!val && inp.IsRequired]"
                       />
                       <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
-                        <q-radio
-                          v-model="inp.Value"
-                          val="Tidak"
-                          label="Tidak"
-                        />
+                        <q-radio v-model="inp.Value" val="1" label="Ya" />
+                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
                       <q-file
                         v-else-if="inp.Type == 'file'"
@@ -209,12 +205,8 @@
                         :rules="[(val) => !!val && inp.IsRequired]"
                       />
                       <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
-                        <q-radio
-                          v-model="inp.Value"
-                          val="Tidak"
-                          label="Tidak"
-                        />
+                        <q-radio v-model="inp.Value" val="1" label="Ya" />
+                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
                       <q-file
                         v-else-if="inp.Type == 'file'"

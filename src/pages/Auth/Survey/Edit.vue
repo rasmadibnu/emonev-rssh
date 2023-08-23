@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Edit Penginputan</div>
+    <div class="tw-text-3xl tw-mb-4">Edit Survey</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
@@ -178,12 +178,8 @@
                         :rules="[(val) => !!val && inp.IsRequired]"
                       />
                       <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
-                        <q-radio
-                          v-model="inp.Value"
-                          val="Tidak"
-                          label="Tidak"
-                        />
+                        <q-radio v-model="inp.Value" val="1" label="Ya" />
+                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
                       <q-file
                         v-else-if="inp.Type == 'file'"
@@ -211,12 +207,8 @@
                         :rules="[(val) => !!val && inp.IsRequired]"
                       />
                       <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="Ya" label="Ya" />
-                        <q-radio
-                          v-model="inp.Value"
-                          val="Tidak"
-                          label="Tidak"
-                        />
+                        <q-radio v-model="inp.Value" val="1" label="Ya" />
+                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
                       <q-file
                         v-else-if="inp.Type == 'file'"
@@ -321,7 +313,7 @@ export default defineComponent({
     getData() {
       return this.$api
         .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field.Childs"}&Relations={"Name": "RegencyCity"}`
         )
         .then((res) => {
           this.year = res.data.data.FormID;

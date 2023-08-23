@@ -15,9 +15,9 @@ export default defineComponent({
     };
   },
   mounted() {
-    if (this.authStore.token != null) {
-      this.authStore.getUser();
-    }
+    // if (this.authStore.token != null && this.authStore.user === null) {
+    //   this.authStore.getUser();
+    // }
   },
 });
 </script>

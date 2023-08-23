@@ -9,12 +9,19 @@ const requireAuth = (to, from, next) => {
     next("/login");
   }
   const auth = useAuthStore();
+  if (auth.user === null) {
+    auth.getUser().then((res) => {
+      next();
+    });
+  } else {
+    next();
+  }
   // if (auth.checkMenu(to.name)) {
   //   next();
   // } else {
   //   next("/not-found");
   // }
-  next();
+  // next();
 };
 
 const routes = [
