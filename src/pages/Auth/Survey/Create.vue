@@ -179,17 +179,22 @@
                         <q-radio v-model="inp.Value" val="1" label="Ya" />
                         <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
-                      <q-file
+                      <q-uploader
                         v-else-if="inp.Type == 'file'"
-                        dense
-                        filled
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                      />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
@@ -208,51 +213,68 @@
                         <q-radio v-model="inp.Value" val="1" label="Ya" />
                         <q-radio v-model="inp.Value" val="0" label="Tidak" />
                       </div>
-                      <q-file
+                      <q-uploader
                         v-else-if="inp.Type == 'file'"
-                        dense
-                        filled
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                      />
                     </td>
                   </tr>
                 </template>
                 <template
                   v-else-if="
-                    inp.Type == 'file' && fields[index - 1].Value == 'Ya'
+                    inp.Type == 'file' && fields[index - 1].Value == '1'
                   "
                 >
                   <tr class="q-tr--no-hover">
                     <td :class="inp.class">{{ inp.Code }}</td>
                     <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden">
-                      <q-file
-                        dense
-                        filled
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                    <td class="md:tw-block tw-hidden" style="height: 100%">
+                      <q-uploader
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                      />
                     </td>
                   </tr>
                   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
                     <td colspan="100%">
-                      <q-file
-                        dense
-                        filled
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      >
-                        <template #prepend>
-                          <q-icon name="attach_file" />
-                        </template>
-                      </q-file>
+                      <q-uploader
+                        :url="$api_url + '/attachments'"
+                        :headers="[
+                          {
+                            name: 'Authorization',
+                            value: 'Bearer ' + auth.token,
+                          },
+                        ]"
+                        style="max-width: 300px"
+                        flat
+                        bordered
+                        auto-upload
+                        field-name="data_file"
+                        @uploaded="(info) => onFileUploaded(info, index)"
+                      />
                     </td>
                   </tr>
                 </template>
@@ -286,6 +308,7 @@
 <script>
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
+
 export default defineComponent({
   props: ["user"],
   setup() {
@@ -378,6 +401,10 @@ export default defineComponent({
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    onFileUploaded(info, index) {
+      this.fields[index].Value = JSON.parse(info.xhr.response).data.Url;
     },
 
     submit() {
