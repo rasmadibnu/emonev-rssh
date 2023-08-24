@@ -231,7 +231,7 @@ export default defineComponent({
           enabled: true,
           followCursor: true,
           y: {
-            formatter: (value) => parseFloat(value).toFixed(0),
+            formatter: (value) => parseFloat(value).toFixed(0) + "%",
           },
         },
         colors: ["#FF6E31"],
@@ -262,7 +262,7 @@ export default defineComponent({
         xaxis: {
           labels: {
             formatter: function (value) {
-              return `${parseFloat(value).toFixed(0)}`;
+              return `${parseFloat(value).toFixed(0)}%`;
             },
           },
           categories: [],
