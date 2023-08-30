@@ -154,135 +154,12 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
-              <template v-for="(inp, index) in fields" v-bind:key="inp.ID">
-                <tr class="q-tr--no-hover" v-if="inp.Dividen">
-                  <td colspan="100%">
-                    <q-separator />
-                  </td>
-                </tr>
-                <template v-if="inp.Type != 'file'">
-                  <tr class="q-tr--no-hover">
-                    <td :class="inp.class">{{ inp.Code }}</td>
-                    <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden">
-                      <q-input
-                        v-if="inp.Type == 'currency'"
-                        dense
-                        filled
-                        mask="###,###,###,###,###,###,###,###,###,###"
-                        reverse-fill-mask
-                        prefix="Rp"
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      />
-                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="1" label="Ya" />
-                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
-                      </div>
-                      <q-uploader
-                        v-else-if="inp.Type == 'file'"
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Unggah Lampiran"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%" style="height: 100%">
-                      <q-input
-                        v-if="inp.Type == 'currency'"
-                        dense
-                        filled
-                        mask="###,###,###,###,###,###,###,###,###,###"
-                        reverse-fill-mask
-                        prefix="Rp"
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      />
-                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="1" label="Ya" />
-                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
-                      </div>
-                      <q-uploader
-                        v-else-if="inp.Type == 'file'"
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Unggah Lampiran"
-                      />
-                    </td>
-                  </tr>
-                </template>
-                <template
-                  v-else-if="
-                    inp.Type == 'file' && fields[index - 1].Value == '1'
-                  "
-                >
-                  <tr class="q-tr--no-hover">
-                    <td :class="inp.class">{{ inp.Code }}</td>
-                    <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden" style="height: 100%">
-                      <q-uploader
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Unggah Lampiran"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%" style="height: 100%">
-                      <q-uploader
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Unggah Lampiran"
-                      />
-                    </td>
-                  </tr>
-                </template>
-              </template>
+              <TRInput
+                v-for="(inp, index) in fields"
+                v-model="inp.Value"
+                v-bind="{ ...inp, Index: index, Token: auth.token }"
+                :key="inp.ID"
+              />
             </tbody>
           </q-markup-table>
           <div class="tw-flex tw-justify-center tw-mt-4 tw-gap-4">
@@ -310,10 +187,12 @@
   </q-page>
 </template>
 <script>
+import TRInput from "src/components/TRInput.vue";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
+  components: { TRInput },
   props: ["user"],
   setup() {
     const auth = useAuthStore();
@@ -392,7 +271,7 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
+        .get("/forms/" + year + '/survey?Relation={"Name": "Fields.Childs"}')
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;
@@ -411,18 +290,40 @@ export default defineComponent({
       this.fields[index].Value = JSON.parse(info.xhr.response).data.Url;
     },
 
+    flattenFields(data) {
+      const result = [];
+
+      function flatten(item) {
+        const flattenedItem = {
+          FieldID: item.ID,
+          Value: item.Value,
+        };
+
+        if (flattenedItem.Value) {
+          result.push(flattenedItem);
+        }
+
+        if (item.Childs && item.Childs.length > 0) {
+          item.Childs.forEach((child) => {
+            flatten(child);
+          });
+        }
+      }
+
+      data.forEach((item) => {
+        flatten(item);
+      });
+
+      return result;
+    },
+
     submit() {
       this.loading = true;
       const payload = {
         FormID: this.year,
         UserID: this.user.ID,
         RegencyCityID: this.regency,
-        FieldResponse: this.fields.map((filed) => {
-          return {
-            FieldID: filed.ID,
-            Value: filed.Value,
-          };
-        }),
+        FieldResponse: this.flattenFields(this.fields),
       };
       this.$api
         .post("form-responses", payload)

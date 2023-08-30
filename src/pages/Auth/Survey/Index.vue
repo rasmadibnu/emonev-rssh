@@ -201,14 +201,14 @@ export default defineComponent({
         name: "Code",
         label: "Code",
         align: "left",
-        field: (row) => row.Field.Code,
+        field: (row) => row?.Field?.Code,
         sortable: true,
       },
       {
         name: "Label",
         label: "Label",
         align: "left",
-        field: (row) => row.Field.Label,
+        field: (row) => row?.Field?.Label,
         sortable: true,
       },
       {

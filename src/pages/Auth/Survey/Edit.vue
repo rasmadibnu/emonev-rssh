@@ -6,7 +6,7 @@
         Anggaran APBD Kab/Kota
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-form @submit.prevent="submit" ref="myForm">
+        <q-form @submit="submit" ref="myForm">
           <q-markup-table flat separator="none" class="tw-h-auto">
             <tbody>
               <tr class="q-tr--no-hover">
@@ -156,187 +156,12 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
-              <template v-for="(inp, index) in fields" v-bind:key="inp.ID">
-                <tr class="q-tr--no-hover" v-if="inp.Dividen">
-                  <td colspan="100%">
-                    <q-separator />
-                  </td>
-                </tr>
-                <template v-if="inp.Type != 'file'">
-                  <tr class="q-tr--no-hover">
-                    <td :class="inp.class">{{ inp.Code }}</td>
-                    <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden">
-                      <q-input
-                        v-if="inp.Type == 'currency'"
-                        dense
-                        filled
-                        mask="###,###,###,###,###,###,###,###,###,###"
-                        reverse-fill-mask
-                        prefix="Rp"
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      />
-                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="1" label="Ya" />
-                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
-                      </div>
-                      <q-uploader
-                        v-else-if="inp.Type == 'file'"
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Ubah Lampiran"
-                      />
-                      <q-btn
-                        v-if="inp.Type == 'file' && inp.Value != ''"
-                        as="a"
-                        target="_blank"
-                        color="secondary"
-                        padding="0"
-                        class="tw-mt-2"
-                        :href="$api_url.split('/api/v1')[0] + inp.Value"
-                        label="Lampiran yang diunggah"
-                        icon="attachment"
-                        no-caps
-                        flat
-                      />
-                    </td>
-                  </tr>
-                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%" style="height: 100%">
-                      <q-input
-                        v-if="inp.Type == 'currency'"
-                        dense
-                        filled
-                        mask="###,###,###,###,###,###,###,###,###,###"
-                        reverse-fill-mask
-                        prefix="Rp"
-                        v-model="inp.Value"
-                        :rules="[(val) => !!val && inp.IsRequired]"
-                      />
-                      <div v-else-if="inp.Type == 'radio'" class="q-gutter-sm">
-                        <q-radio v-model="inp.Value" val="1" label="Ya" />
-                        <q-radio v-model="inp.Value" val="0" label="Tidak" />
-                      </div>
-                      <q-uploader
-                        v-else-if="inp.Type == 'file'"
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Ubah Lampiran"
-                      />
-                      <q-btn
-                        v-if="inp.Type == 'file' && inp.Value != ''"
-                        as="a"
-                        target="_blank"
-                        color="secondary"
-                        padding="0"
-                        class="tw-mt-2"
-                        :href="$api_url.split('/api/v1')[0] + inp.Value"
-                        label="Lampiran yang diunggah"
-                        icon="attachment"
-                        no-caps
-                        flat
-                      />
-                    </td>
-                  </tr>
-                </template>
-                <template
-                  v-else-if="
-                    inp.Type == 'file' && fields[index - 1].Value == '1'
-                  "
-                >
-                  <tr class="q-tr--no-hover">
-                    <td :class="inp.class">{{ inp.Code }}</td>
-                    <td :class="inp.class">{{ inp.Label }}</td>
-                    <td class="md:tw-block tw-hidden" style="height: 100%">
-                      <q-uploader
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Ubah Lampiran"
-                      />
-                      <q-btn
-                        v-if="inp.Type == 'file' && inp.Value != ''"
-                        as="a"
-                        target="_blank"
-                        color="secondary"
-                        padding="0"
-                        class="tw-mt-2"
-                        :href="$api_url.split('/api/v1')[0] + inp.Value"
-                        label="Lampiran yang diunggah"
-                        icon="attachment"
-                        no-caps
-                        flat
-                      />
-                    </td>
-                  </tr>
-                  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-                    <td colspan="100%" style="height: 100%">
-                      <q-uploader
-                        :url="$api_url + '/attachments'"
-                        :headers="[
-                          {
-                            name: 'Authorization',
-                            value: 'Bearer ' + auth.token,
-                          },
-                        ]"
-                        style="max-width: 300px"
-                        flat
-                        bordered
-                        auto-upload
-                        field-name="data_file"
-                        @uploaded="(info) => onFileUploaded(info, index)"
-                        label="Ubah Lampiran"
-                      />
-                      <q-btn
-                        v-if="inp.Type == 'file' && inp.Value != ''"
-                        as="a"
-                        target="_blank"
-                        color="secondary"
-                        padding="0"
-                        class="tw-mt-2"
-                        :href="$api_url.split('/api/v1')[0] + inp.Value"
-                        label="Lampiran yang diunggah"
-                        icon="attachment"
-                        no-caps
-                        flat
-                      />
-                    </td>
-                  </tr>
-                </template>
-              </template>
+              <TRInput
+                v-for="(inp, index) in fields"
+                v-model="inp.Value"
+                v-bind="{ ...inp, Index: index, Token: auth.token }"
+                :key="inp.ID"
+              />
             </tbody>
           </q-markup-table>
           <div class="tw-flex tw-justify-center tw-mt-4 tw-gap-4">
@@ -364,10 +189,12 @@
   </q-page>
 </template>
 <script>
+import TRInput from "src/components/TRInput.vue";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
+  components: { TRInput },
   props: ["user"],
   setup() {
     const auth = useAuthStore();
@@ -391,7 +218,7 @@ export default defineComponent({
     getData() {
       return this.$api
         .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field.Childs"}&Relations={"Name": "RegencyCity"}`
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
         )
         .then((res) => {
           this.year = res.data.data.FormID;
@@ -403,6 +230,7 @@ export default defineComponent({
           this.fields = res.data.data.FieldResponse.map((e) => {
             return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
           });
+          console.log(this.fields);
         })
         .catch((err) => {
           console.log(err);
@@ -422,7 +250,6 @@ export default defineComponent({
           console.log(err);
         });
     },
-
     filterRegency(val, update) {
       if (val === "") {
         update(() => {
@@ -430,7 +257,6 @@ export default defineComponent({
         });
         return;
       }
-
       update(() => {
         const needle = val.toLowerCase();
         this.list_regency = this.user?.Group.Details.map((regency) => {
@@ -449,7 +275,6 @@ export default defineComponent({
         });
         return;
       }
-
       update(() => {
         const needle = val.toLowerCase();
         this.list_province = this.auth.provinces.filter(
@@ -457,7 +282,6 @@ export default defineComponent({
         );
       });
     },
-
     getForm(val) {
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
@@ -466,7 +290,6 @@ export default defineComponent({
         .then((res) => {
           this.fields = res.data.data.Fields;
           this.loading = false;
-
           return res;
         })
         .then((res) => {
@@ -477,19 +300,41 @@ export default defineComponent({
         });
     },
 
+    flattenFields(data) {
+      const result = [];
+
+      function flatten(item) {
+        console.log(item);
+        const flattenedItem = {
+          ID: item.ResponseFieldID,
+          Value: item.Value,
+        };
+
+        if (flattenedItem.Value) {
+          result.push(flattenedItem);
+        }
+
+        if (item.Childs && item.Childs.length > 0) {
+          item.Childs.forEach((child) => {
+            flatten(child);
+          });
+        }
+      }
+
+      data.forEach((item) => {
+        flatten(item);
+      });
+
+      return result;
+    },
+
     submit() {
       this.loading = true;
       const payload = {
         FormID: this.year,
         UserID: this.user.ID,
         RegencyCityID: this.regency,
-        FieldResponse: this.fields.map((filed) => {
-          return {
-            ID: filed.ResponseFieldID,
-            FormResponseID: parseInt(this.$route.params.id),
-            Value: filed.Value,
-          };
-        }),
+        FieldResponse: this.flattenFields(this.fields),
       };
       this.$api
         .put("form-responses/" + this.$route.params.id, payload)
@@ -504,7 +349,6 @@ export default defineComponent({
           console.log(err);
         });
     },
-
     onFileUploaded(info, index) {
       this.fields[index].Value = JSON.parse(info.xhr.response).data.Url;
     },
