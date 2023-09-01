@@ -58,7 +58,7 @@
         bordered
         auto-upload
         field-name="data_file"
-        @uploaded="(info) => $emit('onFileUploaded', info, Index)"
+        @uploaded="(info) => onUploaded(info)"
         label="Unggah Lampiran"
       />
     </td>
@@ -154,5 +154,10 @@ defineProps({
   modelValue: String,
 });
 
-defineEmits(["update:modelValue", "onFileUploaded"]);
+const emit = defineEmits(["update:modelValue", "onFileUploaded"]);
+
+function onUploaded(info) {
+  this.modelValue = JSON.parse(info.xhr.response).data.Url;
+  emit("update:modelValue", this.modelValue);
+}
 </script>
