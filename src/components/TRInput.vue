@@ -115,6 +115,19 @@
         @uploaded="(info) => $emit('onFileUploaded', info, Index)"
         label="Unggah Lampiran"
       />
+      <q-btn
+        v-if="Type == 'file' && modelValue != ''"
+        as="a"
+        target="_blank"
+        color="secondary"
+        padding="0"
+        class="tw-mt-2"
+        :href="$api_url.split('/api/v1')[0] + modelValue"
+        label="Lampiran yang diunggah"
+        icon="attachment"
+        no-caps
+        flat
+      />
     </td>
   </tr>
   <template v-if="modelValue">
