@@ -212,8 +212,9 @@ export default defineComponent({
   },
   mounted() {
     this.getYear();
-    if (this.auth.provinces.lenth > 1) {
+    if (this.auth.provinces.length > 1) {
       this.auth.province = null;
+      this.$refs.myForm.reset();
     }
   },
   methods: {

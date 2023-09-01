@@ -46,6 +46,7 @@
                 <td>Pilih Provinsi</td>
                 <td class="md:tw-block tw-hidden">
                   <q-select
+                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -75,6 +76,7 @@
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
                   <q-select
+                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -209,8 +211,9 @@ export default defineComponent({
   },
   mounted() {
     this.getYear();
-    if (this.auth.provinces.lenth > 1) {
+    if (this.auth.provinces.length > 1) {
       this.auth.province = null;
+      this.$refs.myForm.reset();
     }
   },
   methods: {
