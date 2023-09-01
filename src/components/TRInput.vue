@@ -10,7 +10,7 @@
       {{ Code }}
     </td>
     <td>{{ Label }}</td>
-    <td class="md:tw-block tw-hidden">
+    <td class="md:tw-block tw-hidden" style="height: 100%">
       <q-input
         v-if="Type == 'currency'"
         dense
