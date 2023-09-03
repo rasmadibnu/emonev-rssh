@@ -109,7 +109,35 @@
                   flat
                   :rows="props.row.FieldResponse"
                   :columns="columnsDetail"
-                />
+                >
+                  <template #body-cell-Isi="props">
+                    <q-td :props="props">
+                      <template v-if="props.row.Field?.Type == 'radio'">
+                        <template v-if="props.row.Value == '0'">
+                          Tidak
+                        </template>
+                        <template v-else>Ya</template>
+                      </template>
+                      <template v-else-if="props.row.Field?.Type == 'file'">
+                        <q-btn
+                          as="a"
+                          target="_blank"
+                          color="secondary"
+                          padding="0"
+                          class="tw-mt-2"
+                          :href="$api_url.split('/api/v1')[0] + props.row.Value"
+                          label="Lampiran yang diunggah"
+                          icon="attachment"
+                          no-caps
+                          flat
+                        />
+                      </template>
+                      <template v-else>
+                        {{ props.row.Value }}
+                      </template>
+                    </q-td>
+                  </template>
+                </q-table>
               </q-td>
               <q-td></q-td>
             </q-tr>
@@ -215,13 +243,7 @@ export default defineComponent({
         name: "Isi",
         label: "Isi",
         align: "left",
-        field: (row) =>
-          row.Field?.Type == "radio"
-            ? row.Value == "1"
-              ? "Ya"
-              : "Tidak"
-            : row.Value,
-        sortable: true,
+        sortable: false,
       },
     ];
     return {
