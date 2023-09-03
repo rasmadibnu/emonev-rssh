@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Survey</div>
+    <div class="tw-text-3xl tw-mb-4">Dokumen Perencanaan</div>
     <q-card flat>
       <q-card-section>
         <div class="tw-flex tw-justify-end tw-items-center tw-mb-4">
@@ -8,7 +8,7 @@
             outline
             no-caps
             color="primary"
-            :to="{ name: 'survey-create' }"
+            :to="{ name: 'perencanaan-create' }"
           >
             <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
             Tambah
@@ -73,7 +73,7 @@
                         v-ripple
                         class="text-primary"
                         :to="{
-                          name: 'survey-edit',
+                          name: 'perencanaan-edit',
                           params: { id: props.row.ID },
                         }"
                       >
@@ -270,7 +270,7 @@ export default defineComponent({
       params.append("Relation", '{"Name": "User"}');
       params.append(
         "Relation",
-        '{"Name": "Form", "Filters":{"Type": "survey"}}'
+        '{"Name": "Form", "Filters":{"Type": "perencanaan"}}'
       );
       params.append("Relation", '{"Name": "RegencyCity.Province"}');
       params.append("Relation", '{"Name": "FieldResponse.Field"}');

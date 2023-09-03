@@ -19,7 +19,7 @@
         reverse-fill-mask
         prefix="Rp"
         :model-value="modelValue"
-        @update:model-value="(val) => $emit('update:modelValue', val)"
+        @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
       />
       <q-input
@@ -27,19 +27,19 @@
         dense
         filled
         :model-value="modelValue"
-        @update:model-value="(val) => $emit('update:modelValue', val)"
+        @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
       />
       <div v-else-if="Type == 'radio'" class="q-gutter-sm">
         <q-radio
           :model-value="modelValue"
-          @update:model-value="(val) => $emit('update:modelValue', val)"
+          @update:model-value="(val) => updateModelValue(val)"
           val="1"
           label="Ya"
         />
         <q-radio
           :model-value="modelValue"
-          @update:model-value="(val) => $emit('update:modelValue', val)"
+          @update:model-value="(val) => updateModelValue(val)"
           val="0"
           label="Tidak"
         />
@@ -61,6 +61,22 @@
         @uploaded="(info) => onUploaded(info)"
         label="Unggah Lampiran"
       />
+      <q-btn
+        v-if="Type == 'file' && modelValue != '' && modelValue"
+        as="a"
+        target="_blank"
+        color="secondary"
+        padding="0"
+        class="tw-mt-2"
+        :href="$api_url.split('/api/v1')[0] + modelValue"
+        label="Lampiran yang diunggah"
+        icon="attachment"
+        no-caps
+        flat
+      />
+      <div v-if="Error && !modelValue" class="text-negative">
+        {{ ErrorMessage }}
+      </div>
     </td>
   </tr>
   <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
@@ -73,7 +89,7 @@
         reverse-fill-mask
         prefix="Rp"
         :model-value="modelValue"
-        @update:model-value="(val) => $emit('update:modelValue', val)"
+        @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
       />
       <q-input
@@ -81,19 +97,19 @@
         dense
         filled
         :model-value="modelValue"
-        @update:model-value="(val) => $emit('update:modelValue', val)"
+        @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
       />
       <div v-else-if="Type == 'radio'" class="q-gutter-sm">
         <q-radio
           :model-value="modelValue"
-          @update:model-value="(val) => $emit('update:modelValue', val)"
+          @update:model-value="(val) => updateModelValue(val)"
           val="1"
           label="Ya"
         />
         <q-radio
           :model-value="modelValue"
-          @update:model-value="(val) => $emit('update:modelValue', val)"
+          @update:model-value="(val) => updateModelValue(val)"
           val="0"
           label="Tidak"
         />
@@ -112,11 +128,11 @@
         bordered
         auto-upload
         field-name="data_file"
-        @uploaded="(info) => $emit('onFileUploaded', info, Index)"
+        @uploaded="(info) => onUploaded(info)"
         label="Unggah Lampiran"
       />
       <q-btn
-        v-if="Type == 'file' && modelValue != ''"
+        v-if="Type == 'file' && modelValue != '' && modelValue"
         as="a"
         target="_blank"
         color="secondary"
@@ -130,10 +146,10 @@
       />
     </td>
   </tr>
-  <template v-if="modelValue">
+  <template v-if="modelValue && Childs">
     <template v-if="modelValue != '0'">
       <TRInput
-        v-for="(inp, index) in Childs"
+        v-for="(inp, index) in Childs.sort((a, b) => a.SortOrder - b.SortOrder)"
         v-bind="{ ...inp, Index: index, Token: Token }"
         v-model="inp.Value"
         :key="inp.ID"
@@ -142,7 +158,7 @@
   </template>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   Index: Number,
   Token: String,
   Dividen: Boolean,
@@ -152,12 +168,30 @@ defineProps({
   IsRequired: Boolean,
   Childs: Array,
   modelValue: String,
+  ID: Number,
+  ParentID: Number,
+  FormID: Number,
+  SortOrder: Number,
+  CreatedAt: String,
+  UpdatedAt: String,
+  DeletedAt: String,
+  Error: Boolean,
+  ErrorMessage: String,
+  Value: String,
 });
 
-const emit = defineEmits(["update:modelValue", "onFileUploaded"]);
+const emit = defineEmits(["update:modelValue", "onValueEmpty"]);
 
 function onUploaded(info) {
   this.modelValue = JSON.parse(info.xhr.response).data.Url;
-  emit("update:modelValue", this.modelValue);
+  updateModelValue(this.modelValue);
+}
+
+function updateModelValue(val) {
+  emit("update:modelValue", val);
+
+  if (val === "0") {
+    emit("onValueEmpty");
+  }
 }
 </script>

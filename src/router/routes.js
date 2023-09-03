@@ -76,6 +76,23 @@ const routes = [
         name: "survey-edit",
       },
 
+      // Perencanaan
+      {
+        path: "perencanaan",
+        component: () => import("pages/Auth/Perencanaan/Index.vue"),
+        name: "perencanaan-index",
+      },
+      {
+        path: "perencanaan/create",
+        component: () => import("pages/Auth/Perencanaan/Create.vue"),
+        name: "perencanaan-create",
+      },
+      {
+        path: "perencanaan/:id/edit",
+        component: () => import("pages/Auth/Perencanaan/Edit.vue"),
+        name: "perencanaan-edit",
+      },
+
       {
         path: "laporan",
         component: () => import("src/pages/Auth/Laporan.vue"),

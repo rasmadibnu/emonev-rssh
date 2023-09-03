@@ -215,7 +215,12 @@ export default defineComponent({
         name: "Isi",
         label: "Isi",
         align: "left",
-        field: (row) => row.Value,
+        field: (row) =>
+          row.Field?.Type == "radio"
+            ? row.Value == "1"
+              ? "Ya"
+              : "Tidak"
+            : row.Value,
         sortable: true,
       },
     ];

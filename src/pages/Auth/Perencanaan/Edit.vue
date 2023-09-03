@@ -1,12 +1,12 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Buat Survey</div>
+    <div class="tw-text-3xl tw-mb-4">Edit Dokumen Perencanaan</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-form @submit.prevent="submit" ref="myForm">
+        <q-form @submit="submit" ref="myForm">
           <q-markup-table flat separator="none" class="tw-h-auto">
             <tbody>
               <tr class="q-tr--no-hover">
@@ -46,6 +46,7 @@
                 <td>Pilih Provinsi</td>
                 <td class="md:tw-block tw-hidden">
                   <q-select
+                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -53,11 +54,11 @@
                     :options="list_province"
                     @filter="filterProvince"
                     @update:model-value="auth.setRegencies"
+                    :disable="auth.provinces.length == 1"
                     use-input
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
-                    :disable="auth.provinces.length == 1"
                   >
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
@@ -75,6 +76,7 @@
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
                   <q-select
+                    ref="selectProvince"
                     dense
                     filled
                     v-model="auth.province"
@@ -82,11 +84,11 @@
                     :options="list_province"
                     @filter="filterProvince"
                     @update:model-value="auth.setRegencies"
+                    :disable="auth.provinces.length == 1"
                     use-input
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
-                    :disable="auth.provinces.length == 1"
                   />
                 </td>
               </tr>
@@ -169,7 +171,7 @@
               color="primary"
               unelevated
               label="Kembali"
-              :to="{ name: 'survey-index' }"
+              :to="{ name: 'perencanaan-index' }"
               no-caps
               :loading="loading"
             />
@@ -206,12 +208,10 @@ export default defineComponent({
       auth,
       list_year: ref([]),
       year: ref(null),
-      list_regency: ref([]),
-      regency: ref(null),
-
       list_province: ref([]),
       province: ref(null),
-
+      list_regency: ref([]),
+      regency: ref(null),
       fields: ref([]),
       loading: ref(false),
 
@@ -221,17 +221,34 @@ export default defineComponent({
     };
   },
   mounted() {
+    this.getData();
     this.getYear();
-    if (this.auth.provinces.length > 1) {
-      this.auth.province = null;
-      this.$refs.myForm.reset();
-    }
   },
   methods: {
+    getData() {
+      return this.$api
+        .get(
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
+        )
+        .then((res) => {
+          this.year = res.data.data.FormID;
+          this.regency = res.data.data.RegencyCityID;
+          this.list_province = this.auth.provinces;
+          this.auth.province = res.data.data.RegencyCity.ProvinceID;
+          this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
+          this.list_regency = this.auth.regency;
+          this.fields = res.data.data.FieldResponse.map((e) => {
+            return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
+          }).sort((a, b) => a.SortOrder - b.SortOrder);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "survey"}')
+        .get('/forms?Limit=-&Filters={"Type": "perencanaan"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -242,7 +259,6 @@ export default defineComponent({
           console.log(err);
         });
     },
-
     filterRegency(val, update) {
       if (val === "") {
         update(() => {
@@ -250,7 +266,6 @@ export default defineComponent({
         });
         return;
       }
-
       update(() => {
         const needle = val.toLowerCase();
         this.list_regency = this.user?.Group.Details.map((regency) => {
@@ -269,7 +284,6 @@ export default defineComponent({
         });
         return;
       }
-
       update(() => {
         const needle = val.toLowerCase();
         this.list_province = this.auth.provinces.filter(
@@ -277,18 +291,16 @@ export default defineComponent({
         );
       });
     },
-
     getForm(val) {
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/survey?Relation={"Name": "Fields.Childs"}')
+        .get("/forms/" + year + '/perencanaan?Relation={"Name": "Fields"}')
         .then((res) => {
           this.fields = res.data.data.Fields.sort(
             (a, b) => a.SortOrder - b.SortOrder
           );
           this.loading = false;
-
           return res;
         })
         .then((res) => {
@@ -306,6 +318,7 @@ export default defineComponent({
       this.assignErrorsToFields(errors, this.fields);
 
       if (isValid) {
+        this.loading = true;
         const payload = {
           FormID: this.year,
           UserID: this.user.ID,
@@ -313,13 +326,13 @@ export default defineComponent({
           FieldResponse: result,
         };
         this.$api
-          .post("form-responses", payload)
+          .put("form-responses/" + this.$route.params.id, payload)
           .then((res) => {
             this.$q.notify({
               message: "Data berhasil tersimpan",
               color: "positive",
             });
-            this.getForm(this.year);
+            this.loading = false;
           })
           .catch((err) => {
             console.log(err);

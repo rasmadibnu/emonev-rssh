@@ -161,6 +161,7 @@
                 v-model="inp.Value"
                 v-bind="{ ...inp, Index: index, Token: auth.token }"
                 :key="inp.ID"
+                @onValueEmpty="flushChilds(inp)"
               />
             </tbody>
           </q-markup-table>
@@ -192,6 +193,11 @@
 import TRInput from "src/components/TRInput.vue";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
+import {
+  flattenFields,
+  assignErrorsToFields,
+  flushChilds,
+} from "src/helper/fields.js";
 
 export default defineComponent({
   components: { TRInput },
@@ -208,6 +214,10 @@ export default defineComponent({
       regency: ref(null),
       fields: ref([]),
       loading: ref(false),
+
+      flattenFields,
+      assignErrorsToFields,
+      flushChilds,
     };
   },
   mounted() {
@@ -229,8 +239,7 @@ export default defineComponent({
           this.list_regency = this.auth.regency;
           this.fields = res.data.data.FieldResponse.map((e) => {
             return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
-          });
-          console.log(this.fields);
+          }).sort((a, b) => a.SortOrder - b.SortOrder);
         })
         .catch((err) => {
           console.log(err);
@@ -288,7 +297,9 @@ export default defineComponent({
       this.$api
         .get("/forms/" + year + '/survey?Relation={"Name": "Fields"}')
         .then((res) => {
-          this.fields = res.data.data.Fields;
+          this.fields = res.data.data.Fields.sort(
+            (a, b) => a.SortOrder - b.SortOrder
+          );
           this.loading = false;
           return res;
         })
@@ -300,57 +311,38 @@ export default defineComponent({
         });
     },
 
-    flattenFields(data) {
-      const result = [];
-
-      function flatten(item) {
-        console.log(item);
-        const flattenedItem = {
-          ID: item.ResponseFieldID,
-          Value: item.Value,
-        };
-
-        if (flattenedItem.Value) {
-          result.push(flattenedItem);
-        }
-
-        if (item.Childs && item.Childs.length > 0) {
-          item.Childs.forEach((child) => {
-            flatten(child);
-          });
-        }
-      }
-
-      data.forEach((item) => {
-        flatten(item);
-      });
-
-      return result;
-    },
-
     submit() {
       this.loading = true;
-      const payload = {
-        FormID: this.year,
-        UserID: this.user.ID,
-        RegencyCityID: this.regency,
-        FieldResponse: this.flattenFields(this.fields),
-      };
-      this.$api
-        .put("form-responses/" + this.$route.params.id, payload)
-        .then((res) => {
-          this.$q.notify({
-            message: "Data berhasil tersimpan",
-            color: "positive",
+
+      const { isValid, errors, result } = this.flattenFields(this.fields);
+      this.assignErrorsToFields(errors, this.fields);
+
+      if (isValid) {
+        const payload = {
+          FormID: this.year,
+          UserID: this.user.ID,
+          RegencyCityID: this.regency,
+          FieldResponse: result,
+        };
+        this.$api
+          .put("form-responses/" + this.$route.params.id, payload)
+          .then((res) => {
+            this.$q.notify({
+              message: "Data berhasil tersimpan",
+              color: "positive",
+            });
+            this.loading = false;
+          })
+          .catch((err) => {
+            console.log(err);
           });
-          this.loading = false;
-        })
-        .catch((err) => {
-          console.log(err);
+      } else {
+        this.$q.notify({
+          message: "Ada field yang belum lengkap, silahkan cek kembali",
+          color: "negative",
         });
-    },
-    onFileUploaded(info, index) {
-      this.fields[index].Value = JSON.parse(info.xhr.response).data.Url;
+        this.loading = false;
+      }
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Buat Survey</div>
+    <div class="tw-text-3xl tw-mb-4">Buat Dokumen Perencanaan</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
@@ -169,7 +169,7 @@
               color="primary"
               unelevated
               label="Kembali"
-              :to="{ name: 'survey-index' }"
+              :to="{ name: 'perencanaan-index' }"
               no-caps
               :loading="loading"
             />
@@ -231,7 +231,7 @@ export default defineComponent({
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "survey"}')
+        .get('/forms?Limit=-&Filters={"Type": "perencanaan"}')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -282,7 +282,9 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/survey?Relation={"Name": "Fields.Childs"}')
+        .get(
+          "/forms/" + year + '/perencanaan?Relation={"Name": "Fields.Childs"}'
+        )
         .then((res) => {
           this.fields = res.data.data.Fields.sort(
             (a, b) => a.SortOrder - b.SortOrder
