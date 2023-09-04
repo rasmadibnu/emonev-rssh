@@ -120,14 +120,11 @@
                       </template>
                       <template v-else-if="props.row.Field?.Type == 'file'">
                         <q-btn
-                          as="a"
-                          target="_blank"
                           color="secondary"
                           padding="0"
-                          class="tw-mt-2"
-                          :href="$api_url.split('/api/v1')[0] + props.row.Value"
                           label="Lampiran yang diunggah"
                           icon="attachment"
+                          @click="openFileDialog(props.row.Value)"
                           no-caps
                           flat
                         />
@@ -163,6 +160,41 @@
       <q-card-actions align="right">
         <q-btn flat label="Cancel" no-caps v-close-popup />
         <q-btn flat label="Yes" color="negative" no-caps @click="deleteData" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
+  <q-dialog v-model="file_dialog">
+    <q-card style="width: 600px">
+      <q-card-section class="tw-flex tw-gap-2 tw-items-center">
+        <q-icon name="attachment" size="sm" />
+        <div class="text-h6">Lampiran</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-list v-if="file_list.length > 0">
+          <template v-for="(file, index) in file_list" :key="index">
+            <q-item
+              clickable
+              v-ripple
+              as="a"
+              target="_blank"
+              :href="$api_url.split('/api/v1')[0] + file"
+            >
+              <q-item-section>
+                <q-item-label>File {{ index + 1 }}</q-item-label>
+                <q-item-label class="text-primary" caption>{{
+                  file
+                }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-list>
+        <template v-else> Belum ada file yang di unggah </template>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat label="Tutup" color="primary" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -262,6 +294,9 @@ export default defineComponent({
       confirm: ref(false),
       loading: ref(false),
       id: ref(""),
+
+      file_dialog: ref(false),
+      file_list: ref([]),
     };
   },
   mounted() {
@@ -333,46 +368,7 @@ export default defineComponent({
       this.form_dialog = false;
       this.loading = false;
     },
-    submit() {
-      this.loading = true;
-      if (!this.is_edit) {
-        this.$api
-          .post("/roles", {
-            ...this.form,
-            CreatedBy: this.user.Username,
-          })
-          .then((res) => {
-            this.$q.notify({
-              message: "Role berhasil ditambahkan",
-              color: "positive",
-            });
-            this.closeDialog();
-            this.$refs.tableRef.requestServerInteraction();
-          })
-          .catch((err) => {
-            this.closeDialog();
-            console.log(err);
-          });
-      } else {
-        this.$api
-          .put("/roles/" + this.id, {
-            ...this.form,
-            UpdateBy: this.user.Username,
-          })
-          .then((res) => {
-            this.$q.notify({
-              message: "Role berhasil diubah",
-              color: "positive",
-            });
-            this.closeDialog();
-            this.$refs.tableRef.requestServerInteraction();
-          })
-          .catch((err) => {
-            this.closeDialog();
-            console.log(err);
-          });
-      }
-    },
+
     confirmDelete(id) {
       this.id = id;
       this.confirm = true;
@@ -392,6 +388,11 @@ export default defineComponent({
           console.log(err);
           this.confirm = false;
         });
+    },
+
+    openFileDialog(data) {
+      this.file_list = data.split("|");
+      this.file_dialog = true;
     },
   },
 });

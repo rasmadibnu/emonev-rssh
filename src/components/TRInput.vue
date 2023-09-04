@@ -57,22 +57,22 @@
         flat
         bordered
         auto-upload
-        field-name="data_file"
+        field-name="data_files"
         @uploaded="(info) => onUploaded(info)"
+        multiple
+        batch
         label="Unggah Lampiran"
       />
       <q-btn
         v-if="Type == 'file' && modelValue != '' && modelValue"
-        as="a"
-        target="_blank"
         color="secondary"
         padding="0"
         class="tw-mt-2"
-        :href="$api_url.split('/api/v1')[0] + modelValue"
         label="Lampiran yang diunggah"
         icon="attachment"
         no-caps
         flat
+        @click="list_dialog = true"
       />
       <div v-if="Error && !modelValue" class="text-negative">
         {{ ErrorMessage }}
@@ -127,23 +127,26 @@
         flat
         bordered
         auto-upload
-        field-name="data_file"
+        field-name="data_files"
         @uploaded="(info) => onUploaded(info)"
+        multiple
+        batch
         label="Unggah Lampiran"
       />
       <q-btn
         v-if="Type == 'file' && modelValue != '' && modelValue"
-        as="a"
-        target="_blank"
         color="secondary"
         padding="0"
         class="tw-mt-2"
-        :href="$api_url.split('/api/v1')[0] + modelValue"
         label="Lampiran yang diunggah"
         icon="attachment"
         no-caps
         flat
+        @click="list_dialog = true"
       />
+      <div v-if="Error && !modelValue" class="text-negative">
+        {{ ErrorMessage }}
+      </div>
     </td>
   </tr>
   <template v-if="modelValue && Childs">
@@ -156,9 +159,45 @@
       />
     </template>
   </template>
+  <q-dialog v-model="list_dialog" v-if="Type == 'file'">
+    <q-card style="width: 600px">
+      <q-card-section class="tw-flex tw-gap-2 tw-items-center">
+        <q-icon name="attachment" size="sm" />
+        <div class="text-h6">Lampiran</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-list separator v-if="modelValue != '' && modelValue">
+          <template v-for="(file, index) in modelValue.split('|')" :key="index">
+            <q-item
+              clickable
+              v-ripple
+              as="a"
+              target="_blank"
+              :href="$api_url.split('/api/v1')[0] + file"
+            >
+              <q-item-section>
+                <q-item-label>File {{ index + 1 }}</q-item-label>
+                <q-item-label class="text-primary" caption>{{
+                  file
+                }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-list>
+        <template v-else> Belum ada file yang di unggah </template>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat label="Tutup" color="primary" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
-const props = defineProps({
+import { ref } from "vue";
+
+defineProps({
   Index: Number,
   Token: String,
   Dividen: Boolean,
@@ -182,8 +221,12 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "onValueEmpty"]);
 
+const list_dialog = ref(false);
+
 function onUploaded(info) {
-  this.modelValue = JSON.parse(info.xhr.response).data.Url;
+  this.modelValue = JSON.parse(info.xhr.response)
+    .data.map((e) => e.Url)
+    .join("|");
   updateModelValue(this.modelValue);
 }
 
