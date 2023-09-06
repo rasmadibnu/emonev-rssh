@@ -246,20 +246,26 @@ export default defineComponent({
     filterRegency(val, update) {
       if (val === "") {
         update(() => {
-          this.list_regency = this.auth.regency;
+          const stripe = [{ label: "-", value: "-" }];
+
+          this.list_regency = stripe.concat(this.auth.regency);
         });
         return;
       }
 
       update(() => {
         const needle = val.toLowerCase();
-        this.list_regency = this.user?.Group.Details.map((regency) => {
-          return {
-            label: regency.RegencyCity.Name,
-            value: regency.RegencyCityID,
-            province: regency.RegencyCity.Province.LongName,
-          };
-        }).filter((v) => v.label.toLowerCase().indexOf(needle) > -1);
+        const stripe = [{ label: "-", value: "-" }];
+
+        this.list_regency = stripe.concat(
+          this.user?.Group.Details.map((regency) => {
+            return {
+              label: regency.RegencyCity.Name,
+              value: regency.RegencyCityID,
+              province: regency.RegencyCity.Province.LongName,
+            };
+          }).filter((v) => v.label.toLowerCase().indexOf(needle) > -1)
+        );
       });
     },
     filterProvince(val, update) {
@@ -272,6 +278,7 @@ export default defineComponent({
 
       update(() => {
         const needle = val.toLowerCase();
+
         this.list_province = this.auth.provinces.filter(
           (v) => v.label.toLowerCase().indexOf(needle) > -1
         );

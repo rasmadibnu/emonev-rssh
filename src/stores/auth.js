@@ -102,7 +102,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     setRegencies(province) {
-      this.regency = [];
+      this.regency = [{ label: "-", value: 0, province: [] }];
       this.regency = this.user.Group.Details.filter(
         (item) => item.ProvinceID === province
       ).map((regency) => {

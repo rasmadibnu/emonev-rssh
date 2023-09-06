@@ -323,7 +323,7 @@ export default defineComponent({
       }
 
       params.append("Limit", rowsPerPage);
-      params.append("Page", page);
+      params.append("Page", page == 0 ? "1" : page);
       params.append("Relation", '{"Name": "User"}');
       params.append(
         "Relation",

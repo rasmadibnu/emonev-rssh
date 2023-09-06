@@ -22,20 +22,29 @@
         </q-card-section>
       </q-card>
     </div>
+    <div class="tw-flex tw-justify-between tw-mt-4 tw-items-center">
+      <div class="tw-text-xl tw-font-semibold">Progress</div>
+      <q-select
+        v-model="year"
+        :options="list_year"
+        dense
+        label="Tahun"
+        class="tw-w-44"
+        map-options
+        emit-value
+      />
+    </div>
     <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
       <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
-        <div class="tw-text-xl tw-font-semibold">Progress Penginputan</div>
-        <q-select
-          v-model="year"
-          :options="list_year"
-          dense
-          label="Tahun"
-          class="tw-w-44"
-          map-options
-          emit-value
-        />
+        <div class="tw-text-xl tw-font-semibold">Penginputan</div>
+        <div></div>
       </div>
-      <q-table flat class="tw-col-span-8" :columns="columns" :rows="progress">
+      <q-table
+        flat
+        class="tw-col-span-8"
+        :columns="columns_penginputan"
+        :rows="progress_penginputan"
+      >
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
@@ -93,8 +102,8 @@
       <div class="tw-col-span-4 tw-w-full">
         <apex-chart
           type="radialBar"
-          :options="chartOptions2"
-          :series="series2"
+          :options="chart_penginputan"
+          :series="series_penginputan"
         ></apex-chart>
         <q-separator />
         <q-list>
@@ -112,7 +121,9 @@
             <div side class="tw-text-right">
               <div class="tw-text-lg tw-font-semibold">
                 {{
-                  this.progress.filter((e) => e.Status == "Completed").length
+                  this.progress_penginputan.filter(
+                    (e) => e.Status == "Completed"
+                  ).length
                 }}
               </div>
               <div>Completed</div>
@@ -127,7 +138,11 @@
 
             <div side class="tw-text-right">
               <div class="tw-text-lg tw-font-semibold">
-                {{ this.progress.filter((e) => e.Status == "Progress").length }}
+                {{
+                  this.progress_penginputan.filter(
+                    (e) => e.Status == "Progress"
+                  ).length
+                }}
               </div>
               <div>Progress</div>
             </div>
@@ -146,7 +161,9 @@
             <div side class="tw-text-right">
               <div class="tw-text-lg tw-font-semibold">
                 {{
-                  this.progress.filter((e) => e.Status == "Belum Input").length
+                  this.progress_penginputan.filter(
+                    (e) => e.Status == "Belum Input"
+                  ).length
                 }}
               </div>
               <div>Belum Input</div>
@@ -155,16 +172,180 @@
         </q-list>
       </div>
     </q-card>
-    <!-- <q-card id="chart" flat class="tw-mt-4">
-      <q-card-section>
+    <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+      <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
+        <div class="tw-text-xl tw-font-semibold">Dokumen Perencanaan</div>
+        <div></div>
+      </div>
+      <q-table
+        flat
+        class="tw-col-span-8"
+        :columns="columns_planning"
+        :rows="progress_planning"
+      >
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td>
+              {{ props.row.Name }}
+            </q-td>
+            <td>
+              <q-badge
+                label="Completed"
+                v-if="props.row.Status == 'Completed'"
+                color="positive"
+              />
+              <q-badge
+                label="Belum Input"
+                v-else-if="props.row.Status == 'Belum Input'"
+                color="negative"
+              />
+              <q-badge
+                label="Progress"
+                v-else-if="props.row.Status == 'Progress'"
+                color="secondary"
+              />
+            </td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{
+                    parseFloat(props.row.ProgressRKPD * 100).toFixed(0) + "%"
+                  }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressRKPD"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputRKPD +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{
+                    parseFloat(props.row.ProgressRenja * 100).toFixed(0) + "%"
+                  }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressRenja"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputRenja +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <!-- <q-td>
+              {{ moment(props.row.UpdatedAt).format("YYYY-MM-DD hh:mm:ss") }}
+            </q-td> -->
+          </q-tr>
+        </template>
+      </q-table>
+      <div class="tw-col-span-4 tw-w-full">
         <apex-chart
-          type="bar"
-          height="350"
-          :options="chartOptions"
-          :series="series"
+          type="radialBar"
+          :options="chart_planning"
+          :series="series_planning"
         ></apex-chart>
-      </q-card-section>
-    </q-card> -->
+        <q-separator />
+        <q-list>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="positive" size="50px">
+                <vx-icon
+                  iconName="TickCircle"
+                  class="text-white"
+                  :size="'24'"
+                />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_planning.filter((e) => e.Status == "Completed")
+                    .length
+                }}
+              </div>
+              <div>Completed</div>
+            </div>
+          </q-item>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="secondary" size="50px">
+                <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_planning.filter((e) => e.Status == "Progress")
+                    .length
+                }}
+              </div>
+              <div>Progress</div>
+            </div>
+          </q-item>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="negative" size="50px">
+                <vx-icon
+                  iconName="ClipboardClose"
+                  class="text-white"
+                  :size="'24'"
+                />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_planning.filter(
+                    (e) => e.Status == "Belum Input"
+                  ).length
+                }}
+              </div>
+              <div>Belum Input</div>
+            </div>
+          </q-item>
+        </q-list>
+      </div>
+    </q-card>
   </q-page>
 </template>
 
@@ -178,7 +359,7 @@ export default defineComponent({
   props: ["user"],
   components: { VxIcon, ApexChart },
   setup() {
-    const columns = [
+    const columns_penginputan = [
       {
         name: "Provinsi",
         label: "Provinsi",
@@ -209,76 +390,97 @@ export default defineComponent({
       // },
     ];
 
+    const columns_planning = [
+      {
+        name: "Provinsi",
+        label: "Provinsi",
+        align: "left",
+        field: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Status",
+        align: "left",
+        label: "Status",
+        field: "Status",
+        sortable: true,
+      },
+      {
+        name: "ProgressRKPD",
+        align: "left",
+        label: "Progress RKPD",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressRenja",
+        align: "left",
+        label: "Progress Renja Dinkes",
+        field: "Progress",
+        sortable: true,
+      },
+      // {
+      //   name: "Last Update",
+      //   align: "left",
+      //   label: "Last Update",
+      //   field: "Last Update",
+      //   sortable: true,
+      // },
+    ];
+
     return {
       moment,
-      columns,
+      columns_penginputan,
+      columns_planning,
       year: ref(null),
 
       list_year: ref([]),
-      progress: ref([]),
+      progress_penginputan: ref([]),
+      progress_planning: ref([]),
       count: ref([]),
-      series: [
-        {
-          name: "Net Profit",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-        },
-        {
-          name: "Revenue",
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-        },
-        {
-          name: "Free Cash Flow",
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-        },
-      ],
-      chartOptions: {
+
+      series_penginputan: ref([0]),
+      chart_penginputan: ref({
         chart: {
-          type: "bar",
-          height: 350,
-        },
-        colors: ["#243763", "#FF6E31", "#9384D1"],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "55%",
-            endingShape: "rounded",
+          type: "radialBar",
+          offsetY: -20,
+          sparkline: {
+            enabled: true,
           },
         },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ["transparent"],
-        },
-        xaxis: {
-          categories: [
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-          ],
-        },
-        fill: {
-          opacity: 1,
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return "$ " + val + " thousands";
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+              background: "#e7e7e7",
+              strokeWidth: "97%",
+              margin: 5, // margin is in pixels
+            },
+            dataLabels: {
+              name: {
+                offsetY: 40,
+                show: true,
+              },
+              value: {
+                offsetY: -2,
+                fontSize: "22px",
+              },
             },
           },
         },
-      },
+        grid: {
+          padding: {
+            top: -10,
+          },
+        },
 
-      series2: ref([0]),
-      chartOptions2: ref({
+        colors: ["#243763"],
+        labels: ["- / -"],
+      }),
+
+      series_planning: ref([0]),
+      chart_planning: ref({
         chart: {
           type: "radialBar",
           offsetY: -20,
@@ -341,6 +543,7 @@ export default defineComponent({
             this.year = res[0].value;
           }
           this.getProgess(this.year);
+          this.getPlanning(this.year);
         })
         .catch((err) => {
           console.log(err);
@@ -351,7 +554,7 @@ export default defineComponent({
       return this.$api
         .get("/forms/" + findYear.label + "/progress")
         .then((res) => {
-          this.progress = res.data.data.map((e) => {
+          this.progress_penginputan = res.data.data.map((e) => {
             var jumlah_input = e.Regencies.filter(
               (r) => r.IsInput == true
             ).length;
@@ -371,15 +574,68 @@ export default defineComponent({
             };
           });
 
-          var jumlah_completed = this.progress.filter(
+          var jumlah_completed = this.progress_penginputan.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series2[0] = parseFloat(
-            jumlah_completed / this.progress.length
+          this.series_penginputan[0] = parseFloat(
+            jumlah_completed / this.progress_penginputan.length
           ).toFixed(0);
 
-          this.chartOptions2.labels[0] = [
-            jumlah_completed + " / " + this.progress.length,
+          this.chart_penginputan.labels[0] = [
+            jumlah_completed + " / " + this.progress_penginputan.length,
+          ];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getPlanning(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      return this.$api
+        .get("/forms/" + findYear.label + "/planning")
+        .then((res) => {
+          this.progress_planning = res.data.data.map((e) => {
+            var jumlah_input_rkpd = e.Regencies.filter(
+              (r) => r.Detail.RKPD == true
+            ).length;
+
+            var jumlah_input_renja = e.Regencies.filter(
+              (r) => r.Detail.Renja == true
+            ).length;
+            var status = "";
+            if (jumlah_input_rkpd == 0 && jumlah_input_renja == 0) {
+              status = "Belum Input";
+            } else if (
+              jumlah_input_rkpd < e.Regencies.length ||
+              jumlah_input_renja < e.Regencies.length
+            ) {
+              status = "Progress";
+            } else if (
+              jumlah_input_rkpd >= e.Regencies.length &&
+              jumlah_input_renja >= e.Regencies.length
+            ) {
+              status = "Completed";
+            }
+            return {
+              ...e,
+              Status: status,
+              ProgressRKPD: jumlah_input_rkpd / e.Regencies.length,
+              JumlahInputRKPD: jumlah_input_rkpd,
+              ProgressRenja: jumlah_input_renja / e.Regencies.length,
+              JumlahInputRenja: jumlah_input_renja,
+            };
+          });
+
+          var jumlah_completed = this.progress_planning.filter(
+            (e) => e.Status == "Completed"
+          ).length;
+          this.series_penginputan[0] = parseFloat(
+            jumlah_completed / this.progress_planning.length
+          ).toFixed(0);
+
+          this.chart_penginputan.labels[0] = [
+            jumlah_completed + " / " + this.progress_planning.length,
           ];
         })
         .catch((err) => {
