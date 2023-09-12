@@ -53,7 +53,7 @@
                     label="Pilih Provinsi"
                     :options="list_province"
                     @filter="filterProvince"
-                    @update:model-value="auth.setRegencies"
+                    @update:model-value="setRegencies"
                     :disable="auth.provinces.length == 1"
                     use-input
                     map-options
@@ -83,7 +83,7 @@
                     label="Pilih Provinsi"
                     :options="list_province"
                     @filter="filterProvince"
-                    @update:model-value="auth.setRegencies"
+                    @update:model-value="setRegencies"
                     :disable="auth.provinces.length == 1"
                     use-input
                     map-options
@@ -259,6 +259,12 @@ export default defineComponent({
           console.log(err);
         });
     },
+
+    setRegencies(val) {
+      this.regency = null;
+      this.auth.setRegencies(val);
+    },
+
     filterRegency(val, update) {
       if (val === "") {
         update(() => {

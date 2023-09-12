@@ -166,6 +166,7 @@
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 import Apex from "vue3-apexcharts";
+import ApexCharts from "apexcharts";
 
 export default defineComponent({
   components: { Apex },
@@ -218,7 +219,15 @@ export default defineComponent({
       isReveal: ref(true),
       series: ref([
         {
+          name: "Persentase",
+          data: [],
+        },
+        {
           name: "Jumlah",
+          data: [],
+        },
+        {
+          name: "Anggaran",
           data: [],
         },
       ]),
@@ -226,15 +235,53 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartPartnership",
+        },
+        legend: {
+          show: false,
         },
         tooltip: {
           enabled: true,
           followCursor: true,
-          y: {
-            formatter: (value) => parseFloat(value).toFixed(0) + "%",
+          shared: true,
+          intersect: false,
+          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+            // const seriesName = w.globals.seriesNames[seriesIndex];
+            console.log();
+            return `
+            <div class="tw-p-4">
+              <div>
+                Presentase: ${parseFloat(
+                  series[seriesIndex][dataPointIndex]
+                ).toFixed(0)}%
+              </div>
+              <div>
+                Jumlah: ${w.globals.collapsedSeries[0].data[dataPointIndex]}
+              </div>
+              <div>
+                Anggaran: ${rupiah(
+                  w.globals.collapsedSeries[1].data[dataPointIndex]
+                )}
+              </div>
+             </div>
+             `;
+            // return `${w.globals}`;
+            // // Customize the tooltip format based on seriesIndex
+            // if (seriesIndex === 0) {
+            //   // First series (Percentage)
+            //   return `<div class="tw-p-4"><span class="tw-font-bold">Percentage:</span> ${parseFloat(
+            //     series[seriesIndex][dataPointIndex]
+            //   ).toFixed(0)}%</div>`;
+            // } else if (seriesIndex === 1) {
+            //   // Second series (Qty)
+            //   return `<div class="tw-p-4"><span class="tw-font-bold">Qty:</span> ${series[seriesIndex][dataPointIndex]}</div>`;
+            // } else if (seriesIndex === 2) {
+            //   // Third series (Budget)
+            //   return `<div class="tw-p-4"><span class="tw-font-bold">Budget:</span> $${series[seriesIndex][dataPointIndex]}</div>`;
+            // }
           },
         },
-        colors: ["#FF6E31"],
+        colors: ["#FF6E31", "#243763", "#9384d1"],
         plotOptions: {
           bar: {
             // borderRadius: 4,
@@ -502,13 +549,23 @@ export default defineComponent({
       this.$api
         .get("/forms/" + findYear.label + "/partnership")
         .then((res) => {
-          this.series[0].data = res.data.data.map((data) => data.Value);
-          this.chartOptions.xaxis.categories = res.data.data.map(
-            (data) => data.Name
-          );
+          const data = res.data.data;
+          const categories = data.map((item) => item.Name);
+          // const percentageSeries = data.map((item) => item.Percentage);
+          // const qtySeries = data.map((item) => item.Qty);
+          // const budgetSeries = data.map((item) => item.Budget);
+          this.chartOptions.xaxis.categories = categories;
+          this.series[0].data = [45.12, 25.11, 10.2, 55.213, 22.1];
+          this.series[1].data = [22, 56, 23, 44, 12];
+          this.series[2].data = [5123211, 8324324, 3339433, 2122123, 4432322];
+          console.log();
         })
         .then(() => {
           this.$refs.chartPartnership.refresh();
+        })
+        .then((res) => {
+          ApexCharts.getChartByID("chartPartnership").toggleSeries("Jumlah");
+          ApexCharts.getChartByID("chartPartnership").toggleSeries("Anggaran");
         })
         .catch((err) => {
           console.log(err);
