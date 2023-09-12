@@ -21,7 +21,7 @@
         <q-tab-panels v-model="tab" animated class="tw-bg-gray-50">
           <q-tab-panel name="Dashboard1">
             <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
-              <q-card flat>
+              <!-- <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
                   Persentase capaian kemitraan untuk ATM
                 </q-card-section>
@@ -34,7 +34,7 @@
                     ref="chartPartnership"
                   ></apex>
                 </q-card-section>
-              </q-card>
+              </q-card> -->
               <!-- <q-card flat>
             <q-card-section class="text-primary tw-text-xl">
               Rekapitulasi Anggaran ATM {{ tahun }}
@@ -112,6 +112,24 @@
               </q-card>
             </div>
           </q-tab-panel>
+          <q-tab-panel name="Dashboard3">
+            <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
+              <q-card flat>
+                <q-card-section class="text-primary tw-text-xl">
+                  Persentase capaian kemitraan untuk ATM
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex
+                    type="bar"
+                    height="250"
+                    :options="chartOptions"
+                    :series="series"
+                    ref="chartPartnership"
+                  ></apex>
+                </q-card-section>
+              </q-card>
+            </div>
+          </q-tab-panel>
         </q-tab-panels>
 
         <q-page-sticky class="tw-z-50" expand position="top">
@@ -149,6 +167,7 @@
             >
               <q-tab name="Dashboard1" label="Rekapitulasi Anggaran ATM" />
               <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
+              <q-tab name="Dashboard3" label="Rekapitulasi Kemitraan" />
 
               <!-- <q-tab name="Dashboard3" label="Dashboard 3" />
 
@@ -557,13 +576,13 @@ export default defineComponent({
         .then((res) => {
           const data = res.data.data;
           const categories = data.map((item) => item.Name);
-          // const percentageSeries = data.map((item) => item.Percentage);
-          // const qtySeries = data.map((item) => item.Qty);
-          // const budgetSeries = data.map((item) => item.Budget);
+          const percentageSeries = data.map((item) => item.Percentage);
+          const qtySeries = data.map((item) => item.Qty);
+          const budgetSeries = data.map((item) => item.Budget);
           this.chartOptions.xaxis.categories = categories;
-          this.series[0].data = [45.12, 25.11, 10.2, 55.213, 22.1];
-          this.series[1].data = [22, 56, 23, 44, 12];
-          this.series[2].data = [5123211, 8324324, 3339433, 2122123, 4432322];
+          this.series[0].data = percentageSeries;
+          this.series[1].data = qtySeries;
+          this.series[2].data = budgetSeries;
           console.log();
         })
         .then(() => {
@@ -584,7 +603,7 @@ export default defineComponent({
     },
 
     onChangeTab() {
-      if (this.tab == "Dashboard1") {
+      if (this.tab == "Dashboard3") {
         this.findPartnership(this.year);
       }
     },
