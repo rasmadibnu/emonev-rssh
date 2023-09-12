@@ -30,6 +30,15 @@
         @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
       />
+      <q-input
+        v-if="Type == 'numeric'"
+        dense
+        filled
+        mask="##############################"
+        :model-value="modelValue"
+        @update:model-value="(val) => updateModelValue(val)"
+        :rules="[(val) => !!val && IsRequired]"
+      />
       <div v-else-if="Type == 'radio'" class="q-gutter-sm">
         <q-radio
           :model-value="modelValue"
@@ -96,6 +105,15 @@
         v-if="Type == 'text'"
         dense
         filled
+        :model-value="modelValue"
+        @update:model-value="(val) => updateModelValue(val)"
+        :rules="[(val) => !!val && IsRequired]"
+      />
+      <q-input
+        v-if="Type == 'numeric'"
+        dense
+        filled
+        mask="##############################"
         :model-value="modelValue"
         @update:model-value="(val) => updateModelValue(val)"
         :rules="[(val) => !!val && IsRequired]"
