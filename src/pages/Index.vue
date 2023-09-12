@@ -140,7 +140,13 @@
                 no-caps
               />
             </div>
-            <q-tabs v-model="tab" align="justify" no-caps class="text-white">
+            <q-tabs
+              v-model="tab"
+              align="justify"
+              no-caps
+              class="text-white"
+              @update:model-value="onChangeTab"
+            >
               <q-tab name="Dashboard1" label="Rekapitulasi Anggaran ATM" />
               <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
 
@@ -575,6 +581,12 @@ export default defineComponent({
     onUpdateYear() {
       this.getBudget(this.year);
       this.findPartnership(this.year);
+    },
+
+    onChangeTab() {
+      if (this.tab == "Dashboard1") {
+        this.findPartnership(this.year);
+      }
     },
   },
 });
