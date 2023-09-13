@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Buat Penginputan</div>
+    <div class="tw-text-3xl tw-mb-4">Buat Anggaran</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota

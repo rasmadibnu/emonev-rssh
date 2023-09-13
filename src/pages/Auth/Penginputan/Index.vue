@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Penginputan</div>
+    <div class="tw-text-3xl tw-mb-4">Anggaran</div>
     <q-card flat>
       <q-card-section>
         <div class="tw-flex tw-justify-end tw-items-center tw-mb-4">

@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Buat Survey</div>
+    <div class="tw-text-3xl tw-mb-4">Buat Kemitraan</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
         Anggaran APBD Kab/Kota
