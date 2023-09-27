@@ -527,7 +527,7 @@ export default defineComponent({
   methods: {
     getYear() {
       this.$api
-        .get(`/forms?Limit=-&Filters={"Type":"perencanaan"}`)
+        .get(`/forms?Limit=-&Filters={"Type":"perencanaan"}&Sort=year asc`)
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
