@@ -36,7 +36,7 @@
     </div>
     <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
       <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
-        <div class="tw-text-xl tw-font-semibold">Penginputan</div>
+        <div class="tw-text-xl tw-font-semibold">Anggaran</div>
         <div></div>
       </div>
       <q-table
@@ -527,7 +527,7 @@ export default defineComponent({
   methods: {
     getYear() {
       this.$api
-        .get(`/forms?Limit=-&Filters={"Type":"perencanaan"}&Sort=year asc`)
+        .get(`/forms?Limit=-&Filters={"Type":"budget"}&Sort=year asc`)
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
@@ -593,7 +593,7 @@ export default defineComponent({
     getPlanning(val) {
       const findYear = this.list_year.find((year) => year.value == val);
       return this.$api
-        .get("/forms/" + findYear.label + "/planning")
+        .get("/forms/" + findYear.label + "/planning/progress")
         .then((res) => {
           this.progress_planning = res.data.data.map((e) => {
             var jumlah_input_rkpd = e.Regencies.filter(

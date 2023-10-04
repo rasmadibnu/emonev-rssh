@@ -231,7 +231,7 @@ export default defineComponent({
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "perencanaan"}&Sort=year asc')
+        .get('/forms?Limit=-&Filters={"Type": "planning"}&Sort=year asc')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };

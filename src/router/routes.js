@@ -93,6 +93,13 @@ const routes = [
         name: "perencanaan-edit",
       },
 
+      // Dokumen
+      {
+        path: "dokumen",
+        component: () => import("pages/Auth/Dokumen/Index.vue"),
+        name: "dokumen-index",
+      },
+
       {
         path: "laporan",
         component: () => import("src/pages/Auth/Laporan.vue"),

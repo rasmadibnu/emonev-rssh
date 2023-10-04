@@ -327,7 +327,7 @@ export default defineComponent({
       params.append("Relation", '{"Name": "User"}');
       params.append(
         "Relation",
-        '{"Name": "Form", "Filters":{"Type": "perencanaan"}}'
+        '{"Name": "Form", "Filters":{"Type": "planning"}}'
       );
       params.append("Relation", '{"Name": "RegencyCity.Province"}');
       params.append("Relation", '{"Name": "FieldResponse.Field"}');
