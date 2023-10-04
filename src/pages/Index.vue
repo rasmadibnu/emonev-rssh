@@ -340,6 +340,196 @@
                 <div
                   class="tw-col-span-12 tw-flex tw-justify-between tw-items-center"
                 >
+                  <div class="tw-text-xl tw-font-semibold">Kemitraan</div>
+                  <div></div>
+                </div>
+                <q-table
+                  flat
+                  class="tw-col-span-8"
+                  :columns="columns_planning"
+                  :rows="progress_planning"
+                >
+                  <template v-slot:body="props">
+                    <q-tr :props="props">
+                      <q-td>
+                        {{ props.row.Name }}
+                      </q-td>
+                      <td>
+                        <q-badge
+                          label="Completed"
+                          v-if="props.row.Status == 'Completed'"
+                          color="positive"
+                        />
+                        <q-badge
+                          label="Belum Input"
+                          v-else-if="props.row.Status == 'Belum Input'"
+                          color="negative"
+                        />
+                        <q-badge
+                          label="Progress"
+                          v-else-if="props.row.Status == 'Progress'"
+                          color="secondary"
+                        />
+                      </td>
+                      <q-td>
+                        <div class="tw-flex tw-items-center">
+                          <div
+                            style="font-size: 0.8em"
+                            class="tw-mt-1 tw-mr-2 text-primary"
+                          >
+                            {{
+                              parseFloat(props.row.ProgressRKPD * 100).toFixed(
+                                0
+                              ) + "%"
+                            }}
+                          </div>
+                          <q-linear-progress
+                            rounded
+                            stripe
+                            size="25px"
+                            :value="props.row.ProgressRKPD"
+                            color="accent"
+                            class="q-mt-sm"
+                          >
+                            <div class="absolute-full flex flex-center">
+                              <q-badge
+                                color="white"
+                                text-color="accent"
+                                :label="
+                                  props.row.JumlahInputRKPD +
+                                  '/' +
+                                  props.row.Regencies.length
+                                "
+                              />
+                            </div>
+                          </q-linear-progress>
+                        </div>
+                      </q-td>
+                      <q-td>
+                        <div class="tw-flex tw-items-center">
+                          <div
+                            style="font-size: 0.8em"
+                            class="tw-mt-1 tw-mr-2 text-primary"
+                          >
+                            {{
+                              parseFloat(props.row.ProgressRenja * 100).toFixed(
+                                0
+                              ) + "%"
+                            }}
+                          </div>
+                          <q-linear-progress
+                            rounded
+                            stripe
+                            size="25px"
+                            :value="props.row.ProgressRenja"
+                            color="accent"
+                            class="q-mt-sm"
+                          >
+                            <div class="absolute-full flex flex-center">
+                              <q-badge
+                                color="white"
+                                text-color="accent"
+                                :label="
+                                  props.row.JumlahInputRenja +
+                                  '/' +
+                                  props.row.Regencies.length
+                                "
+                              />
+                            </div>
+                          </q-linear-progress>
+                        </div>
+                      </q-td>
+                      <!-- <q-td>
+              {{ moment(props.row.UpdatedAt).format("YYYY-MM-DD hh:mm:ss") }}
+            </q-td> -->
+                    </q-tr>
+                  </template>
+                </q-table>
+                <div class="tw-col-span-4 tw-w-full">
+                  <apex-chart
+                    type="radialBar"
+                    :options="chart_planning"
+                    :series="series_planning"
+                    ref="radialPlanning"
+                  ></apex-chart>
+                  <q-separator />
+                  <q-list>
+                    <q-item class="tw-flex tw-justify-between tw-items-center">
+                      <q-item-section avatar>
+                        <q-avatar color="positive" size="50px">
+                          <vx-icon
+                            iconName="TickCircle"
+                            class="text-white"
+                            :size="'24'"
+                          />
+                        </q-avatar>
+                      </q-item-section>
+
+                      <div side class="tw-text-right">
+                        <div class="tw-text-lg tw-font-semibold">
+                          {{
+                            this.progress_planning.filter(
+                              (e) => e.Status == "Completed"
+                            ).length
+                          }}
+                        </div>
+                        <div>Completed</div>
+                      </div>
+                    </q-item>
+                    <q-item class="tw-flex tw-justify-between tw-items-center">
+                      <q-item-section avatar>
+                        <q-avatar color="secondary" size="50px">
+                          <vx-icon
+                            iconName="Bookmark"
+                            class="text-white"
+                            :size="'24'"
+                          />
+                        </q-avatar>
+                      </q-item-section>
+
+                      <div side class="tw-text-right">
+                        <div class="tw-text-lg tw-font-semibold">
+                          {{
+                            this.progress_planning.filter(
+                              (e) => e.Status == "Progress"
+                            ).length
+                          }}
+                        </div>
+                        <div>Progress</div>
+                      </div>
+                    </q-item>
+                    <q-item class="tw-flex tw-justify-between tw-items-center">
+                      <q-item-section avatar>
+                        <q-avatar color="negative" size="50px">
+                          <vx-icon
+                            iconName="ClipboardClose"
+                            class="text-white"
+                            :size="'24'"
+                          />
+                        </q-avatar>
+                      </q-item-section>
+
+                      <div side class="tw-text-right">
+                        <div class="tw-text-lg tw-font-semibold">
+                          {{
+                            this.progress_planning.filter(
+                              (e) => e.Status == "Belum Input"
+                            ).length
+                          }}
+                        </div>
+                        <div>Belum Input</div>
+                      </div>
+                    </q-item>
+                  </q-list>
+                </div>
+              </q-card>
+              <q-card
+                flat
+                class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4"
+              >
+                <div
+                  class="tw-col-span-12 tw-flex tw-justify-between tw-items-center"
+                >
                   <div class="tw-text-xl tw-font-semibold">
                     Dokumen Perencanaan
                   </div>
