@@ -174,6 +174,242 @@
     </q-card>
     <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
       <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
+        <div class="tw-text-xl tw-font-semibold">Kemitraan</div>
+        <div></div>
+      </div>
+      <q-table
+        flat
+        class="tw-col-span-8"
+        :columns="columns_partnership"
+        :rows="progress_partnership"
+      >
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td>
+              {{ props.row.Name }}
+            </q-td>
+            <td>
+              <q-badge
+                label="Completed"
+                v-if="props.row.Status == 'Completed'"
+                color="positive"
+              />
+              <q-badge
+                label="Belum Input"
+                v-else-if="props.row.Status == 'Belum Input'"
+                color="negative"
+              />
+              <q-badge
+                label="Progress"
+                v-else-if="props.row.Status == 'Progress'"
+                color="secondary"
+              />
+            </td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{
+                    parseFloat(props.row.ProgressSKPD * 100).toFixed(0) + "%"
+                  }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressSKPD"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputSKPD +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{ parseFloat(props.row.ProgressCSR * 100).toFixed(0) + "%" }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressCSR"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputCSR +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{
+                    parseFloat(props.row.ProgressVillage * 100).toFixed(0) + "%"
+                  }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressVillage"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputVillage +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <q-td>
+              <div class="tw-flex tw-items-center">
+                <div
+                  style="font-size: 0.8em"
+                  class="tw-mt-1 tw-mr-2 text-primary"
+                >
+                  {{ parseFloat(props.row.ProgressSK * 100).toFixed(0) + "%" }}
+                </div>
+                <q-linear-progress
+                  rounded
+                  stripe
+                  size="25px"
+                  :value="props.row.ProgressSK"
+                  color="accent"
+                  class="q-mt-sm"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="white"
+                      text-color="accent"
+                      :label="
+                        props.row.JumlahInputSK +
+                        '/' +
+                        props.row.Regencies.length
+                      "
+                    />
+                  </div>
+                </q-linear-progress>
+              </div>
+            </q-td>
+            <!-- <q-td>
+              {{ moment(props.row.UpdatedAt).format("YYYY-MM-DD hh:mm:ss") }}
+            </q-td> -->
+          </q-tr>
+        </template>
+      </q-table>
+      <div class="tw-col-span-4 tw-w-full">
+        <apex-chart
+          type="radialBar"
+          :options="chart_parterhsip"
+          :series="series_parterhsip"
+        ></apex-chart>
+        <q-separator />
+        <q-list>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="positive" size="50px">
+                <vx-icon
+                  iconName="TickCircle"
+                  class="text-white"
+                  :size="'24'"
+                />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_partnership.filter(
+                    (e) => e.Status == "Completed"
+                  ).length
+                }}
+              </div>
+              <div>Completed</div>
+            </div>
+          </q-item>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="secondary" size="50px">
+                <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_partnership.filter(
+                    (e) => e.Status == "Progress"
+                  ).length
+                }}
+              </div>
+              <div>Progress</div>
+            </div>
+          </q-item>
+          <q-item class="tw-flex tw-justify-between tw-items-center">
+            <q-item-section avatar>
+              <q-avatar color="negative" size="50px">
+                <vx-icon
+                  iconName="ClipboardClose"
+                  class="text-white"
+                  :size="'24'"
+                />
+              </q-avatar>
+            </q-item-section>
+
+            <div side class="tw-text-right">
+              <div class="tw-text-lg tw-font-semibold">
+                {{
+                  this.progress_partnership.filter(
+                    (e) => e.Status == "Belum Input"
+                  ).length
+                }}
+              </div>
+              <div>Belum Input</div>
+            </div>
+          </q-item>
+        </q-list>
+      </div>
+    </q-card>
+    <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+      <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
         <div class="tw-text-xl tw-font-semibold">Dokumen Perencanaan</div>
         <div></div>
       </div>
@@ -428,15 +664,69 @@ export default defineComponent({
       // },
     ];
 
+    const columns_partnership = [
+      {
+        name: "Provinsi",
+        label: "Provinsi",
+        align: "left",
+        field: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Status",
+        align: "left",
+        label: "Status",
+        field: "Status",
+        sortable: true,
+      },
+      {
+        name: "ProgressSKPD",
+        align: "left",
+        label: "Progress SKPD",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressCSR",
+        align: "left",
+        label: "Progress CSR",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressDanaDesa",
+        align: "left",
+        label: "Progress Dana Desa",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressSK",
+        align: "left",
+        label: "Progress SK",
+        field: "Progress",
+        sortable: true,
+      },
+      // {
+      //   name: "Last Update",
+      //   align: "left",
+      //   label: "Last Update",
+      //   field: "Last Update",
+      //   sortable: true,
+      // },
+    ];
+
     return {
       moment,
       columns_penginputan,
       columns_planning,
+      columns_partnership,
       year: ref(null),
 
       list_year: ref([]),
       progress_penginputan: ref([]),
       progress_planning: ref([]),
+      progress_partnership: ref([]),
       count: ref([]),
 
       series_penginputan: ref([0]),
@@ -518,6 +808,46 @@ export default defineComponent({
         colors: ["#243763"],
         labels: ["- / -"],
       }),
+
+      series_parterhsip: ref([0]),
+      chart_parterhsip: ref({
+        chart: {
+          type: "radialBar",
+          offsetY: -20,
+          sparkline: {
+            enabled: true,
+          },
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+              background: "#e7e7e7",
+              strokeWidth: "97%",
+              margin: 5, // margin is in pixels
+            },
+            dataLabels: {
+              name: {
+                offsetY: 40,
+                show: true,
+              },
+              value: {
+                offsetY: -2,
+                fontSize: "22px",
+              },
+            },
+          },
+        },
+        grid: {
+          padding: {
+            top: -10,
+          },
+        },
+
+        colors: ["#243763"],
+        labels: ["- / -"],
+      }),
     };
   },
   mounted() {
@@ -544,6 +874,7 @@ export default defineComponent({
           }
           this.getProgess(this.year);
           this.getPlanning(this.year);
+          this.getPartnerhsip(this.year);
         })
         .catch((err) => {
           console.log(err);
@@ -593,15 +924,15 @@ export default defineComponent({
     getPlanning(val) {
       const findYear = this.list_year.find((year) => year.value == val);
       return this.$api
-        .get("/forms/" + findYear.label + "/planning/progress")
+        .get("/forms/" + findYear.label + "/progress/planning")
         .then((res) => {
           this.progress_planning = res.data.data.map((e) => {
             var jumlah_input_rkpd = e.Regencies.filter(
-              (r) => r.Detail.RKPD == true
+              (r) => r.RKPD == true
             ).length;
 
             var jumlah_input_renja = e.Regencies.filter(
-              (r) => r.Detail.Renja == true
+              (r) => r.Renja == true
             ).length;
             var status = "";
             if (jumlah_input_rkpd == 0 && jumlah_input_renja == 0) {
@@ -636,6 +967,81 @@ export default defineComponent({
 
           this.chart_penginputan.labels[0] = [
             jumlah_completed + " / " + this.progress_planning.length,
+          ];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getPartnerhsip(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      return this.$api
+        .get("/forms/" + findYear.label + "/progress/partnership")
+        .then((res) => {
+          this.progress_partnership = res.data.data.map((e) => {
+            var jumlah_input_skpd = e.Regencies.filter(
+              (r) => r.SKPD == true
+            ).length;
+
+            var jumlah_input_csr = e.Regencies.filter(
+              (r) => r.CSR == true
+            ).length;
+
+            var jumlah_input_village = e.Regencies.filter(
+              (r) => r.Village == true
+            ).length;
+
+            var jumlah_input_sk = e.Regencies.filter(
+              (r) => r.SK == true
+            ).length;
+
+            var status = "";
+            if (
+              jumlah_input_skpd == 0 &&
+              jumlah_input_csr == 0 &&
+              jumlah_input_village == 0 &&
+              jumlah_input_sk == 0
+            ) {
+              status = "Belum Input";
+            } else if (
+              jumlah_input_skpd < e.Regencies.length ||
+              jumlah_input_csr < e.Regencies.length ||
+              jumlah_input_village < e.Regencies.length ||
+              jumlah_input_sk < e.Regencies.length
+            ) {
+              status = "Progress";
+            } else if (
+              jumlah_input_skpd >= e.Regencies.length &&
+              jumlah_input_csr >= e.Regencies.length &&
+              jumlah_input_village >= e.Regencies.length &&
+              jumlah_input_sk >= e.Regencies.length
+            ) {
+              status = "Completed";
+            }
+            return {
+              ...e,
+              Status: status,
+              ProgressSKPD: jumlah_input_skpd / e.Regencies.length,
+              JumlahInputSKPD: jumlah_input_skpd,
+              ProgressCSR: jumlah_input_csr / e.Regencies.length,
+              JumlahInputCSR: jumlah_input_csr,
+              ProgressVillage: jumlah_input_village / e.Regencies.length,
+              JumlahInputVillage: jumlah_input_village,
+              ProgressSK: jumlah_input_sk / e.Regencies.length,
+              JumlahInputSK: jumlah_input_sk,
+            };
+          });
+
+          var jumlah_completed = this.progress_partnership.filter(
+            (e) => e.Status == "Completed"
+          ).length;
+          this.series_penginputan[0] = parseFloat(
+            jumlah_completed / this.progress_partnership.length
+          ).toFixed(0);
+
+          this.chart_penginputan.labels[0] = [
+            jumlah_completed + " / " + this.progress_partnership.length,
           ];
         })
         .catch((err) => {

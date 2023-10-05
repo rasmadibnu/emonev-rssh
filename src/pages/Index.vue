@@ -256,12 +256,12 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex-chart
+                  <apex
                     type="radialBar"
                     :options="chart_penginputan"
                     :series="series_penginputan"
                     ref="radialAnggaran"
-                  ></apex-chart>
+                  ></apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -346,8 +346,8 @@
                 <q-table
                   flat
                   class="tw-col-span-8"
-                  :columns="columns_planning"
-                  :rows="progress_planning"
+                  :columns="columns_partnership"
+                  :rows="progress_partnership"
                 >
                   <template v-slot:body="props">
                     <q-tr :props="props">
@@ -378,7 +378,7 @@
                             class="tw-mt-1 tw-mr-2 text-primary"
                           >
                             {{
-                              parseFloat(props.row.ProgressRKPD * 100).toFixed(
+                              parseFloat(props.row.ProgressSKPD * 100).toFixed(
                                 0
                               ) + "%"
                             }}
@@ -387,7 +387,7 @@
                             rounded
                             stripe
                             size="25px"
-                            :value="props.row.ProgressRKPD"
+                            :value="props.row.ProgressSKPD"
                             color="accent"
                             class="q-mt-sm"
                           >
@@ -396,7 +396,7 @@
                                 color="white"
                                 text-color="accent"
                                 :label="
-                                  props.row.JumlahInputRKPD +
+                                  props.row.JumlahInputSKPD +
                                   '/' +
                                   props.row.Regencies.length
                                 "
@@ -412,7 +412,7 @@
                             class="tw-mt-1 tw-mr-2 text-primary"
                           >
                             {{
-                              parseFloat(props.row.ProgressRenja * 100).toFixed(
+                              parseFloat(props.row.ProgressCSR * 100).toFixed(
                                 0
                               ) + "%"
                             }}
@@ -421,7 +421,7 @@
                             rounded
                             stripe
                             size="25px"
-                            :value="props.row.ProgressRenja"
+                            :value="props.row.ProgressCSR"
                             color="accent"
                             class="q-mt-sm"
                           >
@@ -430,7 +430,75 @@
                                 color="white"
                                 text-color="accent"
                                 :label="
-                                  props.row.JumlahInputRenja +
+                                  props.row.JumlahInputCSR +
+                                  '/' +
+                                  props.row.Regencies.length
+                                "
+                              />
+                            </div>
+                          </q-linear-progress>
+                        </div>
+                      </q-td>
+                      <q-td>
+                        <div class="tw-flex tw-items-center">
+                          <div
+                            style="font-size: 0.8em"
+                            class="tw-mt-1 tw-mr-2 text-primary"
+                          >
+                            {{
+                              parseFloat(
+                                props.row.ProgressVillage * 100
+                              ).toFixed(0) + "%"
+                            }}
+                          </div>
+                          <q-linear-progress
+                            rounded
+                            stripe
+                            size="25px"
+                            :value="props.row.ProgressVillage"
+                            color="accent"
+                            class="q-mt-sm"
+                          >
+                            <div class="absolute-full flex flex-center">
+                              <q-badge
+                                color="white"
+                                text-color="accent"
+                                :label="
+                                  props.row.JumlahInputVillage +
+                                  '/' +
+                                  props.row.Regencies.length
+                                "
+                              />
+                            </div>
+                          </q-linear-progress>
+                        </div>
+                      </q-td>
+                      <q-td>
+                        <div class="tw-flex tw-items-center">
+                          <div
+                            style="font-size: 0.8em"
+                            class="tw-mt-1 tw-mr-2 text-primary"
+                          >
+                            {{
+                              parseFloat(props.row.ProgressSK * 100).toFixed(
+                                0
+                              ) + "%"
+                            }}
+                          </div>
+                          <q-linear-progress
+                            rounded
+                            stripe
+                            size="25px"
+                            :value="props.row.ProgressSK"
+                            color="accent"
+                            class="q-mt-sm"
+                          >
+                            <div class="absolute-full flex flex-center">
+                              <q-badge
+                                color="white"
+                                text-color="accent"
+                                :label="
+                                  props.row.JumlahInputSK +
                                   '/' +
                                   props.row.Regencies.length
                                 "
@@ -446,12 +514,12 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex-chart
+                  <apex
                     type="radialBar"
-                    :options="chart_planning"
-                    :series="series_planning"
-                    ref="radialPlanning"
-                  ></apex-chart>
+                    :options="chart_parterhsip"
+                    :series="series_parterhsip"
+                    ref="radialPartnership"
+                  ></apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -468,7 +536,7 @@
                       <div side class="tw-text-right">
                         <div class="tw-text-lg tw-font-semibold">
                           {{
-                            this.progress_planning.filter(
+                            this.progress_partnership.filter(
                               (e) => e.Status == "Completed"
                             ).length
                           }}
@@ -490,7 +558,7 @@
                       <div side class="tw-text-right">
                         <div class="tw-text-lg tw-font-semibold">
                           {{
-                            this.progress_planning.filter(
+                            this.progress_partnership.filter(
                               (e) => e.Status == "Progress"
                             ).length
                           }}
@@ -512,7 +580,7 @@
                       <div side class="tw-text-right">
                         <div class="tw-text-lg tw-font-semibold">
                           {{
-                            this.progress_planning.filter(
+                            this.progress_partnership.filter(
                               (e) => e.Status == "Belum Input"
                             ).length
                           }}
@@ -638,12 +706,12 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex-chart
+                  <apex
                     type="radialBar"
                     :options="chart_planning"
                     :series="series_planning"
                     ref="radialPlanning"
-                  ></apex-chart>
+                  ></apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -780,9 +848,10 @@ import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 import Apex from "vue3-apexcharts";
 import ApexCharts from "apexcharts";
+import VxIcon from "src/components/VxIcon.vue";
 
 export default defineComponent({
-  components: { Apex },
+  components: { Apex, VxIcon },
   setup() {
     const authStore = useAuthStore();
 
@@ -895,14 +964,68 @@ export default defineComponent({
       //   sortable: true,
       // },
     ];
+
+    const columns_partnership = [
+      {
+        name: "Provinsi",
+        label: "Provinsi",
+        align: "left",
+        field: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Status",
+        align: "left",
+        label: "Status",
+        field: "Status",
+        sortable: true,
+      },
+      {
+        name: "ProgressSKPD",
+        align: "left",
+        label: "SKPD",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressCSR",
+        align: "left",
+        label: "CSR",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressDanaDesa",
+        align: "left",
+        label: "Dana Desa",
+        field: "Progress",
+        sortable: true,
+      },
+      {
+        name: "ProgressSK",
+        align: "left",
+        label: "SK",
+        field: "Progress",
+        sortable: true,
+      },
+      // {
+      //   name: "Last Update",
+      //   align: "left",
+      //   label: "Last Update",
+      //   field: "Last Update",
+      //   sortable: true,
+      // },
+    ];
     return {
       authStore,
       province_table_column,
       isReveal: ref(true),
       columns_penginputan,
       columns_planning,
+      columns_partnership,
       progress_penginputan: ref([]),
       progress_planning: ref([]),
+      progress_partnership: ref([]),
       count: ref([]),
 
       series_penginputan: ref([0]),
@@ -947,6 +1070,46 @@ export default defineComponent({
 
       series_planning: ref([0]),
       chart_planning: ref({
+        chart: {
+          type: "radialBar",
+          offsetY: -20,
+          sparkline: {
+            enabled: true,
+          },
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            track: {
+              background: "#e7e7e7",
+              strokeWidth: "97%",
+              margin: 5, // margin is in pixels
+            },
+            dataLabels: {
+              name: {
+                offsetY: 40,
+                show: true,
+              },
+              value: {
+                offsetY: -2,
+                fontSize: "22px",
+              },
+            },
+          },
+        },
+        grid: {
+          padding: {
+            top: -10,
+          },
+        },
+
+        colors: ["#243763"],
+        labels: ["- / -"],
+      }),
+
+      series_parterhsip: ref([0]),
+      chart_parterhsip: ref({
         chart: {
           type: "radialBar",
           offsetY: -20,
@@ -1746,15 +1909,15 @@ export default defineComponent({
     getPlanning(val) {
       const findYear = this.list_year.find((year) => year.value == val);
       return this.$api
-        .get("/forms/" + findYear.label + "/planning/progress")
+        .get("/forms/" + findYear.label + "/progress/planning")
         .then((res) => {
           this.progress_planning = res.data.data.map((e) => {
             var jumlah_input_rkpd = e.Regencies.filter(
-              (r) => r.Detail.RKPD == true
+              (r) => r.RKPD == true
             ).length;
 
             var jumlah_input_renja = e.Regencies.filter(
-              (r) => r.Detail.Renja == true
+              (r) => r.Renja == true
             ).length;
             var status = "";
             if (jumlah_input_rkpd == 0 && jumlah_input_renja == 0) {
@@ -1791,6 +1954,87 @@ export default defineComponent({
             jumlah_completed + " / " + this.progress_planning.length,
           ];
         })
+        .then((res) => {
+          this.$refs.radialPlanning.refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getPartnerhsip(val) {
+      const findYear = this.list_year.find((year) => year.value == val);
+      return this.$api
+        .get("/forms/" + findYear.label + "/progress/partnership")
+        .then((res) => {
+          this.progress_partnership = res.data.data.map((e) => {
+            var jumlah_input_skpd = e.Regencies.filter(
+              (r) => r.SKPD == true
+            ).length;
+
+            var jumlah_input_csr = e.Regencies.filter(
+              (r) => r.CSR == true
+            ).length;
+
+            var jumlah_input_village = e.Regencies.filter(
+              (r) => r.Village == true
+            ).length;
+
+            var jumlah_input_sk = e.Regencies.filter(
+              (r) => r.SK == true
+            ).length;
+
+            var status = "";
+            if (
+              jumlah_input_skpd == 0 &&
+              jumlah_input_csr == 0 &&
+              jumlah_input_village == 0 &&
+              jumlah_input_sk == 0
+            ) {
+              status = "Belum Input";
+            } else if (
+              jumlah_input_skpd < e.Regencies.length ||
+              jumlah_input_csr < e.Regencies.length ||
+              jumlah_input_village < e.Regencies.length ||
+              jumlah_input_sk < e.Regencies.length
+            ) {
+              status = "Progress";
+            } else if (
+              jumlah_input_skpd >= e.Regencies.length &&
+              jumlah_input_csr >= e.Regencies.length &&
+              jumlah_input_village >= e.Regencies.length &&
+              jumlah_input_sk >= e.Regencies.length
+            ) {
+              status = "Completed";
+            }
+            return {
+              ...e,
+              Status: status,
+              ProgressSKPD: jumlah_input_skpd / e.Regencies.length,
+              JumlahInputSKPD: jumlah_input_skpd,
+              ProgressCSR: jumlah_input_csr / e.Regencies.length,
+              JumlahInputCSR: jumlah_input_csr,
+              ProgressVillage: jumlah_input_village / e.Regencies.length,
+              JumlahInputVillage: jumlah_input_village,
+              ProgressSK: jumlah_input_sk / e.Regencies.length,
+              JumlahInputSK: jumlah_input_sk,
+            };
+          });
+
+          var jumlah_completed = this.progress_partnership.filter(
+            (e) => e.Status == "Completed"
+          ).length;
+          this.series_penginputan[0] = parseFloat(
+            jumlah_completed / this.progress_partnership.length
+          ).toFixed(0);
+
+          this.chart_penginputan.labels[0] = [
+            jumlah_completed + " / " + this.progress_partnership.length,
+          ];
+        })
+        .then((res) => {
+          this.$refs.radialPartnership.refresh();
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -1802,7 +2046,8 @@ export default defineComponent({
       this.findPartnershipPerProvince(this.year);
       this.getPartnershipDetail(this.year);
       this.getProgess(this.year);
-      // this.getPlanning(this.year);
+      this.getPlanning(this.year);
+      this.getPartnerhsip(this.year);
     },
 
     updateProvinceKemirtraan() {
@@ -1817,7 +2062,8 @@ export default defineComponent({
         this.getPartnershipDetail(this.year);
       } else if (this.tab == "Dashboard4") {
         this.getProgess(this.year);
-        // this.getPlanning(this.year);
+        this.getPlanning(this.year);
+        this.getPartnerhsip(this.year);
       }
     },
   },
