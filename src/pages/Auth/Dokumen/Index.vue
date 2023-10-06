@@ -97,7 +97,8 @@
                     }}</span>
                   </div>
                   <q-btn
-                    :label="props.row.Field.Code"
+                    :label="props.row.Field.Label"
+                    no-caps
                     unelevated
                     color="primary"
                     class="tw-w-full tw-mt-2"
@@ -153,10 +154,10 @@ export default defineComponent({
         sortable: true,
       },
       {
-        name: "Code",
-        label: "Code",
+        name: "Name",
+        label: "Name",
         align: "left",
-        field: (row) => row.Field.Code,
+        field: (row) => row.Field.Label,
         sortable: true,
       },
       {
