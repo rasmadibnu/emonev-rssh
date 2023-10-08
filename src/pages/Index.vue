@@ -1036,6 +1036,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "radialAnggaran",
         },
         plotOptions: {
           radialBar: {
@@ -1076,6 +1077,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "radialPlanning",
         },
         plotOptions: {
           radialBar: {
@@ -1116,6 +1118,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "radialPartnership",
         },
         plotOptions: {
           radialBar: {
@@ -1326,6 +1329,7 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartPercentage",
         },
         colors: ["#243763"],
         plotOptions: {
@@ -1369,6 +1373,7 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartVillageCount",
         },
         colors: ["#243763"],
         plotOptions: {
@@ -1413,6 +1418,7 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartVillageFund",
         },
         colors: ["#243763"],
         plotOptions: {
@@ -1457,6 +1463,7 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartCSR",
         },
         colors: ["#243763"],
         plotOptions: {
@@ -1502,6 +1509,7 @@ export default defineComponent({
           zoom: {
             enabled: true,
           },
+          id: "chartSKPDN",
         },
         dataLabels: {
           formatter: function (value) {
@@ -1579,6 +1587,7 @@ export default defineComponent({
         chart: {
           type: "bar",
           height: 350,
+          id: "chartProvince",
         },
         colors: ["#243763", "#FF6E31", "#9384D1"],
         plotOptions: {
@@ -1666,23 +1675,25 @@ export default defineComponent({
       this.$api
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
-          this.seriesPercentage[0].data = res.data.data.map((e) => e.budget);
-          this.chartOptionsPercentage.xaxis.categories = res.data.data.map(
-            (e) => e.name
-          );
-
+          this.province = null;
           this.options_province = res.data.data.map((e) => {
             return { label: e.name, value: e.id };
           });
           this.list_province = this.options_province;
-          return res;
-        })
-        .then((res) => {
-          this.$refs.chartPercentage.refresh();
           this.province = this.list_province[0].value;
           this.province_kemitraan = this.list_province[0].value;
           this.updateProvince(this.list_province[0].value);
+          this.seriesPercentage[0].data = res.data.data.map((e) => e.budget);
+
+          ApexCharts.getChartByID("chartPercentage").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((e) => e.name),
+            },
+          });
+
+          return res;
         })
+        .then((res) => {})
         .catch((err) => {
           console.log(err);
         });
@@ -1714,9 +1725,11 @@ export default defineComponent({
       return this.$api
         .get("/result/" + findYear.label + "/percentage/" + val)
         .then((res) => {
-          this.chartOptionsProvince.xaxis.categories = res.data.data.map(
-            (province) => province.name
-          );
+          ApexCharts.getChartByID("chartProvince").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((province) => province.name),
+            },
+          });
           this.seriesProvince[0].data = res.data.data.map(
             (province) => province.percentage.AIDS
           );
@@ -1728,9 +1741,6 @@ export default defineComponent({
           );
 
           return res;
-        })
-        .then((res) => {
-          this.$refs.chartProvince.refresh();
         })
         .catch((err) => {
           console.log(err);
@@ -1759,13 +1769,19 @@ export default defineComponent({
           const percentageSeries = data.map((item) => item.Percentage);
           const qtySeries = data.map((item) => item.Qty);
           const budgetSeries = data.map((item) => item.Budget);
-          this.chartOptions.xaxis.categories = categories;
           this.series[0].data = percentageSeries;
           this.series[1].data = qtySeries;
           this.series[2].data = budgetSeries;
-        })
-        .then(() => {
-          this.$refs.chartPartnership.refresh();
+          ApexCharts.getChartByID("chartPartnership").updateOptions({
+            xaxis: {
+              labels: {
+                formatter: function (value) {
+                  return `${parseFloat(value).toFixed(0)}%`;
+                },
+              },
+              categories: categories,
+            },
+          });
         })
         .then((res) => {
           ApexCharts.getChartByID("chartPartnership").toggleSeries("Jumlah");
@@ -1791,13 +1807,19 @@ export default defineComponent({
           const percentageSeries = data.map((item) => item.Percentage);
           const qtySeries = data.map((item) => item.Qty);
           const budgetSeries = data.map((item) => item.Budget);
-          this.chartOptionsPerProvince.xaxis.categories = categories;
           this.seriesPerProvince[0].data = percentageSeries;
           this.seriesPerProvince[1].data = qtySeries;
           this.seriesPerProvince[2].data = budgetSeries;
-        })
-        .then(() => {
-          this.$refs.chartPartnershipPerProvince.refresh();
+          ApexCharts.getChartByID("chartPartnershipPerProvince").updateOptions({
+            xaxis: {
+              labels: {
+                formatter: function (value) {
+                  return `${parseFloat(value).toFixed(0)}%`;
+                },
+              },
+              categories: categories,
+            },
+          });
         })
         .then((res) => {
           ApexCharts.getChartByID("chartPartnershipPerProvince").toggleSeries(
@@ -1845,16 +1867,18 @@ export default defineComponent({
 
           this.seriesSKPDN = outputData;
 
-          this.chartOptionVillageCount.xaxis.categories = legends;
-          this.chartOptionVillageFund.xaxis.categories = legends;
-          this.chartOptionCSR.xaxis.categories = legends;
-          this.chartOptionSKPDN.xaxis.categories = legends;
-        })
-        .then((res) => {
-          this.$refs.chartVillageCount.refresh();
-          this.$refs.chartVillageFund.refresh();
-          this.$refs.chartCSR.refresh();
-          this.$refs.chartSKPDN.refresh();
+          ApexCharts.getChartByID("chartVillageCount").updateOptions({
+            xaxis: { categories: legends },
+          });
+          ApexCharts.getChartByID("chartVillageFund").updateOptions({
+            xaxis: { categories: legends },
+          });
+          ApexCharts.getChartByID("chartCSR").updateOptions({
+            xaxis: { categories: legends },
+          });
+          ApexCharts.getChartByID("chartSKPDN").updateOptions({
+            xaxis: { categories: legends },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -1889,17 +1913,19 @@ export default defineComponent({
           var jumlah_completed = this.progress_penginputan.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_penginputan.length
-          ).toFixed(0);
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_penginputan.length,
-          ];
+          this.series_penginputan[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_penginputan.length) * 100
+            ).toFixed(0)
+          );
+
+          ApexCharts.getChartByID("radialAnggaran").updateOptions({
+            labels: [
+              jumlah_completed + " / " + this.progress_penginputan.length,
+            ],
+          });
           return res;
-        })
-        .then((res) => {
-          this.$refs.radialAnggaran.refresh();
         })
         .catch((err) => {
           console.log(err);
@@ -1946,16 +1972,15 @@ export default defineComponent({
           var jumlah_completed = this.progress_planning.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_planning.length
-          ).toFixed(0);
+          this.series_planning[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_planning.length) * 100
+            ).toFixed(0)
+          );
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_planning.length,
-          ];
-        })
-        .then((res) => {
-          this.$refs.radialPlanning.refresh();
+          ApexCharts.getChartByID("radialPlanning").updateOptions({
+            labels: [jumlah_completed + " / " + this.progress_planning.length],
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -2024,16 +2049,15 @@ export default defineComponent({
           var jumlah_completed = this.progress_partnership.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_partnership.length
-          ).toFixed(0);
+          this.series_parterhsip[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_partnership.length) * 100
+            ).toFixed(0)
+          );
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_partnership.length,
-          ];
-        })
-        .then((res) => {
-          this.$refs.radialPartnership.refresh();
+          ApexCharts.getChartByID("radialPartnership").updateOptions({
+            labels: [jumlah_completed + " / " + this.progress_planning.length],
+          });
         })
         .catch((err) => {
           console.log(err);

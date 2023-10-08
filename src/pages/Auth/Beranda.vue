@@ -32,6 +32,7 @@
         class="tw-w-44"
         map-options
         emit-value
+        @update:model-value="onUpdateYear"
       />
     </div>
     <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
@@ -100,11 +101,11 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex-chart
+        <apex
           type="radialBar"
           :options="chart_penginputan"
           :series="series_penginputan"
-        ></apex-chart>
+        ></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -336,11 +337,11 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex-chart
+        <apex
           type="radialBar"
           :options="chart_parterhsip"
           :series="series_parterhsip"
-        ></apex-chart>
+        ></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -512,11 +513,11 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex-chart
+        <apex
           type="radialBar"
           :options="chart_planning"
           :series="series_planning"
-        ></apex-chart>
+        ></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -588,12 +589,13 @@
 <script>
 import { defineComponent, ref } from "vue";
 import VxIcon from "src/components/VxIcon.vue";
-import ApexChart from "vue3-apexcharts";
+import Apex from "vue3-apexcharts";
 import moment from "moment";
+import ApexCharts from "apexcharts";
 
 export default defineComponent({
   props: ["user"],
-  components: { VxIcon, ApexChart },
+  components: { VxIcon, Apex },
   setup() {
     const columns_penginputan = [
       {
@@ -737,6 +739,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "chartPenginputan",
         },
         plotOptions: {
           radialBar: {
@@ -777,6 +780,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "chartPlanning",
         },
         plotOptions: {
           radialBar: {
@@ -817,6 +821,7 @@ export default defineComponent({
           sparkline: {
             enabled: true,
           },
+          id: "chartParterhsip",
         },
         plotOptions: {
           radialBar: {
@@ -908,13 +913,17 @@ export default defineComponent({
           var jumlah_completed = this.progress_penginputan.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_penginputan.length
-          ).toFixed(0);
+          this.series_penginputan[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_penginputan.length) * 100
+            ).toFixed(0)
+          );
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_penginputan.length,
-          ];
+          ApexCharts.getChartByID("chartPenginputan").updateOptions({
+            labels: [
+              jumlah_completed + " / " + this.progress_penginputan.length,
+            ],
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -961,13 +970,15 @@ export default defineComponent({
           var jumlah_completed = this.progress_planning.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_planning.length
-          ).toFixed(0);
+          this.series_planning[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_planning.length) * 100
+            ).toFixed(0)
+          );
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_planning.length,
-          ];
+          ApexCharts.getChartByID("chartPlanning").updateOptions({
+            labels: [jumlah_completed + " / " + this.progress_planning.length],
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -1036,13 +1047,17 @@ export default defineComponent({
           var jumlah_completed = this.progress_partnership.filter(
             (e) => e.Status == "Completed"
           ).length;
-          this.series_penginputan[0] = parseFloat(
-            jumlah_completed / this.progress_partnership.length
-          ).toFixed(0);
+          this.series_parterhsip[0] = parseInt(
+            parseFloat(
+              (jumlah_completed / this.progress_partnership.length) * 100
+            ).toFixed(0)
+          );
 
-          this.chart_penginputan.labels[0] = [
-            jumlah_completed + " / " + this.progress_partnership.length,
-          ];
+          ApexCharts.getChartByID("chartParterhsip").updateOptions({
+            labels: [
+              jumlah_completed + " / " + this.progress_partnership.length,
+            ],
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -1053,6 +1068,12 @@ export default defineComponent({
       return this.$api.get("/result/summary").then((res) => {
         this.count = res.data.data;
       });
+    },
+
+    onUpdateYear() {
+      this.getProgess(this.year);
+      this.getPlanning(this.year);
+      this.getPartnerhsip(this.year);
     },
   },
 });
