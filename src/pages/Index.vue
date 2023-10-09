@@ -1330,18 +1330,45 @@ export default defineComponent({
           type: "bar",
           height: 350,
           id: "chartPercentage",
+          toolbar: {
+            show: true,
+            tools: {
+              download: '<img src="export.png" width="20">',
+              selection: true,
+              zoom: '<img src="search.png" width="20">',
+              zoomin: '<img src="zoomin.png" width="20">',
+              zoomout: '<img src="zoomout.png" width="20">',
+              pan: true,
+              reset: '<img src="reset.png" width="20">',
+            },
+          },
         },
         colors: ["#243763"],
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: "55%",
             endingShape: "rounded",
           },
         },
         dataLabels: {
+          enabled: true,
           formatter: function (value) {
             return suffix(value);
+          },
+          style: {
+            fontSize: "12px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
           },
         },
         stroke: {
@@ -1358,9 +1385,15 @@ export default defineComponent({
         },
         xaxis: {
           categories: [],
+          tickPlacement: "on",
         },
         fill: {
           opacity: 1,
+        },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
         },
       },
       seriesVillageCount: [
@@ -1635,6 +1668,7 @@ export default defineComponent({
   },
   mounted() {
     this.getYear();
+    this.getProvince();
   },
   methods: {
     getYear() {
@@ -1662,6 +1696,24 @@ export default defineComponent({
           console.log(err);
         });
     },
+
+    getProvince() {
+      this.$api
+        .get("/groups/locus")
+        .then((res) => {
+          this.options_province = res.data.data.map((e) => {
+            return { label: e.name, value: e.id };
+          });
+          this.list_province = this.options_province;
+          this.province = this.list_province[0].value;
+          this.province_kemitraan = this.list_province[0].value;
+          this.updateProvince(this.list_province[0].value);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     onScroll(position) {
       if (position > 100) {
         this.isReveal = false;
@@ -1675,14 +1727,6 @@ export default defineComponent({
       this.$api
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
-          this.province = null;
-          this.options_province = res.data.data.map((e) => {
-            return { label: e.name, value: e.id };
-          });
-          this.list_province = this.options_province;
-          this.province = this.list_province[0].value;
-          this.province_kemitraan = this.list_province[0].value;
-          this.updateProvince(this.list_province[0].value);
           this.seriesPercentage[0].data = res.data.data.map((e) => e.budget);
 
           ApexCharts.getChartByID("chartPercentage").updateOptions({
@@ -2080,7 +2124,9 @@ export default defineComponent({
     },
 
     onChangeTab() {
-      if (this.tab == "Dashboard3") {
+      if (this.tab == "Dashboard1") {
+        this.getBudget(this.year);
+      } else if (this.tab == "Dashboard3") {
         this.findPartnership(this.year);
         this.findPartnershipPerProvince(this.year);
         this.getPartnershipDetail(this.year);
