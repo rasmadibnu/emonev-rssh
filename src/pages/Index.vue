@@ -1321,7 +1321,7 @@ export default defineComponent({
       }),
       seriesPercentage: [
         {
-          name: "Presentase",
+          name: "Anggaran",
           data: [],
         },
       ],
@@ -1356,7 +1356,7 @@ export default defineComponent({
             return suffix(value);
           },
           style: {
-            fontSize: "12px",
+            fontSize: "10px",
             fontFamily: "Helvetica, Arial, sans-serif",
             fontWeight: "bold",
             colors: ["#243763"],
