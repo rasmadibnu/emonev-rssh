@@ -2116,6 +2116,8 @@ export default defineComponent({
       this.getProgess(this.year);
       this.getPlanning(this.year);
       this.getPartnerhsip(this.year);
+      this.findProvince(this.province);
+      this.findProvinceTable(this.province);
     },
 
     updateProvinceKemirtraan() {
