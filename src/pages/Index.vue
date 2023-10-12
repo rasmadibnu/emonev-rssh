@@ -30,7 +30,6 @@
                 <q-card-section class="q-pt-none">
                   <apex
                     type="bar"
-                    height="350"
                     :options="chartOptionsPercentage"
                     :series="seriesPercentage"
                     ref="chartPercentage"
@@ -1346,7 +1345,7 @@ export default defineComponent({
         colors: ["#243763"],
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal: true,
             endingShape: "rounded",
           },
         },
@@ -1377,15 +1376,14 @@ export default defineComponent({
           colors: ["transparent"],
         },
         yaxis: {
+          tickPlacement: "on",
+        },
+        xaxis: {
           labels: {
             formatter: function (value) {
               return suffix(value);
             },
           },
-        },
-        xaxis: {
-          categories: [],
-          tickPlacement: "on",
         },
         fill: {
           opacity: 1,
@@ -1394,6 +1392,11 @@ export default defineComponent({
           enabled: true,
           shared: true,
           intersect: false,
+          y: {
+            formatter: function (value) {
+              return suffix(value);
+            },
+          }
         },
       },
       seriesVillageCount: [
@@ -1633,6 +1636,21 @@ export default defineComponent({
         dataLabels: {
           formatter: function (value) {
             return `${parseFloat(value).toFixed(2)}%`;
+          },
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#fff"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#000",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#fff",
+            opacity: 1,
           },
         },
         yaxis: {
@@ -2128,6 +2146,9 @@ export default defineComponent({
     onChangeTab() {
       if (this.tab == "Dashboard1") {
         this.getBudget(this.year);
+      } else if(this.tab == "Dashboard2"){
+        this.findProvince(this.province);
+        this.findProvinceTable(this.province);
       } else if (this.tab == "Dashboard3") {
         this.findPartnership(this.year);
         this.findPartnershipPerProvince(this.year);
