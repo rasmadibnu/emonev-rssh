@@ -220,7 +220,12 @@ export default defineComponent({
         params.append("province_id", this.auth.province);
       }
       if (this.year) {
-        params.append("year", this.year);
+        const year = this.list_year.find((y) => {
+          console.log(y.value, this.year);
+          return y.value == this.year;
+        });
+        console.log(this.list_year, year);
+        params.append("year", year.label);
       }
 
       this.$api
@@ -253,9 +258,9 @@ export default defineComponent({
           const nowYear = new Date().getFullYear();
           const findYear = res.find((year) => year.label == nowYear);
           if (findYear) {
-            this.year = findYear.label;
+            this.year = findYear.value;
           } else {
-            this.year = res[0].label;
+            this.year = res[0].value;
           }
         })
         .then(() => {

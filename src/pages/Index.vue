@@ -25,7 +25,7 @@
             >
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Anggaran ATM Terhadap Bidang Kesehatan
+                  Anggaran Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <apex
@@ -1396,7 +1396,7 @@ export default defineComponent({
             formatter: function (value) {
               return suffix(value);
             },
-          }
+          },
         },
       },
       seriesVillageCount: [
@@ -2146,7 +2146,7 @@ export default defineComponent({
     onChangeTab() {
       if (this.tab == "Dashboard1") {
         this.getBudget(this.year);
-      } else if(this.tab == "Dashboard2"){
+      } else if (this.tab == "Dashboard2") {
         this.findProvince(this.province);
         this.findProvinceTable(this.province);
       } else if (this.tab == "Dashboard3") {

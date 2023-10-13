@@ -224,6 +224,7 @@
           auto-upload
           field-name="data_files"
           @uploaded="(info) => onUploaded(info)"
+          @failed="(info) => onFailed(info)"
           multiple
           batch
           label="Unggah Lampiran"
@@ -298,6 +299,7 @@
           auto-upload
           field-name="data_files"
           @uploaded="(info) => onUploaded(info)"
+          @failed="(info) => onFailed(info)"
           multiple
           batch
           label="Unggah Lampiran"
@@ -367,7 +369,7 @@
 <script setup>
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   Index: Number,
   Token: String,
   Dividen: Boolean,
@@ -394,10 +396,14 @@ const emit = defineEmits(["update:modelValue", "onValueEmpty"]);
 const list_dialog = ref(false);
 
 function onUploaded(info) {
-  this.modelValue = JSON.parse(info.xhr.response)
+  const model = JSON.parse(info.xhr.response)
     .data.map((e) => e.Url)
     .join("|");
-  updateModelValue(this.modelValue);
+  updateModelValue(model);
+}
+
+function onFailed(info) {
+  console.log(info);
 }
 
 function updateModelValue(val) {
