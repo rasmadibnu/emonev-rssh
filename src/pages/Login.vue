@@ -60,9 +60,7 @@
                       @click="typePassword = !typePassword"
                     >
                       <vx-icon
-                        :iconName="
-                          typePassword ? 'visibility' : 'visibility_off'
-                        "
+                        :iconName="typePassword ? 'Eye' : 'EyeSlash'"
                         :size="20"
                       />
                     </div>
