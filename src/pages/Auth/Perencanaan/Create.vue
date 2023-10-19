@@ -294,7 +294,11 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/planning?Relation={"Name": "Fields.Childs"}')
+        .get(
+          "/forms/" +
+            year +
+            '/planning?Relation={"Name": "Fields.Childs.Childs.Parent"}'
+        )
         .then((res) => {
           this.fields = res.data.data.Fields.sort(
             (a, b) => a.SortOrder - b.SortOrder

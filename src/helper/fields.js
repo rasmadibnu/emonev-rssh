@@ -8,6 +8,15 @@ export function flattenFields(data) {
       Value: item.Value,
     };
 
+    if (item.Type === "dynamic" && item.Childs.length > 0) {
+      var res = [];
+      item.Childs.forEach((child) => {
+        res.push({ Code: child.Code, Label: child.Label, Value: child.Value });
+      });
+
+      result.push({ FieldID: item.ID, Value: JSON.stringify(res) });
+    }
+
     if (flattenedItem.Value) {
       result.push(flattenedItem);
     } else {

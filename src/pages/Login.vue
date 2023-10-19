@@ -46,12 +46,20 @@
                   filled
                   v-model="password"
                   placeholder="Masukan password anda"
-                  type="password"
+                  :type="typePassword ? 'password' : 'text'"
                   :rules="[(val) => !!val || 'Field ini harus diisi']"
                 >
                   <template v-slot:prepend>
                     <div class="bg-white tw-p-2 tw-rounded-md text-primary">
                       <vx-icon iconName="Lock1" :size="20" />
+                    </div>
+                  </template>
+                  <template v-slot:append>
+                    <div class="bg-white tw-p-2 tw-rounded-md text-primary">
+                      <vx-icon
+                        :iconName="typePassword ? 'Eye' : 'EyeSlash'"
+                        :size="20"
+                      />
                     </div>
                   </template>
                 </q-input>
@@ -100,6 +108,7 @@ export default defineComponent({
 
       username: ref(""),
       password: ref(""),
+      typePassword: ref(true),
     };
   },
   methods: {

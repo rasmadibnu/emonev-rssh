@@ -1,8 +1,23 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <tr class="q-tr--no-hover" v-if="Dividen">
+  <tr class="q-tr--no-hover" v-if="Dividen && Index != 0">
     <td colspan="100%">
       <q-separator />
+      <div
+        v-if="Removeable && Index != 0"
+        class="tw-flex tw-justify-end tw-mt-4"
+      >
+        <div class="tw-flex tw-justify-end">
+          <q-btn
+            icon="close"
+            label="Hapus"
+            color="negative"
+            flat
+            no-caps
+            @click="triggerRemove"
+          />
+        </div>
+      </div>
     </td>
   </tr>
   <tr class="q-tr--no-hover">
@@ -84,6 +99,7 @@
           flat
           @click="list_dialog = true"
         />
+        <q-btn v-if="Type == 'dynamic'" color="primary" :label="'dawwwww'" />
         <div v-if="Error && !modelValue" class="text-negative">
           {{ ErrorMessage }}
         </div>
@@ -157,6 +173,15 @@
           no-caps
           flat
           @click="list_dialog = true"
+        />
+        <q-btn
+          v-if="Type == 'dynamic'"
+          color="primary"
+          :label="Label"
+          flat
+          :icon="clicked ? 'expand_less' : 'expand_more'"
+          no-caps
+          @click="clickDynamic"
         />
         <div v-if="Error && !modelValue" class="text-negative">
           {{ ErrorMessage }}
@@ -240,6 +265,15 @@
           flat
           @click="list_dialog = true"
         />
+        <q-btn
+          v-if="Type == 'dynamic'"
+          color="primary"
+          :label="Label"
+          flat
+          :icon="clicked ? 'expand_less' : 'expand_more'"
+          no-caps
+          @click="clickDynamic"
+        />
         <div v-if="Error && !modelValue" class="text-negative">
           {{ ErrorMessage }}
         </div>
@@ -315,20 +349,51 @@
           flat
           @click="list_dialog = true"
         />
+        <q-btn
+          v-if="Type == 'dynamic'"
+          color="primary"
+          :label="Label"
+          flat
+          :icon="clicked ? 'expand_less' : 'expand_more'"
+          no-caps
+          @click="clickDynamic"
+        />
         <div v-if="Error && !modelValue" class="text-negative">
           {{ ErrorMessage }}
         </div>
       </template>
     </td>
   </tr>
-  <template v-if="modelValue && Childs">
+  <template v-if="(modelValue && Childs) || (Type == 'dynamic' && clicked)">
     <template v-if="modelValue != '0'">
-      <TRInput
-        v-for="(inp, index) in Childs.sort((a, b) => a.SortOrder - b.SortOrder)"
-        v-bind="{ ...inp, Index: index, Token: Token }"
-        v-model="inp.Value"
-        :key="inp.ID"
-      />
+      <template v-if="clicked">
+        <TRInput
+          v-for="(inp, index) in localChilds.sort(
+            (a, b) => a.SortOrder - b.SortOrder
+          )"
+          v-bind="{ ...inp, Index: index, Token: Token, Removeable: true }"
+          v-model="inp.Value"
+          :key="inp.ID"
+          @remove="remove"
+        />
+        <tr v-if="clicked" class="tw-w-full q-tr--no-hover">
+          <td colspan="100%">
+            <div class="tw-flex tw-justify-end">
+              <q-btn icon="add" label="Tambah Lagi" flat @click="add" no-caps />
+            </div>
+          </td>
+        </tr>
+      </template>
+      <template v-else>
+        <TRInput
+          v-for="(inp, index) in Childs.sort(
+            (a, b) => a.SortOrder - b.SortOrder
+          )"
+          v-bind="{ ...inp, Index: index, Token: Token }"
+          v-model="inp.Value"
+          :key="inp.ID"
+        />
+      </template>
     </template>
   </template>
   <q-dialog v-model="list_dialog" v-if="Type == 'file'">
@@ -367,7 +432,7 @@
   </q-dialog>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const props = defineProps({
   Index: Number,
@@ -381,6 +446,7 @@ const props = defineProps({
   modelValue: String,
   ID: Number,
   ParentID: Number,
+  Parent: Object,
   FormID: Number,
   SortOrder: Number,
   CreatedAt: String,
@@ -389,11 +455,35 @@ const props = defineProps({
   Error: Boolean,
   ErrorMessage: String,
   Value: String,
+  Removeable: {
+    default: false,
+    type: Boolean,
+  },
 });
 
-const emit = defineEmits(["update:modelValue", "onValueEmpty"]);
+const originalChilds = ref([]);
+if (props.Childs) {
+  originalChilds.value = JSON.parse(JSON.stringify(props.Childs)).sort(
+    (a, b) => a.SortOrder - b.SortOrder
+  );
+}
+
+const clicked = ref(false);
+const localChilds = ref([]);
+
+const emit = defineEmits(["update:modelValue", "onValueEmpty", "remove"]);
 
 const list_dialog = ref(false);
+
+const copyArray = () => {
+  if (props.Childs) {
+    localChilds.value = JSON.parse(JSON.stringify(originalChilds.value));
+  }
+};
+
+onMounted(() => {
+  copyArray();
+});
 
 function onUploaded(info) {
   const model = JSON.parse(info.xhr.response)
@@ -403,7 +493,10 @@ function onUploaded(info) {
 }
 
 function onFailed(info) {
-  console.log(info);
+  this.$q.notify({
+    message: "File terlalu besar atau ada kesalahan saat mengupload file",
+    color: "negative",
+  });
 }
 
 function updateModelValue(val) {
@@ -413,4 +506,28 @@ function updateModelValue(val) {
     emit("onValueEmpty");
   }
 }
+
+function clickDynamic() {
+  if (!clicked.value) {
+    localChilds.value = props.Childs;
+  }
+  clicked.value = !clicked.value;
+}
+
+const add = () => {
+  const last = localChilds.value[localChilds.value.length - 1];
+  originalChilds.value.forEach((e, index) => {
+    localChilds.value.push({ ...e, SortOrder: last.SortOrder + (index + 1) });
+  });
+};
+
+const triggerRemove = () => {
+  emit("remove", props.Index, props.ParentID);
+};
+
+const remove = (index, parent_id) => {
+  if (props.ID == parent_id) {
+    localChilds.value.splice(index, originalChilds.value.length);
+  }
+};
 </script>
