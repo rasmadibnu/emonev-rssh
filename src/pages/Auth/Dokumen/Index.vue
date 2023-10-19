@@ -189,8 +189,6 @@ export default defineComponent({
     this.getYear();
     if (this.auth.provinces.length > 1) {
       this.auth.province = null;
-    } else {
-      this.auth.province = this.auth.province.value;
     }
   },
   methods: {
@@ -219,7 +217,12 @@ export default defineComponent({
         params.append("regency_city_id", this.regency);
       }
       if (this.auth.province) {
-        params.append("province_id", this.auth.province);
+        params.append(
+          "province_id",
+          this.auth.province instanceof Object
+            ? this.auth.province.value
+            : this.auth.province
+        );
       }
       if (this.year) {
         const year = this.list_year.find((y) => {

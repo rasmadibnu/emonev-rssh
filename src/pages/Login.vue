@@ -55,9 +55,14 @@
                     </div>
                   </template>
                   <template v-slot:append>
-                    <div class="bg-white tw-p-2 tw-rounded-md text-primary">
+                    <div
+                      class="bg-white tw-p-2 tw-rounded-md text-primary tw-cursor-pointer"
+                      @click="typePassword = !typePassword"
+                    >
                       <vx-icon
-                        :iconName="typePassword ? 'Eye' : 'EyeSlash'"
+                        :iconName="
+                          typePassword ? 'visibility' : 'visibility_off'
+                        "
                         :size="20"
                       />
                     </div>
