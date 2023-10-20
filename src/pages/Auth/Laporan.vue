@@ -1,4 +1,114 @@
 <template>
+  <table class="tw-hidden" id="table2">
+    <thead>
+      <tr class="text-center">
+        <td rowspan="2" style="vertical-align: middle; text-align: center">
+          Provinsi
+        </td>
+        <td rowspan="2">Kabupaten / Kota</td>
+        <td colspan="4" class="text-center">
+          UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
+        </td>
+        <td rowspan="2">Total ATM</td>
+        <td colspan="4" class="text-center">
+          Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
+        </td>
+        <td rowspan="2">Grand Total</td>
+        <td rowspan="2">Total APBD Dinas Kesehatan</td>
+        <td rowspan="2">Total APBD Kota/Kabupaten</td>
+        <td rowspan="2">Total APBD Bidang Kesehatan</td>
+        <td colspan="3" class="text-center">
+          Persentase Anggaran ATM terhadap Bidang Kesehatan (%)
+        </td>
+        <td rowspan="2">Persentase Total ATM terhadap Bid.Kesehatan (%)</td>
+        <td rowspan="2">Persentase Bid.Kesehatan Terhadap APBD (%)</td>
+      </tr>
+      <tr class="text-center">
+        <td>AIDS</td>
+        <td>TBC</td>
+        <td>MALARIA</td>
+        <td>Total ATM</td>
+        <td>AIDS</td>
+        <td>TBC</td>
+        <td>MALARIA</td>
+        <td>Total ATM</td>
+        <td>AIDS</td>
+        <td>TBC</td>
+        <td>MALARIA</td>
+      </tr>
+    </thead>
+    <tbody>
+      {{
+        recap
+      }}
+      <tr v-for="(data, index) in this.recap" v-bind:key="index">
+        {{
+          data
+        }}
+        <td>
+          {{ data.Province }}
+        </td>
+        <td>
+          {{ data.RegencyCity }}
+        </td>
+        <td>
+          {{ data.RegencyCity }}
+        </td>
+        <td>
+          {{ rupiah(data.ByUPTD.AIDS) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByUPTD.TBC) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByUPTD.Malaria) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByUPTD.TotalATM) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByOther.AIDS) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByOther.TBC) }}
+        </td>
+        <td>
+          {{ rupiah(data.ByOther.Malaria) }}
+        </td>
+
+        <td>
+          {{ rupiah(data.ByOther.TotalATM) }}
+        </td>
+        <td>
+          {{ rupiah(data.GrandTotal) }}
+        </td>
+        <td>
+          {{ rupiah(data.APBD_ByDinkes) }}
+        </td>
+        <td>
+          {{ rupiah(data.APBD_RegencyCity) }}
+        </td>
+        <td>
+          {{ rupiah(data.APBD_ByBidkes) }}
+        </td>
+        <td class="text-center">
+          {{ parseFloat(data.PercentageATM.AIDS).toFixed(2) }}%
+        </td>
+        <td class="text-center">
+          {{ parseFloat(data.PercentageATM.TBC).toFixed(2) }}%
+        </td>
+        <td class="text-center">
+          {{ parseFloat(data.PercentageATM.Malaria).toFixed(2) }}%
+        </td>
+        <td class="text-center">
+          {{ parseFloat(data.PercentageATM_ByBidkes).toFixed(2) }}%
+        </td>
+        <td class="text-center">
+          {{ parseFloat(data.PercentageAPBD_ByBidkes).toFixed(2) }}%
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <q-page class="tw-p-6">
     <div class="tw-text-3xl tw-mb-4">Laporan</div>
     <q-card flat>
@@ -8,11 +118,12 @@
           :loading="loading"
           flat
           title="Rekapitulasi Belanja ATM"
+          :pagination="{ rowsPerPage: 10 }"
         >
           <template #top-right>
             <div class="tw-flex tw-gap-2">
               <div class="tw-mt-0.5">
-                <q-btn outline no-caps color="primary">
+                <q-btn outline no-caps color="primary" @click="exportExcel">
                   <div class="tw-flex">
                     <vx-icon iconName="Export" class="tw-mr-2" :size="20" />
                     <div class="tw-line-clamp-1">Export Excel</div>
@@ -140,7 +251,6 @@
   </q-page>
 </template>
 <script>
-import moment from "moment";
 import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 import * as XLSX from "xlsx";
@@ -185,7 +295,6 @@ export default defineComponent({
       return this.$api
         .get("/forms/" + year + "/recap")
         .then((res) => {
-          console.log(res.data.data);
           this.recap = res.data.data;
         })
         .catch((err) => {
@@ -201,69 +310,11 @@ export default defineComponent({
     },
 
     exportExcel() {
-      const headerData = [
-        // Header Row 1
-        [
-          { t: "s", v: "Provinsi", rowspan: 2 },
-          { t: "s", v: "Kabupaten / Kota", rowspan: 2 },
-          {
-            t: "s",
-            v: "UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)",
-            colspan: 4,
-            class: "text-center",
-          },
-          { t: "s", v: "Total ATM", rowspan: 2 },
-          {
-            t: "s",
-            v: "Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)",
-            colspan: 4,
-            class: "text-center",
-          },
-          { t: "s", v: "Grand Total", rowspan: 2 },
-          { t: "s", v: "Total APBD Dinas Kesehatan", rowspan: 2 },
-          { t: "s", v: "Total APBD Kota/Kabupaten", rowspan: 2 },
-          { t: "s", v: "Total APBD Bidang Kesehatan", rowspan: 2 },
-          {
-            t: "s",
-            v: "Persentase Anggaran ATM terhadap Bidang Kesehatan (%)",
-            colspan: 3,
-            class: "text-center",
-          },
-          {
-            t: "s",
-            v: "Persentase Total ATM terhadap Bid.Kesehatan (%)",
-            rowspan: 2,
-          },
-          {
-            t: "s",
-            v: "Persentase Bid.Kesehatan Terhadap APBD (%)",
-            rowspan: 2,
-          },
-        ],
-        // Header Row 2
-        [
-          { t: "s", v: "AIDS" },
-          { t: "s", v: "TBC" },
-          { t: "s", v: "MALARIA" },
-          { t: "s", v: "Total ATM" },
-          { t: "s", v: "AIDS" },
-          { t: "s", v: "TBC" },
-          { t: "s", v: "MALARIA" },
-          { t: "s", v: "Total ATM" },
-          { t: "s", v: "AIDS" },
-          { t: "s", v: "TBC" },
-          { t: "s", v: "MALARIA" },
-        ],
-      ];
+      let year = this.list_year.find((e) => e.value == this.year).label;
 
-      const worksheet = XLSX.utils.aoa_to_sheet(headerData);
-
-      // Create a workbook and add the worksheet
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-      // Export the workbook to Excel file
-      XLSX.writeFile(workbook, "data.xlsx");
+      const table = document.getElementById("table2");
+      const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });
+      XLSX.writeFile(workbook, `Export Laporan ${year}.xlsx`);
     },
   },
 });
