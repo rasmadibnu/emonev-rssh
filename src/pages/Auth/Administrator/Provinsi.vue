@@ -29,37 +29,14 @@
           </template>
           <template #body-cell-action="props">
             <q-td :props="props">
-              <q-btn flat dense size="sm" color="primary">
-                <vx-icon iconName="More" :size="18" />
-                <q-menu auto-close class="tw-shadow-none tw-border">
-                  <q-list style="min-width: 100px">
-                    <q-item
-                      clickable
-                      v-ripple
-                      class="text-primary"
-                      @click="openDialog(props.row)"
-                    >
-                      <q-item-section avatar>
-                        <vx-icon iconName="Edit" :size="20" />
-                      </q-item-section>
-
-                      <q-item-section>Ubah</q-item-section>
-                    </q-item>
-                    <q-separator />
-                    <q-item
-                      clickable
-                      v-ripple
-                      class="text-negative"
-                      @click="confirmDelete(props.row.ID)"
-                    >
-                      <q-item-section avatar>
-                        <vx-icon iconName="Trash" :size="20" />
-                      </q-item-section>
-
-                      <q-item-section>Hapus</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
+              <q-btn
+                flat
+                dense
+                size="sm"
+                color="primary"
+                @click="openDialog(props.row)"
+              >
+                <vx-icon iconName="Edit" :size="18" />
               </q-btn>
             </q-td>
           </template>
@@ -71,7 +48,7 @@
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
-        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Permission</div>
+        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Provinsi</div>
         <q-space />
         <q-btn flat round dense v-close-popup>
           <vx-icon iconName="CloseCircle" :size="20" />
@@ -81,16 +58,16 @@
       <q-form @submit.prevent="submit">
         <q-card-section class="tw-gap-y-2">
           <q-input
-            v-model="form.Name"
+            v-model="form.ShortName"
             filled
             label="Nama"
             :rules="[(val) => !!val || 'Field harus diisi']"
           />
           <q-input
-            v-model="form.Description"
+            v-model="form.LongName"
             filled
-            label="Deskripsi"
-            type="textarea"
+            label="Nama Lengkap"
+            :rules="[(val) => !!val || 'Field harus diisi']"
           />
         </q-card-section>
 
@@ -144,8 +121,8 @@ import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 
 const initial_form = {
-  Name: null,
-  Description: null,
+  ShortName: null,
+  LongName: null,
 };
 
 export default defineComponent({
@@ -187,11 +164,11 @@ export default defineComponent({
         sortable: true,
       },
 
-      // {
-      //   name: "action",
-      //   label: "Action",
-      //   align: "right",
-      // },
+      {
+        name: "action",
+        label: "Action",
+        align: "right",
+      },
     ];
     return {
       rows: ref([]),
@@ -273,7 +250,7 @@ export default defineComponent({
       this.loading = true;
       if (!this.is_edit) {
         this.$api
-          .post("/permissions", {
+          .post("/provinces", {
             ...this.form,
             CreatedBy: this.user.Username,
           })
@@ -291,7 +268,7 @@ export default defineComponent({
           });
       } else {
         this.$api
-          .put("/permissions/" + this.id, {
+          .put("/provinces/" + this.id, {
             ...this.form,
             UpdateBy: this.user.Username,
           })
@@ -315,7 +292,7 @@ export default defineComponent({
     },
     deleteData() {
       this.$api
-        .delete("/permissions/" + this.id)
+        .delete("/provinces/" + this.id)
         .then((res) => {
           this.$q.notify({
             message: "Permission berhasil dihapus",
