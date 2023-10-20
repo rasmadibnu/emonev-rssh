@@ -89,7 +89,6 @@
                         v-ripple
                         class="text-negative"
                         @click="confirmDelete(props.row.ID)"
-                        disable
                       >
                         <q-item-section avatar>
                           <vx-icon iconName="Trash" :size="20" />
@@ -375,10 +374,10 @@ export default defineComponent({
     },
     deleteData() {
       this.$api
-        .delete("/roles/" + this.id)
+        .delete("/form-responses/" + this.id)
         .then((res) => {
           this.$q.notify({
-            message: "Role berhasil dihapus",
+            message: "Kemitraan berhasil dihapus",
             color: "positive",
           });
           this.$refs.tableRef.requestServerInteraction();

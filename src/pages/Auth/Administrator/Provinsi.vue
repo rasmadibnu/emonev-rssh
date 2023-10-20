@@ -48,7 +48,7 @@
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
-        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Provinsi</div>
+        <div class="text-h6">{{ !is_edit ? "Tambah" : "Ubah" }} Provinsi</div>
         <q-space />
         <q-btn flat round dense v-close-popup>
           <vx-icon iconName="CloseCircle" :size="20" />
@@ -256,7 +256,7 @@ export default defineComponent({
           })
           .then((res) => {
             this.$q.notify({
-              message: "Permission berhasil ditambahkan",
+              message: "Provinsi berhasil ditambahkan",
               color: "positive",
             });
             this.closeDialog();
@@ -274,7 +274,7 @@ export default defineComponent({
           })
           .then((res) => {
             this.$q.notify({
-              message: "Permission berhasil diubah",
+              message: "Provinsi berhasil diubah",
               color: "positive",
             });
             this.closeDialog();
@@ -295,7 +295,7 @@ export default defineComponent({
         .delete("/provinces/" + this.id)
         .then((res) => {
           this.$q.notify({
-            message: "Permission berhasil dihapus",
+            message: "Provinsi berhasil dihapus",
             color: "positive",
           });
           this.$refs.tableRef.requestServerInteraction();

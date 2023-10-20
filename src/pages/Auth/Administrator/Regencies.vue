@@ -29,37 +29,14 @@
           </template>
           <template #body-cell-action="props">
             <q-td :props="props">
-              <q-btn flat dense size="sm" color="primary">
-                <vx-icon iconName="More" :size="18" />
-                <q-menu auto-close class="tw-shadow-none tw-border">
-                  <q-list style="min-width: 100px">
-                    <q-item
-                      clickable
-                      v-ripple
-                      class="text-primary"
-                      @click="openDialog(props.row)"
-                    >
-                      <q-item-section avatar>
-                        <vx-icon iconName="Edit" :size="20" />
-                      </q-item-section>
-
-                      <q-item-section>Ubah</q-item-section>
-                    </q-item>
-                    <q-separator />
-                    <q-item
-                      clickable
-                      v-ripple
-                      class="text-negative"
-                      @click="confirmDelete(props.row.ID)"
-                    >
-                      <q-item-section avatar>
-                        <vx-icon iconName="Trash" :size="20" />
-                      </q-item-section>
-
-                      <q-item-section>Hapus</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
+              <q-btn
+                flat
+                dense
+                size="sm"
+                color="primary"
+                @click="openDialog(props.row)"
+              >
+                <vx-icon iconName="Edit" :size="18" />
               </q-btn>
             </q-td>
           </template>
@@ -70,7 +47,9 @@
   <q-dialog v-model="form_dialog">
     <q-card style="min-width: 600px">
       <q-card-section class="row items-center">
-        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Permission</div>
+        <div class="text-h6">
+          {{ !is_edit ? "Tambah" : "Ubah" }} Kabupaten / Kota
+        </div>
         <q-space />
         <q-btn flat round dense v-close-popup>
           <vx-icon iconName="CloseCircle" :size="20" />
@@ -144,7 +123,6 @@ import { defineComponent, ref } from "vue";
 
 const initial_form = {
   Name: null,
-  Description: null,
 };
 
 export default defineComponent({
@@ -266,13 +244,13 @@ export default defineComponent({
       this.loading = true;
       if (!this.is_edit) {
         this.$api
-          .post("/permissions", {
+          .post("/regency-cities", {
             ...this.form,
             CreatedBy: this.user.Username,
           })
           .then((res) => {
             this.$q.notify({
-              message: "Permission berhasil ditambahkan",
+              message: "Kabupaten / Kota berhasil ditambahkan",
               color: "positive",
             });
             this.closeDialog();
@@ -284,13 +262,13 @@ export default defineComponent({
           });
       } else {
         this.$api
-          .put("/permissions/" + this.id, {
+          .put("/regency-cities/" + this.id, {
             ...this.form,
             UpdateBy: this.user.Username,
           })
           .then((res) => {
             this.$q.notify({
-              message: "Permission berhasil diubah",
+              message: "Kabupaten / Kota berhasil diubah",
               color: "positive",
             });
             this.closeDialog();
@@ -308,10 +286,10 @@ export default defineComponent({
     },
     deleteData() {
       this.$api
-        .delete("/permissions/" + this.id)
+        .delete("/regency-cities/" + this.id)
         .then((res) => {
           this.$q.notify({
-            message: "Permission berhasil dihapus",
+            message: "Kabupaten / Kota berhasil dihapus",
             color: "positive",
           });
           this.$refs.tableRef.requestServerInteraction();

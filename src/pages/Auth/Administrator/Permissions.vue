@@ -76,7 +76,7 @@
   <q-dialog v-model="form_dialog">
     <q-card style="width: 600px">
       <q-card-section class="row items-center">
-        <div class="text-h6">{{ !is_edit ? "Tmabah" : "Ubah" }} Permission</div>
+        <div class="text-h6">{{ !is_edit ? "Tambah" : "Ubah" }} Permission</div>
         <q-space />
         <q-btn flat round dense v-close-popup>
           <vx-icon iconName="CloseCircle" :size="20" />
