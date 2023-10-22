@@ -157,11 +157,11 @@ export default defineComponent({
         sortable: true,
       },
 
-      // {
-      //   name: "action",
-      //   label: "Action",
-      //   align: "right",
-      // },
+      {
+        name: "action",
+        label: "Aksi",
+        align: "right",
+      },
     ];
     return {
       rows: ref([]),

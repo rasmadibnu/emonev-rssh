@@ -180,7 +180,7 @@ export default defineComponent({
 
       {
         name: "action",
-        label: "Action",
+        label: "Aksi",
         align: "right",
       },
     ];
