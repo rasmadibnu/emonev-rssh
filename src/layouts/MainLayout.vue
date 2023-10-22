@@ -111,7 +111,7 @@
           <q-item
             clickable
             class="tw-px-8 tw-text-gray-400"
-            @click="is_administrator = true"
+            @click="toggleAdministrator"
             v-if="
               authStore.menus.filter((e) => e.Code == 'administrator').length >
               0
@@ -130,7 +130,7 @@
           <q-item
             clickable
             class="tw-px-2 text-primary"
-            @click="is_administrator = false"
+            @click="toggleAdministrator"
           >
             <q-item-section avatar>
               <vx-icon iconName="ArrowLeft2" :size="24" />
@@ -260,12 +260,20 @@ export default defineComponent({
       loading: ref(false),
     };
   },
-  mounted() {},
+  mounted() {
+    this.is_administrator =
+      localStorage.getItem("is_open") == "true" ? true : false;
+  },
   methods: {
     logout() {
       localStorage.removeItem("token");
       this.authStore.token = null;
       this.$router.push({ name: "login" });
+    },
+
+    toggleAdministrator() {
+      this.is_administrator = !this.is_administrator;
+      localStorage.setItem("is_open", this.is_administrator);
     },
   },
 });

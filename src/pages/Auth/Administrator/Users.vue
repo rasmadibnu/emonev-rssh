@@ -7,6 +7,18 @@
           <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
           Tambah
         </q-btn>
+        <q-input
+          dense
+          placeholder="Search..."
+          v-model="search"
+          filled
+          debounce="350"
+          @update:model-value="$refs.tableRef.requestServerInteraction()"
+        >
+          <template #prepend>
+            <vx-icon iconName="SearchStatus" :size="20" />
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table
@@ -19,15 +31,6 @@
           @request="getData"
           v-model:pagination="pagination"
         >
-          <template #top>
-            <div class="tw-flex tw-justify-between tw-w-full">
-              <!-- <q-input dense placeholder="Search..." v-model="search" filled>
-          <template #prepend>
-            <vx-icon iconName="SearchStatus" :size="20" />
-          </template>
-        </q-input> -->
-            </div>
-          </template>
           <template #body-cell-index="props">
             <q-td :props="props">
               {{ props.rowIndex + 1 }}
@@ -107,6 +110,7 @@
           v-model:selected="role_selected"
           row-key="ID"
           selection="multiple"
+          :loading="role_loading"
         >
         </q-table>
       </q-card-section>
@@ -346,6 +350,7 @@ export default defineComponent({
       columns_roles,
       roles: ref([]),
       role_selected: ref([]),
+      role_loading: ref(false),
     };
   },
   mounted() {
@@ -373,16 +378,22 @@ export default defineComponent({
         page = this.totalPages;
       }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
-      params.append("Relations", '{"Name": "Roles.Menus"}');
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+      if (this.search) {
+        params.append(
+          "filters",
+          `[["name","like","${this.search}"],["or"],["username","like","${this.search}"],["or"],["email","like","${this.search}"]]`
+        );
+      }
+      // params.append("Relations", '{"Name": "Roles.Menus"}');
 
       this.$api
         .get("/users", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })
@@ -505,8 +516,18 @@ export default defineComponent({
       delete data.Password;
       this.form = { ...data };
       this.role_selected = [];
-      this.role_selected = data.Roles;
+      this.role_loading = true;
       this.role_dialog = true;
+
+      this.$api
+        .get("/users/" + data.ID + '?Relation={"Name": "Roles"}')
+        .then((res) => {
+          this.role_selected = res.data.data.Roles;
+          this.role_loading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     assignRole() {

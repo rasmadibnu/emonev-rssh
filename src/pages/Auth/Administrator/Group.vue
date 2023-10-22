@@ -7,6 +7,18 @@
           <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
           Tambah
         </q-btn>
+        <q-input
+          dense
+          placeholder="Search..."
+          v-model="search"
+          debounce="350"
+          filled
+          @update:model-value="$refs.tableRef.requestServerInteraction()"
+        >
+          <template #prepend>
+            <vx-icon iconName="SearchStatus" :size="20" />
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table
@@ -20,93 +32,59 @@
           v-model:pagination="pagination"
           row-key="ID"
         >
-          <template #top>
-            <div class="tw-flex tw-justify-between tw-w-full">
-              <!-- <q-input dense placeholder="Search..." v-model="search" filled>
-          <template #prepend>
-            <vx-icon iconName="SearchStatus" :size="20" />
+          <template #body-cell-index="props">
+            <q-td :props="props">
+              {{ props.rowIndex + 1 }}
+            </q-td>
           </template>
-        </q-input> -->
-            </div>
-          </template>
-          <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td @click="props.expand = !props.expand">
-                {{ props.rowIndex + 1 }}
-              </q-td>
-              <q-td>
-                <q-btn
-                  size="sm"
-                  flat
-                  color="primary"
-                  round
-                  dense
-                  @click="props.expand = !props.expand"
-                  :icon="props.expand ? 'remove' : 'add'"
-                />
-                {{ props.row.Name }}
-              </q-td>
-              <q-td @click="props.expand = !props.expand">
-                {{ props.row.Description }}
-              </q-td>
-              <q-td>
-                <q-btn flat dense size="sm" color="primary">
-                  <vx-icon iconName="More" :size="18" />
-                  <q-menu auto-close class="tw-shadow-none tw-border">
-                    <q-list style="min-width: 100px">
-                      <q-item
-                        clickable
-                        v-ripple
-                        class="text-primary"
-                        @click="openDialogRegency(props.row)"
-                      >
-                        <q-item-section avatar>
-                          <vx-icon iconName="LocationAdd" :size="20" />
-                        </q-item-section>
+          <template #body-cell-action="props">
+            <q-td :props="props">
+              <q-btn flat dense size="sm" color="primary">
+                <vx-icon iconName="More" :size="18" />
+                <q-menu auto-close class="tw-shadow-none tw-border">
+                  <q-list style="min-width: 100px">
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      @click="openDialogRegency(props.row)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="UserOctagon" :size="20" />
+                      </q-item-section>
 
-                        <q-item-section>Tambah Kabupaten / Kota</q-item-section>
-                      </q-item>
-                      <q-item
-                        clickable
-                        v-ripple
-                        class="text-primary"
-                        @click="openDialog(props.row)"
-                      >
-                        <q-item-section avatar>
-                          <vx-icon iconName="Edit" :size="20" />
-                        </q-item-section>
+                      <q-item-section>Tambah Kabupaten / Kota</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      @click="openFormDialog(props.row)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="Edit" :size="20" />
+                      </q-item-section>
 
-                        <q-item-section>Ubah</q-item-section>
-                      </q-item>
-                      <q-separator />
-                      <q-item
-                        clickable
-                        v-ripple
-                        class="text-negative"
-                        @click="confirmDelete(props.row.ID)"
-                      >
-                        <q-item-section avatar>
-                          <vx-icon iconName="Trash" :size="20" />
-                        </q-item-section>
+                      <q-item-section>Ubah</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-negative"
+                      @click="confirmDelete(props.row.ID)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="Trash" :size="20" />
+                      </q-item-section>
 
-                        <q-item-section>Hapus</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-btn>
-              </q-td>
-            </q-tr>
-            <q-tr v-show="props.expand" :props="props" no-hover>
-              <q-td> </q-td>
-              <q-td colspan="100%">
-                <q-table
-                  flat
-                  :rows="props.row.Details"
-                  :columns="columnsDetail"
-                ></q-table>
-              </q-td>
-              <q-td> </q-td>
-            </q-tr>
+                      <q-item-section>Hapus</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </q-td>
           </template>
         </q-table>
       </q-card-section>
@@ -159,10 +137,7 @@
       </q-form>
     </q-card>
   </q-dialog>
-  <q-dialog
-    v-model="dialogRegency"
-    @show="$refs.tableRegencyRef.requestServerInteraction()"
-  >
+  <q-dialog v-model="dialogRegency" @show="getRegencyList()">
     <q-card style="width: 600px">
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6">List Kabupaten / Kota</div>
@@ -171,21 +146,17 @@
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
       <q-card-section>
-        <div class="tw-mb-3">Nama Group: {{ selectedGroup?.Name }}</div>
-        <!-- <q-virtual-scroll
-          :items="selectedGroup?.Details"
-          virtual-scroll-horizontal
-          v-slot="{ item, index }"
-          class="tw-mb-4"
-        >
-          <q-badge :key="index" :label="item.RegencyCity.Name" />
-        </q-virtual-scroll> -->
+        <div class="tw-text-lg tw-mb-4">
+          Group: <span class="tw-font-semibold">{{ selectedGroup?.Name }}</span>
+        </div>
         <q-input
           v-model="filter"
           class="tw-mb-3"
           dense
           placeholder="Cari..."
           filled
+          debounce="350"
+          @update:model-value="$refs.tableRegencyRef.requestServerInteraction()"
         >
           <template #prepend>
             <q-icon name="search" />
@@ -204,7 +175,8 @@
             selection="multiple"
             row-key="ID"
             :filter="filter"
-            :pagination="{ rowsPerPage: 50 }"
+            @request="getDataRegency"
+            v-model:pagination="paginationRegency"
           >
             <!-- v-model:pagination="paginationRegency" -->
             <!-- @request="getDataRegency" -->
@@ -400,13 +372,13 @@ export default defineComponent({
       totalPagesRegency: ref(0),
       selectedRegency: ref([]),
       selectedGroup: ref({}),
+      openCount: ref(0),
 
       filter: ref(""),
     };
   },
   mounted() {
     this.$refs.tableRef.requestServerInteraction();
-    this.getDataRegency();
   },
   methods: {
     getData(props) {
@@ -428,16 +400,22 @@ export default defineComponent({
         page = this.totalPages;
       }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
-      params.append("Relations", '{"Name":"Details.RegencyCity.Province"}');
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+      if (this.search) {
+        params.append(
+          "filters",
+          `[["name","like","${this.search}"],["or"],["description","like","${this.search}"]]`
+        );
+      }
+      // params.append("Relations", '{"Name":"Details.RegencyCity.Province"}');
 
       this.$api
         .get("/groups", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })
@@ -526,33 +504,39 @@ export default defineComponent({
 
     getDataRegency(props) {
       this.loadingRegency = true;
-      // this.paginationRegency = props?.pagination;
+      this.paginationRegency = props?.pagination;
 
-      // const params = new URLSearchParams();
-      // const data = {
-      //   params: params,
-      // };
-      // let { page, rowsPerPage, rowsNumber } = props.pagination;
+      const params = new URLSearchParams();
+      const data = {
+        params: params,
+      };
+      let { page, rowsPerPage, rowsNumber } = props.pagination;
 
-      // if (rowsPerPage == 0) {
-      //   page = 1;
-      //   rowsPerPage = rowsNumber;
-      // }
+      if (rowsPerPage == 0) {
+        page = 1;
+        rowsPerPage = rowsNumber;
+      }
 
-      // if (this.totalPagesRegency < page) {
-      //   page = this.totalPagesRegency;
-      // }
+      if (this.totalPagesRegency < page) {
+        page = this.totalPagesRegency;
+      }
 
-      // params.append("Limit", rowsPerPage);
-      // params.append("Page", page);
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+      if (this.filter) {
+        params.append(
+          "filters",
+          `[["name","like","${this.filter}"],["or"],["Province.short_name","like","${this.filter}"],["or"],["Province.long_name","like","${this.filter}"]]`
+        );
+      }
       // params.append("Relations", '{"Name":"Province"}');
 
       this.$api
-        .get('/regency-cities?Limit=-&Relations={"Name":"Province"}')
+        .get("/regency-cities", data)
         .then((response) => {
-          this.rowsRegency = response.data.data.Rows;
-          this.paginationRegency.rowsNumber = response.data.data.TotalRows;
-          this.totalPagesRegency = response.data.data.TotalPages;
+          this.rowsRegency = response.data.data.items;
+          this.paginationRegency.rowsNumber = response.data.data.total;
+          this.totalPagesRegency = response.data.data.total_pages;
 
           this.loadingRegency = false;
         })
@@ -563,9 +547,27 @@ export default defineComponent({
     },
     openDialogRegency(data) {
       this.selectedRegency = [];
-      this.selectedRegency = data.Details.map((detail) => detail.RegencyCity);
       this.selectedGroup = data;
       this.dialogRegency = true;
+      this.loadingRegency = true;
+      this.$api
+        .get("/groups/" + data.ID)
+        .then((res) => {
+          this.selectedRegency = res.data.data.Details.map(
+            (detail) => detail.RegencyCity
+          );
+          this.loadingRegency = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getRegencyList() {
+      if (this.openCount <= 0) {
+        this.$refs.tableRegencyRef.requestServerInteraction();
+        this.openCount++;
+      }
     },
 
     submitRegency() {
