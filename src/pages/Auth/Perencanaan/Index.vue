@@ -414,9 +414,9 @@ export default defineComponent({
       this.$api
         .get("/form-responses", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })
