@@ -112,37 +112,51 @@
   <q-page class="tw-p-6">
     <div class="tw-text-3xl tw-mb-4">Laporan</div>
     <q-card flat>
+      <q-card-section>
+        <div class="tw-text-xl tw-mb-4">Rekapitulasi Belanja ATM</div>
+        <div class="tw-flex tw-justify-between tw-items-center tw-w-full">
+          <q-input
+            dense
+            placeholder="Search..."
+            class="tw-w-64"
+            v-model="search"
+            filled
+          >
+            <template #prepend>
+              <vx-icon iconName="SearchStatus" :size="20" />
+            </template>
+          </q-input>
+          <div class="tw-flex tw-gap-2">
+            <div class="tw-mt-0.5">
+              <q-btn outline no-caps color="primary" @click="exportExcel">
+                <div class="tw-flex">
+                  <vx-icon iconName="Export" class="tw-mr-2" :size="20" />
+                  <div class="tw-line-clamp-1">Export Excel</div>
+                </div>
+              </q-btn>
+            </div>
+            <q-select
+              dense
+              filled
+              v-model="year"
+              label="Pilih Tahun"
+              :options="list_year"
+              @update:model-value="getRecap"
+              map-options
+              emit-value
+              class="tw-w-36"
+            />
+          </div>
+        </div>
+      </q-card-section>
       <q-card-section class="q-py-none">
         <q-table
           :rows="recap"
           :loading="loading"
           flat
-          title="Rekapitulasi Belanja ATM"
           :pagination="{ rowsPerPage: 10 }"
+          :filter="search"
         >
-          <template #top-right>
-            <div class="tw-flex tw-gap-2">
-              <div class="tw-mt-0.5">
-                <q-btn outline no-caps color="primary" @click="exportExcel">
-                  <div class="tw-flex">
-                    <vx-icon iconName="Export" class="tw-mr-2" :size="20" />
-                    <div class="tw-line-clamp-1">Export Excel</div>
-                  </div>
-                </q-btn>
-              </div>
-              <q-select
-                dense
-                filled
-                v-model="year"
-                label="Pilih Tahun"
-                :options="list_year"
-                @update:model-value="getRecap"
-                map-options
-                emit-value
-                class="tw-w-36"
-              />
-            </div>
-          </template>
           <template v-slot:header>
             <tr class="text-center">
               <td rowspan="2">Provinsi</td>
@@ -264,6 +278,8 @@ export default defineComponent({
       list_year: ref([]),
 
       recap: ref([]),
+
+      search: ref(""),
     };
   },
   mounted() {
