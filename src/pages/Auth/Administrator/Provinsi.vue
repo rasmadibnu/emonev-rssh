@@ -3,6 +3,21 @@
     <div class="tw-text-3xl tw-mb-4">Provinsi</div>
     <q-card flat>
       <q-card-section>
+        <div class="tw-flex tw-justify-between tw-w-full">
+          <q-input
+            dense
+            placeholder="Search..."
+            v-model="search"
+            debounce="350"
+            filled
+          >
+            <template #prepend>
+              <vx-icon iconName="SearchStatus" :size="20" />
+            </template>
+          </q-input>
+        </div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
         <q-table
           flat
           ref="tableRef"
@@ -12,16 +27,8 @@
           :columns="columns"
           @request="getData"
           v-model:pagination="pagination"
+          :filter="search"
         >
-          <template #top>
-            <div class="tw-flex tw-justify-between tw-w-full">
-              <!-- <q-input dense placeholder="Search..." v-model="search" filled>
-          <template #prepend>
-            <vx-icon iconName="SearchStatus" :size="20" />
-          </template>
-        </q-input> -->
-            </div>
-          </template>
           <template #body-cell-index="props">
             <q-td :props="props">
               {{ props.rowIndex + 1 }}
@@ -139,6 +146,13 @@ export default defineComponent({
         name: "Name",
         label: "Nama",
         align: "left",
+        field: "ShortName",
+        sortable: true,
+      },
+      {
+        name: "NameLengkap",
+        label: "Nama Lengkap",
+        align: "left",
         field: "LongName",
         sortable: true,
       },
@@ -211,15 +225,22 @@ export default defineComponent({
         page = this.totalPages;
       }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+
+      if (this.search) {
+        params.append(
+          "filters",
+          `[["short_name","like","${this.search}"],["or"],["long_name","like","${this.search}"]]`
+        );
+      }
 
       this.$api
         .get("/provinces", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })

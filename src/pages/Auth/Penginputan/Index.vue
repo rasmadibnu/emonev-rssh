@@ -3,7 +3,34 @@
     <div class="tw-text-3xl tw-mb-4">Anggaran</div>
     <q-card flat>
       <q-card-section>
-        <div class="tw-flex tw-justify-end tw-items-center tw-mb-4">
+        <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
+          <div class="tw-flex tw-gap-4">
+            <q-input
+              dense
+              placeholder="Search..."
+              v-model="search"
+              debounce="350"
+              filled
+            >
+              <template #prepend>
+                <vx-icon iconName="SearchStatus" :size="20" />
+              </template>
+            </q-input>
+            <q-select
+              dense
+              filled
+              v-model="year"
+              label="Pilih Tahun"
+              class="tw-w-36"
+              :options="list_year"
+              @update:model-value="
+                this.$refs.tableRef.requestServerInteraction()
+              "
+              map-options
+              emit-value
+            />
+          </div>
+
           <q-btn
             outline
             no-caps
@@ -24,24 +51,58 @@
           @request="getData"
           v-model:pagination="pagination"
           row-key="ID"
+          :filter="search"
         >
-          <template #top>
-            <div class="tw-flex tw-justify-between tw-w-full">
-              <!-- <q-input dense placeholder="Search..." v-model="search" filled>
-          <template #prepend>
-            <vx-icon iconName="SearchStatus" :size="20" />
-          </template>
-        </q-input> -->
-            </div>
-          </template>
+          <!-- <template #top>
+            <div class="tw-flex tw-justify-between tw-w-full"></div>
+          </template> -->
           <template #body-cell-index="props">
-            <q-td :props="props"> </q-td>
+            <q-td :props="props">
+              {{ props.rowIndex + 1 }}
+            </q-td>
           </template>
-          <template v-slot:body="props">
+          <template #body-cell-action="props">
+            <q-td :props="props">
+              <q-btn flat dense size="sm" color="primary">
+                <vx-icon iconName="More" :size="18" />
+                <q-menu auto-close class="tw-shadow-none tw-border">
+                  <q-list style="min-width: 100px">
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      :to="{
+                        name: 'penginputan-edit',
+                        params: { id: props.row.ID },
+                      }"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="Edit" :size="20" />
+                      </q-item-section>
+
+                      <q-item-section>Ubah</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-negative"
+                      @click="confirmDelete(props.row.ID)"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="Trash" :size="20" />
+                      </q-item-section>
+
+                      <q-item-section>Hapus</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </q-td>
+          </template>
+          <!-- <template v-slot:body="props">
             <q-tr :props="props">
-              <q-td @click="props.expand = !props.expand">
-                {{ props.rowIndex + 1 }}
-              </q-td>
+              <q-td @click="props.expand = !props.expand"> </q-td>
               <q-td>
                 <q-btn
                   size="sm"
@@ -63,43 +124,7 @@
               <q-td @click="props.expand = !props.expand">
                 {{ moment(props.row.CreatedAt).format("YYYY-MM-DD HH:mm:ss") }}
               </q-td>
-              <q-td align="right">
-                <q-btn flat dense size="sm" color="primary">
-                  <vx-icon iconName="More" :size="18" />
-                  <q-menu auto-close class="tw-shadow-none tw-border">
-                    <q-list style="min-width: 100px">
-                      <q-item
-                        clickable
-                        v-ripple
-                        class="text-primary"
-                        :to="{
-                          name: 'penginputan-edit',
-                          params: { id: props.row.ID },
-                        }"
-                      >
-                        <q-item-section avatar>
-                          <vx-icon iconName="Edit" :size="20" />
-                        </q-item-section>
-
-                        <q-item-section>Ubah</q-item-section>
-                      </q-item>
-                      <q-separator />
-                      <q-item
-                        clickable
-                        v-ripple
-                        class="text-negative"
-                        @click="confirmDelete(props.row.ID)"
-                      >
-                        <q-item-section avatar>
-                          <vx-icon iconName="Trash" :size="20" />
-                        </q-item-section>
-
-                        <q-item-section>Hapus</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-btn>
-              </q-td>
+              <q-td align="right"> </q-td>
             </q-tr>
             <q-tr v-show="props.expand" :props="props" no-hover>
               <q-td></q-td>
@@ -137,7 +162,7 @@
               </q-td>
               <q-td></q-td>
             </q-tr>
-          </template>
+          </template> -->
         </q-table>
       </q-card-section>
     </q-card>
@@ -242,6 +267,13 @@ export default defineComponent({
         sortable: true,
       },
       {
+        name: "Year",
+        label: "Tahun",
+        align: "left",
+        field: (row) => row.Form.Year,
+        sortable: true,
+      },
+      {
         name: "Created At",
         label: "Created At",
         align: "left",
@@ -296,9 +328,13 @@ export default defineComponent({
 
       file_dialog: ref(false),
       file_list: ref([]),
+
+      list_year: ref([]),
+      year: ref(null),
     };
   },
   mounted() {
+    this.getYear();
     this.$refs.tableRef.requestServerInteraction();
   },
   methods: {
@@ -321,32 +357,57 @@ export default defineComponent({
         page = this.totalPages;
       }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page == 0 ? "1" : page);
-      params.append("Relation", '{"Name": "User"}');
-      params.append(
-        "Relation",
-        '{"Name": "Form", "Filters":{"Type": "budget"}}'
-      );
-      params.append("Relation", '{"Name": "RegencyCity.Province"}');
-      params.append("Relation", '{"Name": "FieldResponse.Field"}');
-      params.append(
-        "Filters",
-        '{"RegencyCityID": [' + this.auth.regency_ids + "]}"
-      );
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+
+      const year = this.list_year.find((year) => year.value == this.year);
+      if (this.search) {
+        params.append(
+          "filters",
+          `[[["Form.type", "budget"]` +
+            (this.year ? ',["AND"],["Form.year", "' + year.label + '"]' : "") +
+            `],["AND"],["RegencyCity.Province.long_name","like","${this.search}"],["OR"],["RegencyCity.Province.short_name","like","${this.search}"],["OR"],["RegencyCity.name","like","${this.search}"],["OR"],["User.name","like","${this.search}"],["OR"],["User.username","like","${this.search}"]]`
+        );
+      } else {
+        params.append(
+          "filters",
+          '[["Form.type", "budget"]' +
+            (this.year ? ',["AND"],["Form.year", "' + year.label + '"]' : "") +
+            "]"
+        );
+      }
 
       this.$api
         .get("/form-responses", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.loading = false;
+        });
+    },
+
+    getYear() {
+      this.loading = true;
+      this.$api
+        .get('/forms?Limit=-&Filters={"Type": "budget"}&Sort=year asc')
+        .then((res) => {
+          this.list_year = res.data.data.Rows.map((year) => {
+            return { label: year.Year, value: year.ID };
+          });
+          this.loading = false;
+          return this.list_year;
+        })
+        .then(() => {
+          this.$refs.tableRef.requestServerInteraction();
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
 

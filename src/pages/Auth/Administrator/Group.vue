@@ -3,10 +3,6 @@
     <div class="tw-text-3xl tw-mb-4">Group</div>
     <q-card flat>
       <q-card-section class="tw-flex tw-justify-between tw-items-center">
-        <q-btn outline no-caps color="primary" @click="openDialog(null)">
-          <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
-          Tambah
-        </q-btn>
         <q-input
           dense
           placeholder="Search..."
@@ -19,6 +15,10 @@
             <vx-icon iconName="SearchStatus" :size="20" />
           </template>
         </q-input>
+        <q-btn outline no-caps color="primary" @click="openDialog(null)">
+          <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
+          Tambah
+        </q-btn>
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table
