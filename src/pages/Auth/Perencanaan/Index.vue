@@ -11,9 +11,7 @@
               v-model="search"
               debounce="350"
               filled
-              @update:model-value="
-                $refs.tableRef.requestServerInteraction()
-              "
+              @update:model-value="$refs.tableRef.requestServerInteraction()"
             >
               <template #prepend>
                 <vx-icon iconName="SearchStatus" :size="20" />
@@ -26,9 +24,7 @@
               label="Pilih Tahun"
               class="tw-w-36"
               :options="list_year"
-              @update:model-value="
-                $refs.tableRef.requestServerInteraction()
-              "
+              @update:model-value="$refs.tableRef.requestServerInteraction()"
               map-options
               emit-value
             />
@@ -70,7 +66,7 @@
                       v-ripple
                       class="text-primary"
                       :to="{
-                        name: 'survey-edit',
+                        name: 'perencanaan-edit',
                         params: { id: props.row.ID },
                       }"
                     >

@@ -228,9 +228,10 @@ export default defineComponent({
     getData() {
       return this.$api
         .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field"}&Relations={"Name": "RegencyCity"}`
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field.Childs.Childs.Childs"}&Relations={"Name": "RegencyCity"}`
         )
         .then((res) => {
+          console.log(res.data.data);
           this.year = res.data.data.FormID;
           this.regency = res.data.data.RegencyCityID;
           this.list_province = this.auth.provinces;
@@ -305,6 +306,7 @@ export default defineComponent({
           this.fields = res.data.data.Fields.sort(
             (a, b) => a.SortOrder - b.SortOrder
           );
+
           this.loading = false;
           return res;
         })
