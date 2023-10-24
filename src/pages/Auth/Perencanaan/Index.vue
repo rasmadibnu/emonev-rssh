@@ -11,6 +11,9 @@
               v-model="search"
               debounce="350"
               filled
+              @update:model-value="
+                $refs.tableRef.requestServerInteraction()
+              "
             >
               <template #prepend>
                 <vx-icon iconName="SearchStatus" :size="20" />
@@ -24,7 +27,7 @@
               class="tw-w-36"
               :options="list_year"
               @update:model-value="
-                this.$refs.tableRef.requestServerInteraction()
+                $refs.tableRef.requestServerInteraction()
               "
               map-options
               emit-value
