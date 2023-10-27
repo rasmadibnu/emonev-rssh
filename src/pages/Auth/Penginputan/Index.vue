@@ -72,6 +72,22 @@
                       v-ripple
                       class="text-primary"
                       :to="{
+                        name: 'penginputan-history',
+                        params: { id: props.row.ID },
+                      }"
+                    >
+                      <q-item-section avatar>
+                        <vx-icon iconName="CalendarSearch" :size="20" />
+                      </q-item-section>
+
+                      <q-item-section>History</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                      clickable
+                      v-ripple
+                      class="text-primary"
+                      :to="{
                         name: 'penginputan-edit',
                         params: { id: props.row.ID },
                       }"

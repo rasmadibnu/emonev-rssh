@@ -54,6 +54,11 @@ const routes = [
         name: "penginputan-create",
       },
       {
+        path: "penginputan/:id/history",
+        component: () => import("pages/Auth/Penginputan/History.vue"),
+        name: "penginputan-history",
+      },
+      {
         path: "penginputan/:id/edit",
         component: () => import("pages/Auth/Penginputan/Edit.vue"),
         name: "penginputan-edit",

@@ -330,6 +330,7 @@ export default defineComponent({
           FormID: this.year,
           UserID: this.user.ID,
           RegencyCityID: this.regency,
+          ProvinceID: this.auth.province,
           FieldResponse: result,
         };
         this.$api

@@ -23,6 +23,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   />
                 </td>
               </tr>
@@ -38,6 +39,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   />
                 </td>
               </tr>
@@ -59,6 +61,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   >
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
@@ -89,6 +92,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   />
                 </td>
               </tr>
@@ -108,6 +112,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   >
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
@@ -136,6 +141,7 @@
                     map-options
                     emit-value
                     :rules="[(val) => !!val]"
+                    readonly
                   >
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
@@ -322,6 +328,7 @@ export default defineComponent({
           FormID: this.year,
           UserID: this.user.ID,
           RegencyCityID: this.regency,
+          ProvinceID: this.auth.province,
           FieldResponse: result,
         };
         this.$api
