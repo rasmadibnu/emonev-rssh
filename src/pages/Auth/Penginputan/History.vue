@@ -3,7 +3,7 @@
     <div class="tw-text-3xl tw-mb-4">History Anggaran</div>
     <q-card flat>
       <q-card-section>
-        <q-markup-table flat separator="none" class="tw-h-auto">
+        <q-markup-table flat separator="none" class="tw-overflow-y-hidden">
           <tbody>
             <tr class="q-tr--no-hover">
               <td><div class="">-</div></td>
@@ -195,7 +195,12 @@
                           };
                         }).sort((a, b) => a.SortOrder - b.SortOrder)"
                         v-model="inp.Value"
-                        v-bind="{ ...inp, Index: index, Token: auth.token }"
+                        v-bind="{
+                          ...inp,
+                          Index: index,
+                          Token: auth.token,
+                          Readonly: true,
+                        }"
                         :key="inp.ID"
                         @onValueEmpty="flushChilds(inp)"
                       />
@@ -289,6 +294,63 @@ export default defineComponent({
         })
         .then((res) => {
           this.tab = this.history[0].ID;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    setRegencies(val) {
+      this.regency = null;
+      this.auth.setRegencies(val);
+    },
+    filterRegency(val, update) {
+      if (val === "") {
+        update(() => {
+          this.list_regency = this.auth.regency;
+        });
+        return;
+      }
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list_regency = this.user?.Group.Details.map((regency) => {
+          return {
+            label: regency.RegencyCity.Name,
+            value: regency.RegencyCityID,
+            province: regency.RegencyCity.Province.LongName,
+          };
+        }).filter((v) => v.label.toLowerCase().indexOf(needle) > -1);
+      });
+    },
+    filterProvince(val, update) {
+      if (val === "") {
+        update(() => {
+          this.list_province = this.auth.provinces;
+        });
+        return;
+      }
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list_province = this.auth.provinces.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+    getForm(val) {
+      this.loading = true;
+      const year = this.list_year.find((year) => year.value == val).label;
+      this.$api
+        .get("/forms/" + year + '/planning?Relation={"Name": "Fields"}')
+        .then((res) => {
+          this.fields = res.data.data.Fields.sort(
+            (a, b) => a.SortOrder - b.SortOrder
+          );
+
+          this.loading = false;
+          return res;
+        })
+        .then((res) => {
+          this.$refs.myForm.resetValidation();
         })
         .catch((err) => {
           console.log(err);

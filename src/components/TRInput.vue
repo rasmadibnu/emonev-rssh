@@ -37,6 +37,7 @@
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
+          :readonly="Readonly"
         />
         <q-input
           v-if="Type == 'text'"
@@ -45,6 +46,7 @@
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
+          :readonly="Readonly"
         />
         <q-input
           v-if="Type == 'numeric'"
@@ -54,6 +56,7 @@
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
+          :readonly="Readonly"
         />
         <div v-else-if="Type == 'radio'" class="q-gutter-sm">
           <q-radio
@@ -114,6 +117,7 @@
           prefix="Rp"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
+          :readonly="Readonly"
         />
         <q-input
           v-if="Type == 'text'"
@@ -121,6 +125,7 @@
           filled
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
+          :readonly="Readonly"
         />
         <q-input
           v-if="Type == 'numeric'"
@@ -129,6 +134,7 @@
           mask="##############################"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
+          :readonly="Readonly"
         />
         <div v-else-if="Type == 'radio'" class="q-gutter-sm">
           <q-radio
@@ -435,6 +441,7 @@
 import { ref, onMounted } from "vue";
 
 const props = defineProps({
+  ResponseFieldID: Number,
   Index: Number,
   Token: String,
   Dividen: Boolean,
@@ -456,6 +463,10 @@ const props = defineProps({
   ErrorMessage: String,
   Value: String,
   Removeable: {
+    default: false,
+    type: Boolean,
+  },
+  Readonly: {
     default: false,
     type: Boolean,
   },

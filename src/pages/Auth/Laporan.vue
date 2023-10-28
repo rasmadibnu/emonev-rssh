@@ -269,6 +269,7 @@ import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 import * as XLSX from "xlsx";
 export default defineComponent({
+  props: ["user"],
   components: { VxIcon },
   setup() {
     return {

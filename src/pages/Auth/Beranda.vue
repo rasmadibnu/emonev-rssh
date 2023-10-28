@@ -12,7 +12,7 @@
             <vx-icon
               :iconName="item.Icon"
               class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out"
-              :size="'24'"
+              :size="24"
             />
           </q-avatar>
           <div class="tw-text-right">
@@ -111,11 +111,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="positive" size="50px">
-                <vx-icon
-                  iconName="TickCircle"
-                  class="text-white"
-                  :size="'24'"
-                />
+                <vx-icon iconName="TickCircle" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -133,7 +129,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="secondary" size="50px">
-                <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
+                <vx-icon iconName="Bookmark" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -154,7 +150,7 @@
                 <vx-icon
                   iconName="ClipboardClose"
                   class="text-white"
-                  :size="'24'"
+                  :size="24"
                 />
               </q-avatar>
             </q-item-section>
@@ -347,11 +343,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="positive" size="50px">
-                <vx-icon
-                  iconName="TickCircle"
-                  class="text-white"
-                  :size="'24'"
-                />
+                <vx-icon iconName="TickCircle" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -369,7 +361,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="secondary" size="50px">
-                <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
+                <vx-icon iconName="Bookmark" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -390,7 +382,7 @@
                 <vx-icon
                   iconName="ClipboardClose"
                   class="text-white"
-                  :size="'24'"
+                  :size="24"
                 />
               </q-avatar>
             </q-item-section>
@@ -523,11 +515,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="positive" size="50px">
-                <vx-icon
-                  iconName="TickCircle"
-                  class="text-white"
-                  :size="'24'"
-                />
+                <vx-icon iconName="TickCircle" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -544,7 +532,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="secondary" size="50px">
-                <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
+                <vx-icon iconName="Bookmark" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -564,7 +552,7 @@
                 <vx-icon
                   iconName="ClipboardClose"
                   class="text-white"
-                  :size="'24'"
+                  :size="24"
                 />
               </q-avatar>
             </q-item-section>
