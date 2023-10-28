@@ -6,7 +6,6 @@
         <q-markup-table flat separator="none" class="tw-overflow-y-hidden">
           <tbody>
             <tr class="q-tr--no-hover">
-              <td><div class="">-</div></td>
               <td><div class="">Tahun Anggaran</div></td>
               <td class="md:tw-block tw-hidden">
                 <q-select
@@ -40,7 +39,6 @@
               </td>
             </tr>
             <tr class="q-tr--no-hover">
-              <td>-</td>
               <td>Provinsi</td>
               <td class="md:tw-block tw-hidden">
                 <q-select
@@ -93,7 +91,6 @@
               </td>
             </tr>
             <tr class="q-tr--no-hover">
-              <td>-</td>
               <td>Kabupaten Kota</td>
               <td class="md:tw-block tw-hidden">
                 <q-select
@@ -155,6 +152,7 @@
           </tbody>
         </q-markup-table>
       </q-card-section>
+      <q-separator class="tw-my-6" />
       <q-card-section class="q-pt-none">
         <q-splitter v-model="splitterModel" style="height: 100%">
           <template v-slot:before>
