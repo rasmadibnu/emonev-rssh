@@ -1,5 +1,11 @@
 <template>
-  <vsxIcon :iconName="iconName" :color="color" :size="size" type="linear" />
+  <vsxIcon
+    :iconName="iconName"
+    :color="color"
+    :size="size"
+    type="linear"
+    :class="class"
+  />
 </template>
 
 <script setup>
