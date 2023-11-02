@@ -3,13 +3,12 @@
 </template>
 
 <script setup>
-// import { vsxIcon } from "vue-iconsax";
+import { vsxIcon } from "vue-iconsax";
 
 defineProps({
   iconName: String,
   color: String,
   size: Number,
-  class: String,
 });
 </script>
 
