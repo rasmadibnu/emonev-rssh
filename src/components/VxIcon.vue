@@ -1,15 +1,9 @@
 <template>
-  <vsxIcon
-    :iconName="iconName"
-    :color="color"
-    :size="size"
-    type="linear"
-    :class="class"
-  />
+  <vsxIcon :iconName="iconName" :color="color" :size="size" type="linear" />
 </template>
 
 <script setup>
-import { vsxIcon } from "vue-iconsax";
+// import { vsxIcon } from "vue-iconsax";
 
 defineProps({
   iconName: String,
