@@ -197,6 +197,7 @@ import {
   flattenFields,
   assignErrorsToFields,
   flushChilds,
+  findItemById,
 } from "src/helper/fields.js";
 
 export default defineComponent({
@@ -212,6 +213,7 @@ export default defineComponent({
       province: ref(null),
       list_regency: ref([]),
       regency: ref(null),
+      forms: ref([]),
       fields: ref([]),
       loading: ref(false),
 
@@ -221,26 +223,30 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.getData();
-    this.getYear();
+    this.getData().then((fields) => {
+      this.getYear().then((res2) => {
+        this.getForm(this.year).then((form) => {
+          findItemById(this.forms, fields);
+          this.fields = this.forms;
+        });
+      });
+    });
   },
   methods: {
     getData() {
       return this.$api
         .get(
-          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field.Childs.Childs.Childs"}&Relations={"Name": "RegencyCity"}`
+          `/form-responses/${this.$route.params.id}?Relations={"Name": "FieldResponse.Field.Childs.Childs.Parent"}&Relations={"Name": "RegencyCity"}`
         )
         .then((res) => {
-          console.log(res.data.data);
           this.year = res.data.data.FormID;
           this.regency = res.data.data.RegencyCityID;
           this.list_province = this.auth.provinces;
           this.auth.province = res.data.data.RegencyCity.ProvinceID;
           this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
           this.list_regency = this.auth.regency;
-          this.fields = res.data.data.FieldResponse.map((e) => {
-            return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
-          }).sort((a, b) => a.SortOrder - b.SortOrder);
+
+          return res.data.data.FieldResponse;
         })
         .catch((err) => {
           console.log(err);
@@ -248,7 +254,7 @@ export default defineComponent({
     },
     getYear() {
       this.loading = true;
-      this.$api
+      return this.$api
         .get('/forms?Limit=-&Filters={"Type": "planning"}&Sort=year asc')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
@@ -300,10 +306,14 @@ export default defineComponent({
     getForm(val) {
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
-      this.$api
-        .get("/forms/" + year + '/planning?Relation={"Name": "Fields"}')
+      return this.$api
+        .get(
+          "/forms/" +
+            year +
+            '/planning?Relation={"Name": "Fields.Childs.Childs.Parent"}'
+        )
         .then((res) => {
-          this.fields = res.data.data.Fields.sort(
+          this.forms = res.data.data.Fields.sort(
             (a, b) => a.SortOrder - b.SortOrder
           );
 

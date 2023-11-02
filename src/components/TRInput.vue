@@ -528,6 +528,7 @@ function clickDynamic() {
 const add = () => {
   const last = localChilds.value[localChilds.value.length - 1];
   originalChilds.value.forEach((e, index) => {
+    delete e.Value;
     localChilds.value.push({ ...e, SortOrder: last.SortOrder + (index + 1) });
   });
 };

@@ -79,3 +79,52 @@ export function flushChilds(field) {
     }
   }
 }
+
+export function findItemById(array, searchArray) {
+  searchArray.forEach((searchObj) => {
+    const idToSearch = searchObj.Field.ID;
+    const stack = [...array]; // Gunakan stack untuk menyimpan data
+
+    while (stack.length > 0) {
+      const current = stack.pop();
+
+      if (
+        searchObj.Field.Type === "dynamic" &&
+        searchObj.Field.ID === current.ID
+      ) {
+        const temp = current.Childs.sort((a, b) => a.SortOrder - b.SortOrder);
+        try {
+          JSON.parse(searchObj.Value);
+          const val = JSON.parse(searchObj.Value);
+          current.Childs = [];
+          if (val.length > 0) {
+            val.forEach((e, idx) => {
+              const find = temp.find((temp) => temp.Label == e.Label);
+              console.log(find);
+              current.Childs.push({
+                ...find,
+                Value: e.Value,
+                SortOrder: idx,
+              });
+            });
+          } else {
+            current.Childs = temp;
+          }
+        } catch (e) {
+          current.Childs = temp;
+
+          current.Value = searchObj.Value; // Tambahkan nilai "value" ke objek yang ditemukan
+        }
+      } else {
+        if (current.ID === idToSearch) {
+          current.Value = searchObj.Value; // Tambahkan nilai "value" ke objek yang ditemukan
+          break;
+        }
+
+        if (current.Childs) {
+          stack.push(...current.Childs); // Tambahkan children ke dalam stack
+        }
+      }
+    }
+  });
+}
