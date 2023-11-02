@@ -103,7 +103,7 @@
                       clickable
                       v-ripple
                       class="text-negative"
-                      @click="confirmDelete(props.row.ID)"
+                      @click="confirmDelete(props.row.GroupID)"
                     >
                       <q-item-section avatar>
                         <vx-icon iconName="Trash" :size="20" />
