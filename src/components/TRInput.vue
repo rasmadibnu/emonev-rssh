@@ -525,9 +525,18 @@ function clickDynamic() {
   clicked.value = !clicked.value;
 }
 
+function getUniqueObjects(array, property) {
+  const uniqueObjects = Array.from(
+    new Set(array.map((obj) => obj[property]))
+  ).map((id) => {
+    return array.find((obj) => obj[property] === id);
+  });
+  return uniqueObjects;
+}
+
 const add = () => {
   const last = localChilds.value[localChilds.value.length - 1];
-  originalChilds.value.forEach((e, index) => {
+  getUniqueObjects(originalChilds.value, "ID").forEach((e, index) => {
     delete e.Value;
     localChilds.value.push({ ...e, SortOrder: last.SortOrder + (index + 1) });
   });
