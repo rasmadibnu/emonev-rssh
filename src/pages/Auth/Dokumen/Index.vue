@@ -211,32 +211,32 @@ export default defineComponent({
         page = this.totalPages;
       }
 
-      params.append("Limit", rowsPerPage);
-      params.append("Page", page);
-      if (this.regency) {
-        params.append("regency_city_id", this.regency);
-      }
-      if (this.auth.province) {
-        params.append(
-          "province_id",
-          this.auth.province instanceof Object
-            ? this.auth.province.value
-            : this.auth.province
-        );
-      }
-      if (this.year) {
-        const year = this.list_year.find((y) => {
-          return y.value == this.year;
-        });
-        params.append("year", year.label);
-      }
+      params.append("size", rowsPerPage);
+      params.append("page", page - 1);
+      // if (this.regency) {
+      //   params.append("regency_city_id", this.regency);
+      // }
+      // if (this.auth.province) {
+      //   params.append(
+      //     "province_id",
+      //     this.auth.province instanceof Object
+      //       ? this.auth.province.value
+      //       : this.auth.province
+      //   );
+      // }
+      // if (this.year) {
+      //   const year = this.list_year.find((y) => {
+      //     return y.value == this.year;
+      //   });
+      //   params.append("year", year.label);
+      // }
 
       this.$api
         .get("/attachments", data)
         .then((response) => {
-          this.rows = response.data.data.Rows;
-          this.pagination.rowsNumber = response.data.data.TotalRows;
-          this.totalPages = response.data.data.TotalPages;
+          this.rows = response.data.data.items;
+          this.pagination.rowsNumber = response.data.data.total;
+          this.totalPages = response.data.data.total_pages;
 
           this.loading = false;
         })
