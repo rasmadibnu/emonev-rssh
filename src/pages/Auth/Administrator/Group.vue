@@ -5,7 +5,7 @@
       <q-card-section class="tw-flex tw-justify-between tw-items-center">
         <q-input
           dense
-          placeholder="Search..."
+          placeholder="Cari..."
           v-model="search"
           debounce="350"
           filled
@@ -182,7 +182,7 @@
             <!-- @request="getDataRegency" -->
             <template #top>
               <div class="tw-flex tw-justify-between tw-w-full">
-                <!-- <q-input dense placeholder="Search..." v-model="search" filled>
+                <!-- <q-input dense placeholder="Cari..." v-model="search" filled>
           <template #prepend>
             <vx-icon iconName="SearchStatus" :size="20" />
           </template>

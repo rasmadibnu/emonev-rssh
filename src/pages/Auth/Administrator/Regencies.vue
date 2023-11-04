@@ -6,7 +6,7 @@
         <div class="tw-flex tw-justify-between tw-w-full">
           <q-input
             dense
-            placeholder="Search..."
+            placeholder="Cari..."
             v-model="search"
             debounce="350"
             filled

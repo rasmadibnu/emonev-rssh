@@ -117,7 +117,7 @@
         <div class="tw-flex tw-justify-between tw-items-center tw-w-full">
           <q-input
             dense
-            placeholder="Search..."
+            placeholder="Cari..."
             class="tw-w-64"
             v-model="search"
             filled

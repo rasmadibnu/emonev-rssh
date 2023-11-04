@@ -5,7 +5,7 @@
       <q-card-section class="tw-flex tw-justify-between tw-items-center">
         <q-input
           dense
-          placeholder="Search..."
+          placeholder="Cari..."
           v-model="search"
           filled
           debounce="350"

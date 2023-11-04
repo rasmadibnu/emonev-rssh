@@ -7,7 +7,7 @@
           <div class="tw-flex tw-gap-4">
             <q-input
               dense
-              placeholder="Search..."
+              placeholder="Cari..."
               v-model="search"
               debounce="350"
               filled
@@ -293,7 +293,7 @@ export default defineComponent({
       },
       {
         name: "Created By",
-        label: "Created By",
+        label: "Dibuat Oleh",
         align: "left",
         field: (row) => row.User.Name,
         sortable: true,
@@ -307,7 +307,7 @@ export default defineComponent({
       },
       {
         name: "Created At",
-        label: "Created At",
+        label: "Dibuat Pada",
         align: "left",
         field: (row) => moment(row.CreatedAt).format("YYYY-MM-DD HH:mm:ss"),
         sortable: true,

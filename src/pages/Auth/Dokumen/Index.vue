@@ -58,6 +58,18 @@
             </q-item>
           </template>
         </q-select>
+        <q-input
+          dense
+          placeholder="Cari..."
+          class="tw-col-span-3"
+          v-model="search"
+          filled
+          debounce="350"
+        >
+          <template #prepend>
+            <vx-icon iconName="SearchStatus" :size="20" />
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table
@@ -69,6 +81,7 @@
           :columns="columns"
           @request="getData"
           v-model:pagination="pagination"
+          :filter="search"
         >
           <template v-slot:item="props">
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
@@ -81,23 +94,47 @@
                   <div class="tw-text-xs">
                     Provinsi<br />
                     <span class="tw-font-bold">{{
-                      props.row.FormResponse.RegencyCity.Province.LongName
+                      props.row.FormResponse.RegencyCity?.Province.LongName
                     }}</span>
                     <div class="tw-mt-2">Kabupaten Kota</div>
                     <span class="tw-font-bold">{{
-                      props.row.FormResponse.RegencyCity.Name
+                      props.row.FormResponse.RegencyCity?.Name
                     }}</span>
                     <div class="tw-mt-2">Tahun</div>
                     <span class="tw-font-bold">{{
-                      props.row.FormResponse.Form.Year
+                      props.row.FormResponse.Form?.Year
                     }}</span>
                     <div class="tw-mt-2">Tipe</div>
-                    <span class="tw-font-bold tw-capitalize">{{
-                      props.row.FormResponse.Form.Type
-                    }}</span>
+                    <span
+                      class="tw-font-bold tw-capitalize"
+                      v-if="props.row.FormResponse.Form?.Type == 'budget'"
+                    >
+                      {{ "Anggaran" }}
+                    </span>
+                    <span
+                      class="tw-font-bold tw-capitalize"
+                      v-else-if="props.row.FormResponse.Form?.Type == 'survey'"
+                    >
+                      {{ "Kemitraan" }}
+                    </span>
+                    <span
+                      class="tw-font-bold tw-capitalize"
+                      v-else-if="
+                        props.row.FormResponse.Form?.Type == 'planning'
+                      "
+                    >
+                      {{ "Dokumen Perencanaan" }}
+                    </span>
                   </div>
                   <q-btn
-                    :label="props.row.Field.Label"
+                    :label="
+                      props.row.Value.split('|').length > 1
+                        ? props.row.Field.Label +
+                          ' (' +
+                          props.row.Value.split('|').length +
+                          ')'
+                        : props.row.Field.Label
+                    "
                     no-caps
                     unelevated
                     color="primary"
@@ -183,6 +220,8 @@ export default defineComponent({
       regency: ref(null),
       list_province: ref([]),
       province: ref(null),
+
+      search: ref(""),
     };
   },
   mounted() {
@@ -213,23 +252,46 @@ export default defineComponent({
 
       params.append("size", rowsPerPage);
       params.append("page", page - 1);
-      // if (this.regency) {
-      //   params.append("regency_city_id", this.regency);
-      // }
-      // if (this.auth.province) {
-      //   params.append(
-      //     "province_id",
-      //     this.auth.province instanceof Object
-      //       ? this.auth.province.value
-      //       : this.auth.province
-      //   );
-      // }
-      // if (this.year) {
-      //   const year = this.list_year.find((y) => {
-      //     return y.value == this.year;
-      //   });
-      //   params.append("year", year.label);
-      // }
+      var where = [];
+      if (this.regency) {
+        where.push(`["FormResponse.regency_city_id",${this.regency}]`);
+      }
+      if (this.auth.province) {
+        where.push(
+          `["FormResponse.RegencyCity.province_id","${
+            this.auth.province instanceof Object
+              ? this.auth.province.value
+              : this.auth.province
+          }"]`
+        );
+      }
+      if (this.year) {
+        const year = this.list_year.find((y) => {
+          return y.value == this.year;
+        });
+        where.push(`["FormResponse.Form.year","${year.label}"]`);
+      }
+
+      if (this.search) {
+        let search = [];
+        let field = [
+          "value",
+          "Field.label",
+          "FormResponse.Form.year",
+          "FormResponse.RegencyCity.name",
+          "FormResponse.RegencyCity.Province.short_name",
+          "FormResponse.RegencyCity.Province.long_name",
+        ];
+        field.forEach((e) => {
+          search.push(`["${e}", "like", "${this.search}"]`);
+        });
+
+        console.log(search);
+        where.push("[" + search.join(',["OR"],') + "]");
+      }
+
+      params.append("filters", "[" + where.join(',["AND"],') + "]");
+      params.append("sort", "-created_at");
 
       this.$api
         .get("/attachments", data)
@@ -258,13 +320,13 @@ export default defineComponent({
           return this.list_year;
         })
         .then((res) => {
-          const nowYear = new Date().getFullYear();
-          const findYear = res.find((year) => year.label == nowYear);
-          if (findYear) {
-            this.year = findYear.value;
-          } else {
-            this.year = res[0].value;
-          }
+          // const nowYear = new Date().getFullYear();
+          // const findYear = res.find((year) => year.label == nowYear);
+          // if (findYear) {
+          //   this.year = findYear.value;
+          // } else {
+          //   this.year = res[0].value;
+          // }
         })
         .then(() => {
           this.$refs.tableRef.requestServerInteraction();
