@@ -86,54 +86,81 @@
           <template v-slot:item="props">
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
               <q-card flat bordered class="tw-h-full">
-                <q-card-section class="flex flex-center">
-                  <vx-icon iconName="Document" :size="64" />
+                <q-card-section class="flex flex-center text-center">
+                  <div>
+                    <vx-icon iconName="Document" :size="64" />
+                    <div class="tw-font-bold">{{ props.row.Field.Label }}</div>
+                  </div>
                 </q-card-section>
                 <q-separator />
                 <q-card-section>
-                  <div class="tw-text-xs">
-                    Provinsi<br />
-                    <span class="tw-font-bold">{{
-                      props.row.FormResponse.RegencyCity?.Province.LongName
-                    }}</span>
-                    <div class="tw-mt-2">Kabupaten Kota</div>
-                    <span class="tw-font-bold">{{
-                      props.row.FormResponse.RegencyCity?.Name
-                    }}</span>
-                    <div class="tw-mt-2">Tahun</div>
-                    <span class="tw-font-bold">{{
-                      props.row.FormResponse.Form?.Year
-                    }}</span>
-                    <div class="tw-mt-2">Tipe</div>
-                    <span
-                      class="tw-font-bold tw-capitalize"
-                      v-if="props.row.FormResponse.Form?.Type == 'budget'"
-                    >
-                      {{ "Anggaran" }}
-                    </span>
-                    <span
-                      class="tw-font-bold tw-capitalize"
-                      v-else-if="props.row.FormResponse.Form?.Type == 'survey'"
-                    >
-                      {{ "Kemitraan" }}
-                    </span>
-                    <span
-                      class="tw-font-bold tw-capitalize"
-                      v-else-if="
-                        props.row.FormResponse.Form?.Type == 'planning'
-                      "
-                    >
-                      {{ "Dokumen Perencanaan" }}
-                    </span>
+                  <div class="tw-text-xs tw-grid tw-grid-cols-2 tw-gap-4">
+                    <div>
+                      Provinsi<br />
+                      <span class="tw-font-bold">{{
+                        props.row.FormResponse.RegencyCity?.Province.LongName
+                      }}</span>
+                    </div>
+                    <div>
+                      <div>Kabupaten Kota</div>
+                      <span class="tw-font-bold">{{
+                        props.row.FormResponse.RegencyCity?.Name
+                      }}</span>
+                    </div>
+                    <div>
+                      <div>Tahun</div>
+                      <span class="tw-font-bold">{{
+                        props.row.FormResponse.Form?.Year
+                      }}</span>
+                    </div>
+                    <div>
+                      <div>Tipe</div>
+                      <span
+                        class="tw-font-bold tw-capitalize"
+                        v-if="props.row.FormResponse.Form?.Type == 'budget'"
+                      >
+                        {{ "Anggaran" }}
+                      </span>
+                      <span
+                        class="tw-font-bold tw-capitalize"
+                        v-else-if="
+                          props.row.FormResponse.Form?.Type == 'survey'
+                        "
+                      >
+                        {{ "Kemitraan" }}
+                      </span>
+                      <span
+                        class="tw-font-bold tw-capitalize"
+                        v-else-if="
+                          props.row.FormResponse.Form?.Type == 'planning'
+                        "
+                      >
+                        {{ "Dokumen Perencanaan" }}
+                      </span>
+                    </div>
                   </div>
                   <q-btn
+                    v-if="props.row.Value.split('|').length > 1"
                     :label="
-                      props.row.Value.split('|').length > 1
-                        ? props.row.Field.Label +
-                          ' (' +
-                          props.row.Value.split('|').length +
-                          ')'
-                        : props.row.Field.Label
+                      props.row.Value.split('|')[0].substring(
+                        props.row.Value.length,
+                        8
+                      ) +
+                      ' (' +
+                      props.row.Value.split('|').length +
+                      ')'
+                    "
+                    no-caps
+                    unelevated
+                    color="primary"
+                    class="tw-w-full tw-mt-2"
+                    size="sm"
+                    @click="openListDialog(props.row.Value)"
+                  />
+                  <q-btn
+                    v-else
+                    :label="
+                      props.row.Value.substring(props.row.Value.length, 8)
                     "
                     no-caps
                     unelevated
@@ -150,6 +177,43 @@
         </q-table>
       </q-card-section>
     </q-card>
+    <q-dialog v-model="list_dialog">
+      <q-card style="width: 600px">
+        <q-card-section class="tw-flex tw-gap-2 tw-items-center">
+          <q-icon name="attachment" size="sm" />
+          <div class="text-h6">Dokumen</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-list separator v-if="list_file != '' && list_file">
+            <template
+              v-for="(file, index) in list_file.split('|')"
+              :key="index"
+            >
+              <q-item
+                clickable
+                v-ripple
+                as="a"
+                target="_blank"
+                :href="$api_url.split('/api/v1')[0] + file"
+              >
+                <q-item-section>
+                  <q-item-label>Dokumen {{ index + 1 }}</q-item-label>
+                  <q-item-label class="text-primary" caption>{{
+                    file.substring(file.length, 8)
+                  }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-list>
+          <template v-else> Belum ada file yang di unggah </template>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Tutup" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 <script>
@@ -222,6 +286,9 @@ export default defineComponent({
       province: ref(null),
 
       search: ref(""),
+
+      list_dialog: ref(false),
+      list_file: ref(""),
     };
   },
   mounted() {
@@ -371,6 +438,11 @@ export default defineComponent({
           (v) => v.label.toLowerCase().indexOf(needle) > -1
         );
       });
+    },
+
+    openListDialog(file) {
+      this.list_file = file;
+      this.list_dialog = true;
     },
   },
 });

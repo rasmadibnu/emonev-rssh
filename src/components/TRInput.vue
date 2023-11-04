@@ -29,11 +29,13 @@
       <template v-if="IsRequired">
         <q-input
           v-if="Type == 'currency'"
-          dense
+          denur="onBlur"
           filled
           mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
+          @focus="onFocus"
+          @blur="onBlur"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
@@ -89,14 +91,14 @@
           @uploaded="(info) => onUploaded(info)"
           multiple
           batch
-          label="Unggah Lampiran"
+          label="Unggah Dokumen"
         />
         <q-btn
           v-if="Type == 'file' && modelValue != '' && modelValue"
           color="secondary"
           padding="0"
           class="tw-mt-2"
-          label="Lampiran yang diunggah"
+          label="Dokumen yang diunggah"
           icon="attachment"
           no-caps
           flat
@@ -167,14 +169,14 @@
           @uploaded="(info) => onUploaded(info)"
           multiple
           batch
-          label="Unggah Lampiran"
+          label="Unggah Dokumen"
         />
         <q-btn
           v-if="Type == 'file' && modelValue != '' && modelValue"
           color="secondary"
           padding="0"
           class="tw-mt-2"
-          label="Lampiran yang diunggah"
+          label="Dokumen yang diunggah"
           icon="attachment"
           no-caps
           flat
@@ -258,14 +260,14 @@
           @failed="(info) => onFailed(info)"
           multiple
           batch
-          label="Unggah Lampiran"
+          label="Unggah Dokumen"
         />
         <q-btn
           v-if="Type == 'file' && modelValue != '' && modelValue"
           color="secondary"
           padding="0"
           class="tw-mt-2"
-          label="Lampiran yang diunggah"
+          label="Dokumen yang diunggah"
           icon="attachment"
           no-caps
           flat
@@ -326,6 +328,7 @@
         </div>
         <q-uploader
           v-else-if="Type == 'file'"
+          size="sm"
           :url="$api_url + '/attachments'"
           :headers="[
             {
@@ -342,14 +345,14 @@
           @failed="(info) => onFailed(info)"
           multiple
           batch
-          label="Unggah Lampiran"
+          label="Unggah Dokumen"
         />
         <q-btn
           v-if="Type == 'file' && modelValue != '' && modelValue"
           color="secondary"
           padding="0"
           class="tw-mt-2"
-          label="Lampiran yang diunggah"
+          label="Dokumen yang diunggah"
           icon="attachment"
           no-caps
           flat
@@ -406,7 +409,7 @@
     <q-card style="width: 600px">
       <q-card-section class="tw-flex tw-gap-2 tw-items-center">
         <q-icon name="attachment" size="sm" />
-        <div class="text-h6">Lampiran</div>
+        <div class="text-h6">Dokumen</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -420,9 +423,9 @@
               :href="$api_url.split('/api/v1')[0] + file"
             >
               <q-item-section>
-                <q-item-label>File {{ index + 1 }}</q-item-label>
+                <q-item-label>Dokumen {{ index + 1 }}</q-item-label>
                 <q-item-label class="text-primary" caption>{{
-                  file
+                  file.substring(file.length, 8)
                 }}</q-item-label>
               </q-item-section>
             </q-item>
@@ -494,6 +497,7 @@ const copyArray = () => {
 
 onMounted(() => {
   copyArray();
+  if (props.Type == "currency") emit("update:modelValue", "0");
 });
 
 function onUploaded(info) {
@@ -516,6 +520,16 @@ function updateModelValue(val) {
   if (val === "0") {
     emit("onValueEmpty");
   }
+}
+
+function onFocus() {
+  if (props.Type == "currency" && props.modelValue == "0")
+    emit("update:modelValue", "");
+}
+
+function onBlur() {
+  if (props.Type == "currency" && props.modelValue == "")
+    emit("update:modelValue", "0");
 }
 
 function clickDynamic() {
