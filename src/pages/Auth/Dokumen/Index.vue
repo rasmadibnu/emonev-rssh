@@ -87,7 +87,9 @@
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
               <q-card flat bordered class="tw-h-full">
                 <q-card-section class="flex flex-center text-center">
-                  <div>
+                  <div
+                    class="tw-flex tw-flex-col tw-justify-center tw-w-full tw-items-center"
+                  >
                     <vx-icon iconName="Document" :size="64" />
                     <div class="tw-font-bold">{{ props.row.Field.Label }}</div>
                   </div>

@@ -118,6 +118,8 @@
           reverse-fill-mask
           prefix="Rp"
           :model-value="modelValue"
+          @focus="onFocus"
+          @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
           :readonly="Readonly"
         />
@@ -208,6 +210,8 @@
           reverse-fill-mask
           prefix="Rp"
           :model-value="modelValue"
+          @focus="onFocus"
+          @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
         />
@@ -295,6 +299,8 @@
           reverse-fill-mask
           prefix="Rp"
           :model-value="modelValue"
+          @focus="onFocus"
+          @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
         />
         <q-input
