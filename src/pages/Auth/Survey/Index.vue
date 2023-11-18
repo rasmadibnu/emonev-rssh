@@ -180,7 +180,7 @@
                         <q-btn
                           color="secondary"
                           padding="0"
-                          label="Lampiran yang diunggah"
+                          label="Dokumen yang diunggah"
                           icon="attachment"
                           @click="openFileDialog(props.row.Value)"
                           no-caps
@@ -226,7 +226,7 @@
     <q-card style="width: 600px">
       <q-card-section class="tw-flex tw-gap-2 tw-items-center">
         <q-icon name="attachment" size="sm" />
-        <div class="text-h6">Lampiran</div>
+        <div class="text-h6">Dokumen</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -240,9 +240,9 @@
               :href="$api_url.split('/api/v1')[0] + file"
             >
               <q-item-section>
-                <q-item-label>File {{ index + 1 }}</q-item-label>
+                <q-item-label>Dokumen {{ index + 1 }}</q-item-label>
                 <q-item-label class="text-primary" caption>{{
-                  file
+                  file.substring(file.length, 8)
                 }}</q-item-label>
               </q-item-section>
             </q-item>
