@@ -408,7 +408,7 @@ export default defineComponent({
           '/groups?Limit=-&Relation={"Name": "Details.RegencyCity.Province"}'
         )
         .then((res) => {
-          this.list_group = res.data.data.Rows.map((group) => {
+          this.list_group = res.data.data.items.map((group) => {
             return {
               value: group.ID,
               label: group.Name,

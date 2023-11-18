@@ -27,9 +27,13 @@
                 <q-card-section class="text-primary tw-text-xl">
                   Anggaran Terhadap Bidang Kesehatan
                 </q-card-section>
-                <q-card-section class="q-pt-none">
+                <q-card-section
+                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
+                >
                   <apex
                     type="bar"
+                    height="800"
+                    class="tw-w-full"
                     :options="chartOptionsPercentage"
                     :series="seriesPercentage"
                     ref="chartPercentage"
@@ -1327,7 +1331,6 @@ export default defineComponent({
       chartOptionsPercentage: {
         chart: {
           type: "bar",
-          height: 350,
           id: "chartPercentage",
           toolbar: {
             show: true,
@@ -1342,6 +1345,26 @@ export default defineComponent({
             },
           },
         },
+        responsive: [
+          {
+            breakpoint: 480, // defines breakpoint for mobile devices
+            options: {
+              // set chart options for mobile devices
+              chart: {
+                width: "1000", // make chart width 100% on mobile
+              },
+            },
+          },
+          {
+            breakpoint: 600, // defines breakpoint for mobile devices
+            options: {
+              // set chart options for mobile devices
+              chart: {
+                width: "700", // make chart width 100% on mobile
+              },
+            },
+          },
+        ],
         colors: ["#243763"],
         plotOptions: {
           bar: {
@@ -1699,7 +1722,7 @@ export default defineComponent({
           return this.list_year;
         })
         .then((res) => {
-          const nowYear = new Date().getFullYear();
+          const nowYear = "2022";
           const findYear = res.find((year) => year.label == nowYear);
           if (findYear) {
             this.year = findYear.value;
