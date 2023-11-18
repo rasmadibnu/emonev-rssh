@@ -404,10 +404,9 @@ export default defineComponent({
     },
     getGroup() {
       this.$api
-        .get(
-          '/groups?Limit=-&Relation={"Name": "Details.RegencyCity.Province"}'
-        )
+        .get("/groups?size=-1")
         .then((res) => {
+          console.log(res);
           this.list_group = res.data.data.items.map((group) => {
             return {
               value: group.ID,
