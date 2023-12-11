@@ -1722,7 +1722,7 @@ export default defineComponent({
           return this.list_year;
         })
         .then((res) => {
-          const nowYear = "2022";
+          const nowYear = new Date().getFullYear();
           const findYear = res.find((year) => year.label == nowYear);
           if (findYear) {
             this.year = findYear.value;
