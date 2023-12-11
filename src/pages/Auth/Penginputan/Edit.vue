@@ -244,7 +244,7 @@ export default defineComponent({
           this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
           this.list_regency = this.auth.regency;
           this.fields = res.data.data.FieldResponse.map((e) => {
-            return { ...e.Field, Value: e.Value, ResponseFieldID: e.ID };
+            return { Value: e.Value, ResponseFieldID: e.ID, ...e.Field };
           }).sort((a, b) => a.SortOrder - b.SortOrder);
         })
         .catch((err) => {

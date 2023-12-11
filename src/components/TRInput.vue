@@ -503,7 +503,9 @@ const copyArray = () => {
 
 onMounted(() => {
   copyArray();
-  if (props.Type == "currency") emit("update:modelValue", "0");
+  if (!props.modelValue) {
+    if (props.Type == "currency") emit("update:modelValue", "0");
+  }
 });
 
 function onUploaded(info) {
