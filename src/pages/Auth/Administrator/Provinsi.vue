@@ -15,6 +15,10 @@
               <vx-icon iconName="SearchStatus" :size="20" />
             </template>
           </q-input>
+           <q-btn outline no-caps color="primary" @click="openDialog(null)">
+            <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
+            Tambah
+          </q-btn>
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -45,6 +49,16 @@
               >
                 <vx-icon iconName="Edit" :size="18" />
               </q-btn>
+              <q-btn
+                flat
+                dense
+                text-color="text-negative"
+                size="sm"
+                color="primary"
+                @click="confirmDelete(props.row.ID)"
+              >
+                <vx-icon iconName="Trash" :size="18" />
+              </q-btn>
             </q-td>
           </template>
         </q-table>
@@ -63,7 +77,7 @@
       </q-card-section>
 
       <q-form @submit.prevent="submit">
-        <q-card-section class="tw-gap-y-2">
+        <q-card-section class="tw-gap-y-2 tw-grid tw-gap-4 md:tw-grid-cols-2">
           <q-input
             v-model="form.ShortName"
             filled
@@ -75,6 +89,28 @@
             filled
             label="Nama Lengkap"
             :rules="[(val) => !!val || 'Field harus diisi']"
+          />
+          <q-input
+            v-model="form.Code"
+            maxlength="2"
+            filled
+            hint=""
+            label="Kode"
+          />
+          <q-input
+            v-model="form.Type"
+            hint=""
+            maxlength="1"
+            filled
+            label="Tipe"
+          />
+          <q-input
+          class="tw-col-span-2"
+          hint=""
+            v-model="form.CodeMap"
+            maxlength="50"
+            filled
+            label="Kode Map"
           />
         </q-card-section>
 
@@ -227,6 +263,7 @@ export default defineComponent({
 
       params.append("size", rowsPerPage);
       params.append("page", page - 1);
+      params.append("sort", "-created_at");
 
       if (this.search) {
         params.append(

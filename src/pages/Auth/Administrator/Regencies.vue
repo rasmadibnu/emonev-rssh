@@ -15,6 +15,10 @@
               <vx-icon iconName="SearchStatus" :size="20" />
             </template>
           </q-input>
+          <q-btn outline no-caps color="primary" @click="openDialog(null)">
+            <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
+            Tambah
+          </q-btn>
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -45,6 +49,16 @@
               >
                 <vx-icon iconName="Edit" :size="18" />
               </q-btn>
+              <q-btn
+                flat
+                dense
+                text-color="text-negative"
+                size="sm"
+                color="primary"
+                @click="confirmDelete(props.row.ID)"
+              >
+                <vx-icon iconName="Trash" :size="18" />
+              </q-btn>
             </q-td>
           </template>
         </q-table>
@@ -64,12 +78,30 @@
       </q-card-section>
 
       <q-form @submit.prevent="submit">
-        <q-card-section class="tw-gap-y-2">
+        <q-card-section class="tw-gap-y-2 tw-grid md:tw-grid-cols-2 tw-gap-4">
+          <q-select
+            filled
+            v-model.number="form.ProvinceID"
+            :options="list_provinces"
+            map-options
+            class="tw-col-span-2"
+            emit-value
+            label="Provinsi"
+            :rules="[(val) => !!val || 'Field harus diisi']"
+            @filter="filterProvince"
+            use-input
+          />
           <q-input
             v-model="form.Name"
             filled
             label="Nama"
             :rules="[(val) => !!val || 'Field harus diisi']"
+          />
+          <q-input
+            v-model="form.Code"
+            filled
+            label="Kode"
+            hint=""
           />
         </q-card-section>
 
@@ -123,6 +155,8 @@ import VxIcon from "src/components/VxIcon.vue";
 import { defineComponent, ref } from "vue";
 
 const initial_form = {
+  ProvinceID: null,
+  Code: null,
   Name: null,
 };
 
@@ -180,10 +214,13 @@ export default defineComponent({
       loading: ref(false),
       id: ref(""),
       form: ref(structuredClone(initial_form)),
+      list_provinces: ref([]),
+      options_provinces: ref([]),
     };
   },
   mounted() {
     this.$refs.tableRef.requestServerInteraction();
+    this.getProvince()
   },
   methods: {
     getData(props) {
@@ -207,6 +244,7 @@ export default defineComponent({
 
       params.append("size", rowsPerPage);
       params.append("page", page - 1);
+      params.append("sort", "-created_at");
 
       if (this.search) {
         params.append(
@@ -227,6 +265,25 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
           this.loading = false;
+        });
+    },
+
+    getProvince() {
+      this.$api
+        .get("/provinces?size=-1")
+        .then((res) => {
+          console.log(res);
+          this.list_provinces = res.data.data.items.map((prov) => {
+            return {
+              value: prov.ID,
+              label: prov.LongName,
+            };
+          });
+
+          this.options_provinces = this.list_provinces;
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
 
@@ -306,6 +363,22 @@ export default defineComponent({
           console.log(err);
           this.confirm = false;
         });
+    },
+
+    filterProvince(val, update) {
+      if (val === "") {
+        update(() => {
+          this.list_provinces = this.options_provinces;
+        });
+        return;
+      }
+
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list_provinces = this.options_provinces.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
     },
   },
 });
