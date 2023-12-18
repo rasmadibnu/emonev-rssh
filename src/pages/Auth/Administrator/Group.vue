@@ -60,7 +60,7 @@
                       clickable
                       v-ripple
                       class="text-primary"
-                      @click="openFormDialog(props.row)"
+                      @click="openDialog(props.row)"
                     >
                       <q-item-section avatar>
                         <vx-icon iconName="Edit" :size="20" />
