@@ -1758,6 +1758,10 @@ export default defineComponent({
           name: "MALARIA",
           data: [],
         },
+        {
+          name: "LAINNYA",
+          data: [],
+        },
       ]),
       chartOptionsProvince: ref({
         chart: {
@@ -1940,6 +1944,9 @@ export default defineComponent({
           );
           this.seriesProvince[2].data = res.data.data.map(
             (province) => province.percentage.TBC
+          );
+          this.seriesProvince[3].data = res.data.data.map(
+            (province) => province.percentage.Other
           );
 
           return res;
