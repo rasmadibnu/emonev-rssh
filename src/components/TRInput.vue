@@ -29,11 +29,11 @@
       <template v-if="IsRequired">
         <q-input
           v-if="Type == 'currency'"
-          denur="onBlur"
           filled
           mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
+          :class="[Readonly ? 'tw-w-56' : '']"
           @focus="onFocus"
           @blur="onBlur"
           :model-value="modelValue"
@@ -44,6 +44,7 @@
         <q-input
           v-if="Type == 'text'"
           dense
+          :class="[Readonly ? 'tw-w-56' : '']"
           filled
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
@@ -53,6 +54,7 @@
         <q-input
           v-if="Type == 'numeric'"
           dense
+          :class="[Readonly ? 'tw-w-56' : '']"
           filled
           mask="##############################"
           :model-value="modelValue"
@@ -114,6 +116,7 @@
           v-if="Type == 'currency'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
@@ -127,6 +130,7 @@
           v-if="Type == 'text'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :readonly="Readonly"
@@ -134,6 +138,7 @@
         <q-input
           v-if="Type == 'numeric'"
           dense
+          :class="[Readonly ? 'tw-w-56' : '']"
           filled
           mask="##############################"
           :model-value="modelValue"
@@ -206,6 +211,7 @@
           v-if="Type == 'currency'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
@@ -219,6 +225,7 @@
           v-if="Type == 'text'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
@@ -226,6 +233,7 @@
         <q-input
           v-if="Type == 'numeric'"
           dense
+          :class="[Readonly ? 'tw-w-56' : '']"
           filled
           mask="##############################"
           :model-value="modelValue"
@@ -295,6 +303,7 @@
           v-if="Type == 'currency'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
@@ -306,6 +315,7 @@
         <q-input
           v-if="Type == 'text'"
           dense
+          :class="[Readonly ? 'tw-w-56' : '']"
           filled
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
@@ -314,6 +324,7 @@
           v-if="Type == 'numeric'"
           dense
           filled
+          :class="[Readonly ? 'tw-w-56' : '']"
           mask="##############################"
           :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"

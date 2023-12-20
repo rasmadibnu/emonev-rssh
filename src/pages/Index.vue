@@ -40,7 +40,7 @@
                   ></apex>
                 </q-card-section>
               </q-card>
-              <!-- <q-card flat>
+              <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
                   Presentase Rekapitulasi Anggaran ATM
                 </q-card-section>
@@ -51,12 +51,12 @@
                     type="bar"
                     height="800"
                     class="tw-w-full"
-                    :options="chartOptionsAmount"
-                    :series="seriesAmount"
-                    ref="chartAmount"
+                    :options="chartOptionsPrecentage"
+                    :series="seriesPrecentage"
+                    ref="chartPrecentage"
                   ></apex>
                 </q-card-section>
-              </q-card> -->
+              </q-card>
             </div>
           </q-tab-panel>
 
@@ -1890,8 +1890,17 @@ export default defineComponent({
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
           this.seriesAmount[0].data = res.data.data.map((e) => e.budget);
+          this.seriesPrecentage[0].data = res.data.data.map(
+            (e) => e.percentage
+          );
 
           ApexCharts.getChartByID("chartAmount").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((e) => e.name),
+            },
+          });
+
+          ApexCharts.getChartByID("chartPrecentage").updateOptions({
             xaxis: {
               categories: res.data.data.map((e) => e.name),
             },
