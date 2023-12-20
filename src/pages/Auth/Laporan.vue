@@ -9,7 +9,6 @@
         <td colspan="4" class="text-center">
           UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
         </td>
-        <td rowspan="2">Total ATM</td>
         <td colspan="4" class="text-center">
           Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
         </td>
@@ -47,9 +46,6 @@
         }}
         <td>
           {{ data.Province }}
-        </td>
-        <td>
-          {{ data.RegencyCity }}
         </td>
         <td>
           {{ data.RegencyCity }}
@@ -164,7 +160,6 @@
               <td colspan="4" class="text-center">
                 UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
               </td>
-              <td rowspan="2">Total ATM</td>
               <td colspan="4" class="text-center">
                 Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
               </td>
@@ -195,12 +190,9 @@
             </tr>
           </template>
           <template v-slot:body="props">
-            <q-tr :props="props" @click="onRowClick(props.row)">
+            <q-tr :props="props">
               <q-td>
                 {{ props.row.Province }}
-              </q-td>
-              <q-td>
-                {{ props.row.RegencyCity }}
               </q-td>
               <q-td>
                 {{ props.row.RegencyCity }}
