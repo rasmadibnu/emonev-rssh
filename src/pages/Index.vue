@@ -1798,6 +1798,7 @@ export default defineComponent({
           },
         },
         yaxis: {
+          max: 5,
           labels: {
             formatter: function (value) {
               return `${parseFloat(value).toFixed(2)}%`;
