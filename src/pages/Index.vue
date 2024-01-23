@@ -42,7 +42,7 @@
               </q-card>
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Persentase Aanggaran ATM Terhadap Bidang Kesehatan
+                  Persentase Anggaran ATM Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section
                   class="q-pt-none tw-overflow-x-scroll tw-w-auto"
