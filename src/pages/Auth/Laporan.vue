@@ -51,41 +51,41 @@
           {{ data.RegencyCity }}
         </td>
         <td>
-          {{ rupiah(data.ByUPTD.AIDS) }}
+          {{ data.ByUPTD.AIDS }}
         </td>
         <td>
-          {{ rupiah(data.ByUPTD.TBC) }}
+          {{ data.ByUPTD.TBC }}
         </td>
         <td>
-          {{ rupiah(data.ByUPTD.Malaria) }}
+          {{ data.ByUPTD.Malaria }}
         </td>
         <td>
-          {{ rupiah(data.ByUPTD.TotalATM) }}
+          {{ data.ByUPTD.TotalATM }}
         </td>
         <td>
-          {{ rupiah(data.ByOther.AIDS) }}
+          {{ data.ByOther.AIDS }}
         </td>
         <td>
-          {{ rupiah(data.ByOther.TBC) }}
+          {{ data.ByOther.TBC }}
         </td>
         <td>
-          {{ rupiah(data.ByOther.Malaria) }}
+          {{ data.ByOther.Malaria }}
         </td>
 
         <td>
-          {{ rupiah(data.ByOther.TotalATM) }}
+          {{ data.ByOther.TotalATM }}
         </td>
         <td>
-          {{ rupiah(data.GrandTotal) }}
+          {{ data.GrandTotal }}
         </td>
         <td>
-          {{ rupiah(data.APBD_ByDinkes) }}
+          {{ data.APBD_ByDinkes }}
         </td>
         <td>
-          {{ rupiah(data.APBD_RegencyCity) }}
+          {{ data.APBD_RegencyCity }}
         </td>
         <td>
-          {{ rupiah(data.APBD_ByBidkes) }}
+          {{ data.APBD_ByBidkes }}
         </td>
         <td class="text-center">
           {{ parseFloat(data.PercentageATM.AIDS).toFixed(2) }}%

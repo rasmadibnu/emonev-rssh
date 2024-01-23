@@ -42,7 +42,7 @@
               </q-card>
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Presentase Rekapitulasi Anggaran ATM
+                  Persentase Aanggaran ATM Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section
                   class="q-pt-none tw-overflow-x-scroll tw-w-auto"
@@ -1798,7 +1798,7 @@ export default defineComponent({
           },
         },
         yaxis: {
-          max: 5,
+          max: 3,
           labels: {
             formatter: function (value) {
               return `${parseFloat(value).toFixed(2)}%`;
