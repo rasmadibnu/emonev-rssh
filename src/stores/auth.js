@@ -10,6 +10,7 @@ export const useAuthStore = defineStore("auth", {
     provinces: [],
     regency: [],
     regency_ids: [],
+    year_selected: null,
   }),
   getters: {
     token_data() {

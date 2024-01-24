@@ -817,7 +817,7 @@
                 <q-select
                   class="my-select"
                   :options="list_year"
-                  v-model="year"
+                  v-model="authStore.year_selected"
                   borderless
                   dense
                   map-options
@@ -1844,12 +1844,14 @@ export default defineComponent({
           return this.list_year;
         })
         .then((res) => {
-          const nowYear = new Date().getFullYear();
-          const findYear = res.find((year) => year.label == nowYear);
-          if (findYear) {
-            this.year = findYear.value;
-          } else {
-            this.year = res[0].value;
+          if (!this.authStore.year_selected) {
+            const nowYear = new Date().getFullYear();
+            const findYear = res.find((year) => year.label == nowYear);
+            if (findYear) {
+              this.authStore.year_selected = findYear.value;
+            } else {
+              this.authStore.year_selected = res[0].value;
+            }
           }
         })
         .then(() => {
@@ -1937,7 +1939,9 @@ export default defineComponent({
     },
 
     findProvince(val) {
-      const findYear = this.list_year.find((year) => year.value == this.year);
+      const findYear = this.list_year.find(
+        (year) => year.value == this.authStore.year_selected
+      );
       return this.$api
         .get("/result/" + findYear.label + "/percentage/" + val)
         .then((res) => {
@@ -1967,7 +1971,9 @@ export default defineComponent({
     },
 
     findProvinceTable(val) {
-      const findYear = this.list_year.find((year) => year.value == this.year);
+      const findYear = this.list_year.find(
+        (year) => year.value == this.authStore.year_selected
+      );
       return this.$api
         .get("/result/" + findYear.label + "/detail/" + val)
         .then((res) => {
@@ -2284,36 +2290,36 @@ export default defineComponent({
     },
 
     onUpdateYear() {
-      this.getBudget(this.year);
-      this.findPartnership(this.year);
-      this.findPartnershipPerProvince(this.year);
-      this.getPartnershipDetail(this.year);
-      this.getProgess(this.year);
-      this.getPlanning(this.year);
-      this.getPartnerhsip(this.year);
+      this.getBudget(this.authStore.year_selected);
+      this.findPartnership(this.authStore.year_selected);
+      this.findPartnershipPerProvince(this.authStore.year_selected);
+      this.getPartnershipDetail(this.authStore.year_selected);
+      this.getProgess(this.authStore.year_selected);
+      this.getPlanning(this.authStore.year_selected);
+      this.getPartnerhsip(this.authStore.year_selected);
       this.findProvince(this.province);
       this.findProvinceTable(this.province);
     },
 
     updateProvinceKemirtraan() {
-      this.findPartnershipPerProvince(this.year);
-      this.getPartnershipDetail(this.year);
+      this.findPartnershipPerProvince(this.authStore.year_selected);
+      this.getPartnershipDetail(this.authStore.year_selected);
     },
 
     onChangeTab() {
       if (this.tab == "Dashboard1") {
-        this.getBudget(this.year);
+        this.getBudget(this.authStore.year_selected);
       } else if (this.tab == "Dashboard2") {
         this.findProvince(this.province);
         this.findProvinceTable(this.province);
       } else if (this.tab == "Dashboard3") {
-        this.findPartnership(this.year);
-        this.findPartnershipPerProvince(this.year);
-        this.getPartnershipDetail(this.year);
+        this.findPartnership(this.authStore.year_selected);
+        this.findPartnershipPerProvince(this.authStore.year_selected);
+        this.getPartnershipDetail(this.authStore.year_selected);
       } else if (this.tab == "Dashboard4") {
-        this.getProgess(this.year);
-        this.getPlanning(this.year);
-        this.getPartnerhsip(this.year);
+        this.getProgess(this.authStore.year_selected);
+        this.getPlanning(this.authStore.year_selected);
+        this.getPartnerhsip(this.authStore.year_selected);
       }
     },
   },

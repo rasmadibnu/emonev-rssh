@@ -25,7 +25,7 @@
     <div class="tw-flex tw-justify-between tw-mt-4 tw-items-center">
       <div class="tw-text-xl tw-font-semibold">Progress</div>
       <q-select
-        v-model="year"
+        v-model="auth.year_selected"
         :options="list_year"
         dense
         label="Tahun"
@@ -580,7 +580,7 @@ import VxIcon from "src/components/VxIcon.vue";
 import Apex from "vue3-apexcharts";
 import moment from "moment";
 import ApexCharts from "apexcharts";
-
+import { useAuthStore } from "src/stores/auth";
 export default defineComponent({
   props: ["user"],
   components: { VxIcon, Apex },
@@ -706,7 +706,9 @@ export default defineComponent({
       // },
     ];
 
+    const auth = useAuthStore();
     return {
+      auth,
       moment,
       columns_penginputan,
       columns_planning,
@@ -858,16 +860,18 @@ export default defineComponent({
           return this.list_year;
         })
         .then((res) => {
-          const nowYear = new Date().getFullYear();
-          const findYear = res.find((year) => year.label == nowYear);
-          if (findYear) {
-            this.year = findYear.value;
-          } else {
-            this.year = res[0].value;
+          if (!this.auth.year_selected) {
+            const nowYear = new Date().getFullYear();
+            const findYear = res.find((year) => year.label == nowYear);
+            if (findYear) {
+              this.auth.year_selected = findYear.value;
+            } else {
+              this.auth.year_selected = res[0].value;
+            }
           }
-          this.getProgess(this.year);
-          this.getPlanning(this.year);
-          this.getPartnerhsip(this.year);
+          this.getProgess(this.auth.year_selected);
+          this.getPlanning(this.auth.year_selected);
+          this.getPartnerhsip(this.auth.year_selected);
         })
         .catch((err) => {
           console.log(err);
@@ -1059,9 +1063,9 @@ export default defineComponent({
     },
 
     onUpdateYear() {
-      this.getProgess(this.year);
-      this.getPlanning(this.year);
-      this.getPartnerhsip(this.year);
+      this.getProgess(this.auth.year_selected);
+      this.getPlanning(this.auth.year_selected);
+      this.getPartnerhsip(this.auth.year_selected);
     },
   },
 });

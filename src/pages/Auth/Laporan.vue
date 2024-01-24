@@ -2,16 +2,13 @@
   <table class="tw-hidden" id="table2">
     <thead>
       <tr class="text-center">
-        <td rowspan="2" style="vertical-align: middle; text-align: center">
-          Provinsi
-        </td>
+        <td rowspan="2">Provinsi</td>
         <td rowspan="2">Kabupaten / Kota</td>
         <td colspan="4" class="text-center">
           UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
         </td>
-        <td colspan="4" class="text-center">
-          Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
-        </td>
+        <td colspan="6" class="text-center">KKN ATM</td>
+        <td rowspan="2">Selisih Terhadap ATM by UTPD</td>
         <td rowspan="2">Grand Total</td>
         <td rowspan="2">Total APBD Dinas Kesehatan</td>
         <td rowspan="2">Total APBD Kota/Kabupaten</td>
@@ -37,13 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      {{
-        recap
-      }}
       <tr v-for="(data, index) in this.recap" v-bind:key="index">
-        {{
-          data
-        }}
         <td>
           {{ data.Province }}
         </td>
@@ -62,19 +53,26 @@
         <td>
           {{ data.ByUPTD.TotalATM }}
         </td>
-        <td>
-          {{ data.ByOther.AIDS }}
-        </td>
-        <td>
-          {{ data.ByOther.TBC }}
-        </td>
-        <td>
-          {{ data.ByOther.Malaria }}
-        </td>
+        <q-td>
+          {{ data.ByKKN.SuspectedTBC }}
+        </q-td>
+        <q-td>
+          {{ data.ByKKN.RiskHIV }}
+        </q-td>
+        <q-td>
+          {{ data.ByKKN.TBC }}
+        </q-td>
 
-        <td>
-          {{ data.ByOther.TotalATM }}
-        </td>
+        <q-td>
+          {{ data.ByKKN.ODHIV }}
+        </q-td>
+        <q-td>
+          {{ data.ByKKN.ODHIV }}
+        </q-td>
+        <q-td>
+          {{ data.ByKKN.TotalKKN }}
+        </q-td>
+        <q-td> {{ data.DiffATMAtKKN }} </q-td>
         <td>
           {{ data.GrandTotal }}
         </td>
@@ -160,9 +158,8 @@
               <td colspan="4" class="text-center">
                 UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
               </td>
-              <td colspan="4" class="text-center">
-                Sumber Lain (CSR, Dana Desa, SKPD Non Dinkes)
-              </td>
+              <td colspan="6" class="text-center">KKN ATM</td>
+              <td rowspan="2">Selisih Terhadap ATM by UTPD</td>
               <td rowspan="2">Grand Total</td>
               <td rowspan="2">Total APBD Dinas Kesehatan</td>
               <td rowspan="2">Total APBD Kota/Kabupaten</td>
@@ -180,10 +177,12 @@
               <td>TBC</td>
               <td>MALARIA</td>
               <td>Total ATM</td>
-              <td>AIDS</td>
-              <td>TBC</td>
-              <td>MALARIA</td>
-              <td>Total ATM</td>
+              <td>Terduga Tuberkulosis</td>
+              <td>Berisiko HIV</td>
+              <td>Tuberkulosis</td>
+              <td>ODHIV</td>
+              <td>Malaria</td>
+              <td>Total KKN</td>
               <td>AIDS</td>
               <td>TBC</td>
               <td>MALARIA</td>
@@ -210,17 +209,26 @@
                 {{ rupiah(props.row.ByUPTD.TotalATM) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByOther.AIDS) }}
+                {{ rupiah(props.row.ByKKN.SuspectedTBC) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByOther.TBC) }}
+                {{ rupiah(props.row.ByKKN.RiskHIV) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByOther.Malaria) }}
+                {{ rupiah(props.row.ByKKN.TBC) }}
               </q-td>
 
               <q-td>
-                {{ rupiah(props.row.ByOther.TotalATM) }}
+                {{ rupiah(props.row.ByKKN.ODHIV) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.ByKKN.ODHIV) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.ByKKN.TotalKKN) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.DiffATMAtKKN) }}
               </q-td>
               <q-td>
                 {{ rupiah(props.row.GrandTotal) }}
