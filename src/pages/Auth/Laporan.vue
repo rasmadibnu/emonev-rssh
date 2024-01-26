@@ -7,9 +7,10 @@
         <td colspan="4" class="text-center">
           UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
         </td>
-        <td colspan="6" class="text-center">KKN ATM</td>
-        <td rowspan="2">Selisih Terhadap ATM by UTPD</td>
-        <td rowspan="2">Grand Total</td>
+        <td colspan="4" class="text-center">
+          5 Nomenklatur PP ATM (11,12,40,41,42)
+        </td>
+        <td rowspan="2">Total ATM diluar 5KKN</td>
         <td rowspan="2">Total APBD Dinas Kesehatan</td>
         <td rowspan="2">Total APBD Kota/Kabupaten</td>
         <td rowspan="2">Total APBD Bidang Kesehatan</td>
@@ -54,28 +55,18 @@
           {{ data.ByUPTD.TotalATM }}
         </td>
         <q-td>
-          {{ data.ByKKN.SuspectedTBC }}
-        </q-td>
-        <q-td>
-          {{ data.ByKKN.RiskHIV }}
+          {{ data.ByKKN.AIDS }}
         </q-td>
         <q-td>
           {{ data.ByKKN.TBC }}
         </q-td>
-
         <q-td>
-          {{ data.ByKKN.ODHIV }}
+          {{ data.ByKKN.Malaria }}
         </q-td>
         <q-td>
-          {{ data.ByKKN.ODHIV }}
-        </q-td>
-        <q-td>
-          {{ data.ByKKN.TotalKKN }}
+          {{ data.ByKKN.TotalATM }}
         </q-td>
         <q-td> {{ data.DiffATMAtKKN }} </q-td>
-        <td>
-          {{ data.GrandTotal }}
-        </td>
         <td>
           {{ data.APBD_ByDinkes }}
         </td>
@@ -158,9 +149,10 @@
               <td colspan="4" class="text-center">
                 UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
               </td>
-              <td colspan="6" class="text-center">KKN ATM</td>
-              <td rowspan="2">Selisih Terhadap ATM by UTPD</td>
-              <td rowspan="2">Grand Total</td>
+              <td colspan="4" class="text-center">
+                5 Nomenklatur PP ATM (11,12,40,41,42)
+              </td>
+              <td rowspan="2">Total ATM diluar 5KKN</td>
               <td rowspan="2">Total APBD Dinas Kesehatan</td>
               <td rowspan="2">Total APBD Kota/Kabupaten</td>
               <td rowspan="2">Total APBD Bidang Kesehatan</td>
@@ -177,12 +169,10 @@
               <td>TBC</td>
               <td>MALARIA</td>
               <td>Total ATM</td>
-              <td>Terduga Tuberkulosis</td>
-              <td>Berisiko HIV</td>
-              <td>Tuberkulosis</td>
-              <td>ODHIV</td>
-              <td>Malaria</td>
-              <td>Total KKN</td>
+              <td>AIDS</td>
+              <td>TBC</td>
+              <td>MALARIA</td>
+              <td>Total ATM</td>
               <td>AIDS</td>
               <td>TBC</td>
               <td>MALARIA</td>
@@ -209,29 +199,19 @@
                 {{ rupiah(props.row.ByUPTD.TotalATM) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByKKN.SuspectedTBC) }}
-              </q-td>
-              <q-td>
-                {{ rupiah(props.row.ByKKN.RiskHIV) }}
+                {{ rupiah(props.row.ByKKN.AIDS) }}
               </q-td>
               <q-td>
                 {{ rupiah(props.row.ByKKN.TBC) }}
               </q-td>
-
               <q-td>
-                {{ rupiah(props.row.ByKKN.ODHIV) }}
+                {{ rupiah(props.row.ByKKN.Malaria) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByKKN.ODHIV) }}
-              </q-td>
-              <q-td>
-                {{ rupiah(props.row.ByKKN.TotalKKN) }}
+                {{ rupiah(props.row.ByKKN.TotalATM) }}
               </q-td>
               <q-td>
                 {{ rupiah(props.row.DiffATMAtKKN) }}
-              </q-td>
-              <q-td>
-                {{ rupiah(props.row.GrandTotal) }}
               </q-td>
               <q-td>
                 {{ rupiah(props.row.APBD_ByDinkes) }}
