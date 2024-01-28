@@ -237,9 +237,10 @@ import {
   flushChilds,
 } from "src/helper/fields.js";
 import * as XLSX from "xlsx";
+import VxIcon from "src/components/VxIcon.vue";
 
 export default defineComponent({
-  components: { TRInput },
+  components: { TRInput, VxIcon },
   props: ["user"],
   setup() {
     const auth = useAuthStore();
@@ -406,10 +407,12 @@ export default defineComponent({
             });
 
             data.forEach((e) => {
-              const findCode = this.fields.find((f) => f.Code == e.__EMPTY);
+              const findCode = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey]
+              );
               if (findCode) {
-                if (e.__EMPTY_3) {
-                  findCode.Value = e.__EMPTY_3;
+                if (e[this.config_excel.AnggaranKey]) {
+                  findCode.Value = e[this.config_excel.AnggaranKey];
                 }
               }
             });

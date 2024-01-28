@@ -243,9 +243,10 @@ import {
   flushChilds,
 } from "src/helper/fields.js";
 import * as XLSX from "xlsx";
+import VxIcon from "src/components/VxIcon.vue";
 
 export default defineComponent({
-  components: { TRInput },
+  components: { TRInput, VxIcon },
   props: ["user"],
   setup() {
     const auth = useAuthStore();

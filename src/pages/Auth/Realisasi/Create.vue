@@ -3,7 +3,7 @@
     <div class="tw-text-3xl tw-mb-4">Buat Realisasi</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
-        Anggaran APBD Kab/Kota
+        Realisasi APBD Kab/Kota
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="submit" ref="myForm">
@@ -11,7 +11,7 @@
             <tbody>
               <tr class="q-tr--no-hover">
                 <td><div class="">-</div></td>
-                <td><div class="">Pilih Tahun Realisasi</div></td>
+                <td><div class="">Pilih Tahun Anggaran</div></td>
                 <td class="md:tw-block tw-hidden">
                   <q-select
                     dense

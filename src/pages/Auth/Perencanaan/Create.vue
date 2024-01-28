@@ -3,7 +3,7 @@
     <div class="tw-text-3xl tw-mb-4">Buat Dokumen Perencanaan</div>
     <q-card flat>
       <q-card-section class="text-primary tw-font-bold">
-        Anggaran APBD Kab/Kota
+        Dokumen Perencanaan
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="submit" ref="myForm">
