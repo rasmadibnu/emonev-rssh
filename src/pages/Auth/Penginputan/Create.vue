@@ -166,12 +166,12 @@
                       accept=".xlsx"
                       outlined
                       v-model="excel"
-                      label="File"
+                      label="Upload"
                       :loading="loadingUpload"
                       @update:model-value="onUpload"
                     >
                       <template #prepend>
-                        <vx-icon iconName="DocumentUpload" :size="20" />
+                        <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
                     </q-file>
                   </td>
@@ -182,12 +182,12 @@
                       accept=".xlsx"
                       outlined
                       v-model="excel"
-                      label="File"
+                      label="Upload"
                       :loading="loadingUpload"
                       @update:model-value="onUpload"
                     >
                       <template #prepend>
-                        <vx-icon iconName="DocumentUpload" :size="20" />
+                        <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
                     </q-file>
                   </td>

@@ -172,12 +172,12 @@
                       accept=".xlsx"
                       outlined
                       v-model="excel"
-                      label="File"
+                      label="Upload"
                       :loading="loadingUpload"
                       @update:model-value="onUpload"
                     >
                       <template #prepend>
-                        <vx-icon iconName="DocumentUpload" :size="20" />
+                        <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
                     </q-file>
                   </td>
@@ -188,12 +188,12 @@
                       accept=".xlsx"
                       outlined
                       v-model="excel"
-                      label="File"
+                      label="Upload"
                       :loading="loadingUpload"
                       @update:model-value="onUpload"
                     >
                       <template #prepend>
-                        <vx-icon iconName="DocumentUpload" :size="20" />
+                        <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
                     </q-file>
                   </td>
@@ -421,10 +421,12 @@ export default defineComponent({
             });
 
             data.forEach((e) => {
-              const findCode = this.fields.find((f) => f.Code == e.__EMPTY);
+              const findCode = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey]
+              );
               if (findCode) {
-                if (e.__EMPTY_3) {
-                  findCode.Value = e.__EMPTY_3;
+                if (e[this.config_excel.AnggaranKey]) {
+                  findCode.Value = e[this.config_excel.AnggaranKey];
                 }
               }
             });

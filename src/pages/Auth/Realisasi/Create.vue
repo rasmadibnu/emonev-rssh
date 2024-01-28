@@ -156,6 +156,44 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
+
+              <template v-if="year">
+                <tr class="q-tr--no-hover">
+                  <td>Upload Excel</td>
+                  <td></td>
+                  <td class="md:tw-block tw-hidden" style="height: 100%">
+                    <q-file
+                      accept=".xlsx"
+                      outlined
+                      v-model="excel"
+                      label="Upload"
+                      :loading="loadingUpload"
+                      @update:model-value="onUpload"
+                    >
+                      <template #prepend>
+                        <vx-icon iconName="DocumentUpload" :size="22" />
+                      </template>
+                    </q-file>
+                  </td>
+                </tr>
+                <tr class="tw-table-row md:tw-hidden">
+                  <td colspan="100%">
+                    <q-file
+                      accept=".xlsx"
+                      outlined
+                      v-model="excel"
+                      label="Upload"
+                      :loading="loadingUpload"
+                      @update:model-value="onUpload"
+                    >
+                      <template #prepend>
+                        <vx-icon iconName="DocumentUpload" :size="22" />
+                      </template>
+                    </q-file>
+                  </td>
+                </tr>
+              </template>
+
               <TRInput
                 v-for="(inp, index) in fields"
                 v-model="inp.Value"
@@ -198,9 +236,11 @@ import {
   assignErrorsToFields,
   flushChilds,
 } from "src/helper/fields.js";
+import * as XLSX from "xlsx";
+import VxIcon from "src/components/VxIcon.vue";
 
 export default defineComponent({
-  components: { TRInput },
+  components: { TRInput, VxIcon },
   props: ["user"],
   setup() {
     const auth = useAuthStore();
@@ -214,6 +254,9 @@ export default defineComponent({
       province: ref(null),
       fields: ref([]),
       loading: ref(false),
+      excel: ref(null),
+      config_excel: ref({}),
+      loadingUpload: ref(false),
 
       flattenFields,
       assignErrorsToFields,
@@ -222,12 +265,18 @@ export default defineComponent({
   },
   mounted() {
     this.getYear();
+    this.getConfig();
     if (this.auth.provinces.length > 1) {
       this.auth.province = null;
       this.$refs.myForm.reset();
     }
   },
   methods: {
+    getConfig() {
+      this.$api.get("/config-excel").then((res) => {
+        this.config_excel = res.data.data;
+      });
+    },
     getYear() {
       this.loading = true;
       this.$api
@@ -335,6 +384,47 @@ export default defineComponent({
           color: "negative",
         });
         this.loading = false;
+      }
+    },
+
+    onUpload() {
+      this.loadingUpload = true;
+      if (this.excel) {
+        const reader = new FileReader();
+        const myPromise = new Promise((resolve, reject) => {
+          reader.onload = (e) => {
+            /* Parse data */
+            const bstr = e.target.result;
+            const wb = XLSX.read(bstr, { type: "binary" });
+            /* Get first worksheet */
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            /* Convert array of arrays */
+            const data = XLSX.utils.sheet_to_json(ws, {
+              raw: true,
+              range: this.config_excel.Merge,
+              defval: null,
+            });
+
+            data.forEach((e) => {
+              const findCode = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey]
+              );
+              if (findCode) {
+                if (e[this.config_excel.RealisasiKey]) {
+                  findCode.Value = e[this.config_excel.RealisasiKey];
+                }
+              }
+            });
+          };
+
+          reader.readAsBinaryString(this.excel);
+          resolve();
+        });
+
+        myPromise.then((res) => {
+          this.loadingUpload = false;
+        });
       }
     },
   },
