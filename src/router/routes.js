@@ -64,6 +64,27 @@ const routes = [
         name: "penginputan-edit",
       },
 
+      {
+        path: "realisasi",
+        component: () => import("pages/Auth/Realisasi/Index.vue"),
+        name: "realisasi-index",
+      },
+      {
+        path: "realisasi/create",
+        component: () => import("pages/Auth/Realisasi/Create.vue"),
+        name: "realisasi-create",
+      },
+      {
+        path: "realisasi/:id/history",
+        component: () => import("pages/Auth/Realisasi/History.vue"),
+        name: "realisasi-history",
+      },
+      {
+        path: "realisasi/:id/edit",
+        component: () => import("pages/Auth/Realisasi/Edit.vue"),
+        name: "realisasi-edit",
+      },
+
       // Survey
       {
         path: "survey",
