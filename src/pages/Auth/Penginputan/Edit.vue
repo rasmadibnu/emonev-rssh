@@ -259,6 +259,7 @@ export default defineComponent({
       list_regency: ref([]),
       regency: ref(null),
       fields: ref([]),
+      values: ref([]),
       loading: ref(false),
       excel: ref(null),
       config_excel: ref({}),
@@ -270,8 +271,11 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.getData();
-    this.getYear();
+    this.getData().then((year) => {
+      this.getYear().then(() => {
+        this.getForm(year);
+      });
+    });
     this.getConfig();
   },
   methods: {
@@ -292,9 +296,11 @@ export default defineComponent({
           this.auth.province = res.data.data.RegencyCity.ProvinceID;
           this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
           this.list_regency = this.auth.regency;
-          this.fields = res.data.data.FieldResponse.map((e) => {
-            return { Value: e.Value, ResponseFieldID: e.ID, ...e.Field };
-          }).sort((a, b) => a.SortOrder - b.SortOrder);
+          this.values = res.data.data.FieldResponse;
+          // this.fields = res.data.data.FieldResponse.map((e) => {
+          //   return { Value: e.Value, ResponseFieldID: e.ID, ...e.Field };
+          // }).sort((a, b) => a.SortOrder - b.SortOrder);
+          return res.data.data.FormID;
         })
         .catch((err) => {
           console.log(err);
@@ -302,7 +308,7 @@ export default defineComponent({
     },
     getYear() {
       this.loading = true;
-      this.$api
+      return this.$api
         .get('/forms?Limit=-&Filters={"Type": "budget"}&Sort=year asc')
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
@@ -350,15 +356,29 @@ export default defineComponent({
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
-        .get("/forms/" + year + '/budget?Relation={"Name": "Fields"}')
+        .get(
+          "/forms/" +
+            year +
+            '/budget?Relation={"Name": "Fields.Childs.Childs.Parent"}'
+        )
         .then((res) => {
-          this.fields = res.data.data.Fields.Fields.sort(
-            (a, b) => a.SortOrder - b.SortOrder
-          );
+          this.fields = [];
+          res.data.data.Fields.map((field) => {
+            const responseField = this.values.find((rf) => {
+              return rf.FieldID == field.ID;
+            });
+            console.log(responseField);
+            if (responseField) {
+              this.fields.push({ ...field, Value: responseField.Value });
+            } else {
+              this.fields.push({ ...field, Value: "0" });
+            }
+          });
           this.loading = false;
           return res;
         })
         .then((res) => {
+          this.fields.sort((a, b) => a.SortOrder - b.SortOrder);
           this.$refs.myForm.resetValidation();
         })
         .catch((err) => {
