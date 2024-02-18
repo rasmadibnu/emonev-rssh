@@ -107,7 +107,7 @@
           label-key="Name"
           children-key="Childs"
           default-expand-all
-          tickStrategy="leaf"
+          tickStrategy="strict"
         />
       </q-card-section>
       <q-card-actions align="right">
@@ -383,7 +383,7 @@ export default defineComponent({
       for (const child of childs) {
         ids.push(child.ID);
         if (child.Childs.length > 0) {
-          ids = ids.concat(getAllIds(child.Childs));
+          ids = ids.concat(this.getAllIds(child.Childs));
         }
       }
       return ids;

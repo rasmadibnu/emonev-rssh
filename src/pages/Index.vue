@@ -57,6 +57,23 @@
                   ></apex>
                 </q-card-section>
               </q-card>
+              <q-card flat>
+                <q-card-section class="text-primary tw-text-xl">
+                  Rekapitulasi Anggaran 5 KKN
+                </q-card-section>
+                <q-card-section
+                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
+                >
+                  <apex
+                    type="bar"
+                    height="800"
+                    class="tw-w-full"
+                    :options="chartOptionsAmountKKN"
+                    :series="seriesAmountKKN"
+                    ref="chartAmountKKN"
+                  ></apex>
+                </q-card-section>
+              </q-card>
             </div>
           </q-tab-panel>
 
@@ -1539,6 +1556,106 @@ export default defineComponent({
           },
         },
       },
+      seriesAmountKKN: [
+        {
+          name: "KKN ATM",
+          data: [],
+        },
+      ],
+      chartOptionsAmountKKN: {
+        chart: {
+          type: "bar",
+          id: "chartAmountKKN",
+          toolbar: {
+            show: true,
+            tools: {
+              download: '<img src="export.png" width="20">',
+              selection: true,
+              zoom: '<img src="search.png" width="20">',
+              zoomin: '<img src="zoomin.png" width="20">',
+              zoomout: '<img src="zoomout.png" width="20">',
+              pan: true,
+              reset: '<img src="reset.png" width="20">',
+            },
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 480, // defines breakpoint for mobile devices
+            options: {
+              // set chart options for mobile devices
+              chart: {
+                width: "1000", // make chart width 100% on mobile
+              },
+            },
+          },
+          {
+            breakpoint: 600, // defines breakpoint for mobile devices
+            options: {
+              // set chart options for mobile devices
+              chart: {
+                width: "700", // make chart width 100% on mobile
+              },
+            },
+          },
+        ],
+        colors: ["#243763"],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            endingShape: "rounded",
+          },
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (value) {
+            return suffix(value);
+          },
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
+          },
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        yaxis: {
+          tickPlacement: "on",
+        },
+        xaxis: {
+          labels: {
+            formatter: function (value) {
+              return suffix(value);
+            },
+          },
+        },
+        fill: {
+          opacity: 1,
+        },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (value) {
+              return suffix(value);
+            },
+          },
+        },
+      },
       seriesVillageCount: [
         {
           name: "Jumlah",
@@ -1892,6 +2009,7 @@ export default defineComponent({
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
           this.seriesAmount[0].data = res.data.data.map((e) => e.budget);
+          this.seriesAmountKKN[0].data = res.data.data.map((e) => e.kkn);
           this.seriesPrecentage[0].data = res.data.data.map(
             (e) => e.percentage
           );
@@ -1903,6 +2021,12 @@ export default defineComponent({
           });
 
           ApexCharts.getChartByID("chartPrecentage").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((e) => e.name),
+            },
+          });
+
+          ApexCharts.getChartByID("chartAmountKKN").updateOptions({
             xaxis: {
               categories: res.data.data.map((e) => e.name),
             },

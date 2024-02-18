@@ -5,7 +5,8 @@
         <td rowspan="2">Provinsi</td>
         <td rowspan="2">Kabupaten / Kota</td>
         <td colspan="4" class="text-center">
-          UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
+          UPTD Dinas Kesehatan TA
+          {{ list_year.find((e) => e.value == year)?.label }} (15 Sub Kegiatan)
         </td>
         <td colspan="4" class="text-center">
           5 Nomenklatur PP ATM (11,12,40,41,42)
@@ -95,10 +96,10 @@
     </tbody>
   </table>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Laporan</div>
+    <div class="tw-text-3xl tw-mb-4">Laporan Anggaran</div>
     <q-card flat>
       <q-card-section>
-        <div class="tw-text-xl tw-mb-4">Rekapitulasi Belanja ATM</div>
+        <div class="tw-text-xl tw-mb-4">Rekapitulasi Anggaran Belanja ATM</div>
         <div class="tw-flex tw-justify-between tw-items-center tw-w-full">
           <q-input
             dense
@@ -123,7 +124,7 @@
             <q-select
               dense
               filled
-              v-model="year"
+              v-model="year_selected"
               label="Pilih Tahun"
               :options="list_year"
               @update:model-value="getRecap"
@@ -147,7 +148,9 @@
               <td rowspan="2">Provinsi</td>
               <td rowspan="2">Kabupaten / Kota</td>
               <td colspan="4" class="text-center">
-                UPTD Dinas Kesehatan TA 2022 (15 Sub Kegiatan)
+                UPTD Dinas Kesehatan TA
+                {{ list_year.find((e) => e.value == year_selected)?.label }} (15
+                Sub Kegiatan)
               </td>
               <td colspan="4" class="text-center">
                 5 Nomenklatur PP ATM (11,12,40,41,42)
@@ -245,17 +248,22 @@
   </q-page>
 </template>
 <script>
+import { storeToRefs } from "pinia";
 import VxIcon from "src/components/VxIcon.vue";
+import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 import * as XLSX from "xlsx";
+
 export default defineComponent({
   props: ["user"],
   components: { VxIcon },
   setup() {
+    const auth = useAuthStore();
+    const { year_selected } = storeToRefs(auth);
     return {
+      year_selected,
       loading: ref(false),
 
-      year: ref(null),
       list_year: ref([]),
 
       recap: ref([]),
@@ -266,8 +274,8 @@ export default defineComponent({
   mounted() {
     this.getYear().then((res) => {
       let nowYear = new Date().getFullYear();
-      this.year = this.list_year.find((e) => e.label == nowYear).value;
-      this.getRecap(this.year);
+      this.year_selected = this.list_year.find((e) => e.label == nowYear).value;
+      this.getRecap(this.year_selected);
     });
   },
   methods: {
@@ -307,7 +315,9 @@ export default defineComponent({
     },
 
     exportExcel() {
-      let year = this.list_year.find((e) => e.value == this.year).label;
+      let year = this.list_year.find(
+        (e) => e.value == this.year_selected
+      ).label;
 
       const table = document.getElementById("table2");
       const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet 1" });

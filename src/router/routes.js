@@ -127,9 +127,15 @@ const routes = [
       },
 
       {
-        path: "laporan",
-        component: () => import("src/pages/Auth/Laporan.vue"),
-        name: "laporan",
+        path: "laporan/anggaran",
+        component: () => import("src/pages/Auth/Laporan/Anggaran.vue"),
+        name: "laporan-anggaran",
+      },
+
+      {
+        path: "laporan/realisasi",
+        component: () => import("src/pages/Auth/Laporan/Realisasi.vue"),
+        name: "laporan-realisasi",
       },
 
       // Adminsitrator

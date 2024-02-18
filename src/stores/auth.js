@@ -58,7 +58,7 @@ export const useAuthStore = defineStore("auth", {
       for (const child of childs) {
         ids.push(child);
         if (child.Childs.length > 0) {
-          ids = ids.concat(getAllIds(child.Childs));
+          ids = ids.concat(this.getMenuChild(child.Childs));
         }
       }
       return ids;
@@ -70,8 +70,43 @@ export const useAuthStore = defineStore("auth", {
 
     setMenus() {
       this.menus = [];
-      this.user.Roles.map((e) => {
-        this.menus = this.menus.concat(this.getMenuChild(e.Menus));
+      const raw_menus = [];
+      const menus = [];
+
+      this.user.Roles.forEach((role) => {
+        role?.Menus?.forEach((menu) => {
+          raw_menus.push(menu);
+          const findMenu = menus.findIndex((e) => e.ID === menu.ID);
+          if (findMenu == -1) {
+            menus.push(menu);
+          }
+        });
+      });
+
+      this.raw_menus = raw_menus;
+
+      menus.forEach((item) => {
+        if (item.ParentID === 0) {
+          // If parent_id is 0, it is a top-level item
+          this.menus.push(item);
+        } else {
+          // Find the parent in the organized data
+          const parent = this.menus.find(
+            (parentItem) => parentItem.ID === item.ParentID
+          );
+
+          if (parent) {
+            // If the parent is found, append the item to its children
+
+            if (!parent.Childs) {
+              parent.Childs = [];
+            }
+            const find = parent.Childs.find((child) => child.ID == item.ID);
+            if (!find) {
+              parent.Childs.push(item);
+            }
+          }
+        }
       });
 
       this.menus = this.menus.sort((a, b) => a.Ord - b.Ord);

@@ -145,7 +145,7 @@
             class="tw-px-8 tw-text-gray-400"
             v-for="menu in authStore.menus.filter(
               (e) => e.Code == 'administrator'
-            )"
+            )[0].Childs"
             v-bind="menu"
             v-bind:key="menu"
           />

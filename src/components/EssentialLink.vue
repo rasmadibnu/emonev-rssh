@@ -8,12 +8,10 @@
       <q-item-label>{{ Name }}</q-item-label>
     </q-item-section>
   </q-item>
-  <q-expansion-item v-else class="!tw-px-0" header-class="tw-px-6">
+  <q-expansion-item v-else class="!tw-px-2" header-class="tw-px-6">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-avatar>
-          <vx-icon :iconName="Icon" :size="24" />
-        </q-avatar>
+        <vx-icon :iconName="Icon" :size="24" />
       </q-item-section>
 
       <q-item-section class="tw-pl-2">
@@ -22,7 +20,7 @@
     </template>
     <q-list>
       <essential-link
-        class="tw-px-16"
+        class="tw-px-10"
         v-for="child in Childs"
         v-bind="child"
         v-bind:key="child"
@@ -41,6 +39,11 @@ export default defineComponent({
   props: {
     Name: {
       type: String,
+      required: true,
+    },
+
+    ParentID: {
+      type: Number,
       required: true,
     },
 
