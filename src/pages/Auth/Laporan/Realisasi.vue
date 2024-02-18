@@ -273,8 +273,12 @@ export default defineComponent({
   },
   mounted() {
     this.getYear().then((res) => {
-      let nowYear = new Date().getFullYear();
-      this.year_selected = this.list_year.find((e) => e.label == nowYear).value;
+      if (!this.year_selected) {
+        let nowYear = new Date().getFullYear();
+        this.year_selected = this.list_year.find(
+          (e) => e.label == nowYear
+        ).value;
+      }
       this.getRecap(this.year_selected);
     });
   },
