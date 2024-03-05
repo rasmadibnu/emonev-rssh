@@ -102,6 +102,23 @@ const routes = [
         name: "survey-edit",
       },
 
+      // Survey Realisasi
+      {
+        path: "survey-realisasi",
+        component: () => import("pages/Auth/SurveyRealisasi/Index.vue"),
+        name: "survey-realisasi-index",
+      },
+      {
+        path: "survey-realisasi/create",
+        component: () => import("pages/Auth/SurveyRealisasi/Create.vue"),
+        name: "survey-realisasi-create",
+      },
+      {
+        path: "survey-realisasi/:id/edit",
+        component: () => import("pages/Auth/SurveyRealisasi/Edit.vue"),
+        name: "survey-realisasi-edit",
+      },
+
       // Perencanaan
       {
         path: "perencanaan",

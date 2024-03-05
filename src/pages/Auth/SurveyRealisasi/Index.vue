@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-p-6">
-    <div class="tw-text-3xl tw-mb-4">Kemitraan</div>
+    <div class="tw-text-3xl tw-mb-4">Realisasi Kemitraan</div>
     <q-card flat>
       <q-card-section>
         <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
@@ -34,7 +34,7 @@
             outline
             no-caps
             color="primary"
-            :to="{ name: 'survey-create' }"
+            :to="{ name: 'survey-realisasi-create' }"
           >
             <vx-icon iconName="AddCircle" class="tw-mr-2" :size="20" />
             Tambah
@@ -400,14 +400,14 @@ export default defineComponent({
       if (this.search) {
         params.append(
           "filters",
-          `[[["Form.type", "survey"]` +
+          `[[["Form.type", "survey-realization"]` +
             (this.year ? ',["AND"],["Form.year", "' + year.label + '"]' : "") +
             `],["AND"],["RegencyCity.Province.long_name","like","${this.search}"],["OR"],["RegencyCity.Province.short_name","like","${this.search}"],["OR"],["RegencyCity.name","like","${this.search}"],["OR"],["User.name","like","${this.search}"],["OR"],["User.username","like","${this.search}"]]`
         );
       } else {
         params.append(
           "filters",
-          '[["Form.type", "survey"]' +
+          '[["Form.type", "survey-realization"]' +
             (this.year ? ',["AND"],["Form.year", "' + year.label + '"]' : "") +
             "]"
         );
@@ -430,7 +430,9 @@ export default defineComponent({
     getYear() {
       this.loading = true;
       this.$api
-        .get('/forms?Limit=-&Filters={"Type": "survey"}&Sort=year asc')
+        .get(
+          '/forms?Limit=-&Filters={"Type": "survey-realization"}&Sort=year asc'
+        )
         .then((res) => {
           this.list_year = res.data.data.Rows.map((year) => {
             return { label: year.Year, value: year.ID };
