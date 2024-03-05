@@ -68,7 +68,7 @@
                       v-ripple
                       class="text-primary"
                       :to="{
-                        name: 'survey-edit',
+                        name: 'survey-realisasi-edit',
                         params: { id: props.row.ID },
                       }"
                     >

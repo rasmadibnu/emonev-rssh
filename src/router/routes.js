@@ -155,6 +155,12 @@ const routes = [
         name: "laporan-realisasi",
       },
 
+      {
+        path: "laporan/kemitraan",
+        component: () => import("src/pages/Auth/Laporan/Kemitraan.vue"),
+        name: "laporan-kemitraan",
+      },
+
       // Adminsitrator
 
       {

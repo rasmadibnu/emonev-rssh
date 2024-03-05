@@ -169,7 +169,7 @@
               color="primary"
               unelevated
               label="Kembali"
-              :to="{ name: 'survey-index' }"
+              :to="{ name: 'survey-realisasi-index' }"
               no-caps
               :loading="loading"
             />
