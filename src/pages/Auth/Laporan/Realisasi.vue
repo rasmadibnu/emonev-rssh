@@ -6,7 +6,7 @@
         <td rowspan="2">Kabupaten / Kota</td>
         <td colspan="4" class="text-center">
           UPTD Dinas Kesehatan TA
-          {{ list_year.find((e) => e.value == year)?.label }} (15 Sub Kegiatan)
+          {{ list_year.find((e) => e.value == year)?.label }} (18 Sub Kegiatan)
         </td>
         <td colspan="4" class="text-center">
           5 Nomenklatur PP ATM (11,12,40,41,42)
@@ -149,7 +149,7 @@
               <td rowspan="2">Kabupaten / Kota</td>
               <td colspan="4" class="text-center">
                 UPTD Dinas Kesehatan TA
-                {{ list_year.find((e) => e.value == year_selected)?.label }} (15
+                {{ list_year.find((e) => e.value == year_selected)?.label }} (18
                 Sub Kegiatan)
               </td>
               <td colspan="4" class="text-center">

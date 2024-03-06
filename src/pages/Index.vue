@@ -1558,7 +1558,11 @@ export default defineComponent({
       },
       seriesAmountKKN: [
         {
-          name: "KKN ATM",
+          name: "Anggaran",
+          data: [],
+        },
+        {
+          name: "Realisasi",
           data: [],
         },
       ],
@@ -1599,7 +1603,7 @@ export default defineComponent({
             },
           },
         ],
-        colors: ["#243763"],
+        colors: ["#FF6E31", "#243763"],
         plotOptions: {
           bar: {
             horizontal: true,
@@ -2010,6 +2014,9 @@ export default defineComponent({
         .then((res) => {
           this.seriesAmount[0].data = res.data.data.map((e) => e.budget);
           this.seriesAmountKKN[0].data = res.data.data.map((e) => e.kkn);
+          this.seriesAmountKKN[1].data = res.data.data.map(
+            (e) => e.kkn_realization
+          );
           this.seriesPrecentage[0].data = res.data.data.map(
             (e) => e.percentage
           );
