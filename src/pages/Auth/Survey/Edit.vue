@@ -228,7 +228,6 @@ export default defineComponent({
         this.getForm(this.year).then((form) => {
           findItemById(this.forms, fields);
           this.fields = this.forms;
-          console.log(this.fields);
         });
       });
     });

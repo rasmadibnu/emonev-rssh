@@ -100,7 +100,6 @@ export function findItemById(array, searchArray) {
           if (val.length > 0) {
             val.forEach((e, idx) => {
               const find = temp.find((temp) => temp.Label == e.Label);
-              console.log(find);
               current.Childs.push({
                 ...find,
                 Value: e.Value,

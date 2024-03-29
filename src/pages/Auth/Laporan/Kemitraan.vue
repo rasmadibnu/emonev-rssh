@@ -21,6 +21,7 @@
         <td colspan="3" class="text-center">Dinas Pendidikan</td>
         <td colspan="3" class="text-center">Dinas Tenaga Kerja</td>
         <td colspan="3" class="text-center">Dinas Pemdes</td>
+        <td colspan="3" class="text-center">Dinas Lainnya</td>
       </tr>
       <tr class="text-center">
         <td>Anggaran</td>
@@ -30,6 +31,9 @@
         <td>Realisasi</td>
         <td style="border-right: 1px solid black">Persentase</td>
 
+        <td>Anggaran</td>
+        <td>Realisasi</td>
+        <td>Persentase</td>
         <td>Anggaran</td>
         <td>Realisasi</td>
         <td>Persentase</td>
@@ -116,6 +120,15 @@
         <q-td>
           {{ parseFloat(data.PemdesDepartment.Precentage).toFixed(2) }}%
         </q-td>
+        <q-td>
+          {{ rupiah(data.OtherDepartment.Budget) }}
+        </q-td>
+        <q-td>
+          {{ rupiah(data.OtherDepartment.Realization) }}
+        </q-td>
+        <q-td>
+          {{ parseFloat(data.OtherDepartment.Precentage).toFixed(2) }}%
+        </q-td>
       </tr>
     </tbody>
   </table>
@@ -188,6 +201,7 @@
               <td colspan="3" class="text-center">Dinas Pendidikan</td>
               <td colspan="3" class="text-center">Dinas Tenaga Kerja</td>
               <td colspan="3" class="text-center">Dinas Pemdes</td>
+              <td colspan="3" class="text-center">Dinas Lainnya</td>
             </tr>
             <tr class="text-center">
               <td>Anggaran</td>
@@ -197,6 +211,9 @@
               <td>Realisasi</td>
               <td style="border-right: 1px solid black">Persentase</td>
 
+              <td>Anggaran</td>
+              <td>Realisasi</td>
+              <td>Persentase</td>
               <td>Anggaran</td>
               <td>Realisasi</td>
               <td>Persentase</td>
@@ -289,6 +306,17 @@
               <q-td>
                 {{
                   parseFloat(props.row.PemdesDepartment.Precentage).toFixed(2)
+                }}%
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.OtherDepartment.Budget) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.OtherDepartment.Realization) }}
+              </q-td>
+              <q-td>
+                {{
+                  parseFloat(props.row.OtherDepartment.Precentage).toFixed(2)
                 }}%
               </q-td>
             </q-tr>
