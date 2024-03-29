@@ -13,7 +13,7 @@
         >
           Dana CSR
         </td>
-        <td colspan="21">SKPD Non Dinkes</td>
+        <td colspan="21" align="center">SKPD Non Dinkes</td>
       </tr>
       <tr>
         <td colspan="3" class="text-center">Dinas Sosial</td>
@@ -60,71 +60,71 @@
           {{ data.RegencyCity }}
         </q-td>
         <q-td>
-          {{ rupiah(data.Village.Budget) }}
+          {{ data.Village.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.Village.Realization) }}
+          {{ data.Village.Realization }}
         </q-td>
         <q-td> {{ parseFloat(data.Village.Precentage).toFixed(2) }}% </q-td>
         <q-td>
-          {{ rupiah(data.CSR.Budget) }}
+          {{ data.CSR.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.CSR.Realization) }}
+          {{ data.CSR.Realization }}
         </q-td>
         <q-td style="border-right: 1px solid black">
           {{ parseFloat(data.CSR.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.SocialDepartment.Budget) }}
+          {{ data.SocialDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.SocialDepartment.Realization) }}
+          {{ data.SocialDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.SocialDepartment.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.PUDepartment.Budget) }}
+          {{ data.PUDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.PUDepartment.Realization) }}
+          {{ data.PUDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.PUDepartment.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.EduDepartment.Budget) }}
+          {{ data.EduDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.EduDepartment.Realization) }}
+          {{ data.EduDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.EduDepartment.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.NakerDepartment.Budget) }}
+          {{ data.NakerDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.NakerDepartment.Realization) }}
+          {{ data.NakerDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.NakerDepartment.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.PemdesDepartment.Budget) }}
+          {{ data.PemdesDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.PemdesDepartment.Realization) }}
+          {{ data.PemdesDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.PemdesDepartment.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
-          {{ rupiah(data.OtherDepartment.Budget) }}
+          {{ data.OtherDepartment.Budget }}
         </q-td>
         <q-td>
-          {{ rupiah(data.OtherDepartment.Realization) }}
+          {{ data.OtherDepartment.Realization }}
         </q-td>
         <q-td>
           {{ parseFloat(data.OtherDepartment.Precentage).toFixed(2) }}%
