@@ -8,7 +8,7 @@
           UPTD Dinas Kesehatan TA
           {{ list_year.find((e) => e.value == year)?.label }} (18 Sub Kegiatan)
         </td>
-        <td colspan="4" class="text-center">
+        <td colspan="6" class="text-center">
           5 Nomenklatur PP ATM (11,12,40,41,42)
         </td>
         <td rowspan="2">Total ATM diluar 5KKN</td>
@@ -26,9 +26,11 @@
         <td>TBC</td>
         <td>MALARIA</td>
         <td>Total ATM</td>
-        <td>AIDS</td>
-        <td>TBC</td>
-        <td>MALARIA</td>
+        <td>11</td>
+        <td>12</td>
+        <td>40</td>
+        <td>41</td>
+        <td>42</td>
         <td>Total ATM</td>
         <td>AIDS</td>
         <td>TBC</td>
@@ -56,13 +58,17 @@
           {{ data.ByUPTD.TotalATM }}
         </td>
         <q-td>
-          {{ data.ByKKN.AIDS }}
+          {{ data.ByKKN?.Detail?.KKN_11 }}
         </q-td>
         <q-td>
-          {{ data.ByKKN.TBC }}
+          {{ data.ByKKN?.Detail?.KKN_12 }}
         </q-td>
         <q-td>
-          {{ data.ByKKN.Malaria }}
+          {{ data.ByKKN?.Detail?.KKN_40 }}
+        </q-td>
+        <q-td> {{ data.ByKKN?.Detail?.KKN_41 }} </q-td>
+        <q-td>
+          {{ data.ByKKN?.Detail?.KKN_42 }}
         </q-td>
         <q-td>
           {{ data.ByKKN.TotalATM }}
@@ -152,7 +158,7 @@
                 {{ list_year.find((e) => e.value == year_selected)?.label }} (18
                 Sub Kegiatan)
               </td>
-              <td colspan="4" class="text-center">
+              <td colspan="6" class="text-center">
                 5 Nomenklatur PP ATM (11,12,40,41,42)
               </td>
               <td rowspan="2">Total ATM diluar 5KKN</td>
@@ -172,9 +178,11 @@
               <td>TBC</td>
               <td>MALARIA</td>
               <td>Total ATM</td>
-              <td>AIDS</td>
-              <td>TBC</td>
-              <td>MALARIA</td>
+              <td>11</td>
+              <td>12</td>
+              <td>40</td>
+              <td>41</td>
+              <td>42</td>
               <td>Total ATM</td>
               <td>AIDS</td>
               <td>TBC</td>
@@ -202,13 +210,19 @@
                 {{ rupiah(props.row.ByUPTD.TotalATM) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByKKN.AIDS) }}
+                {{ rupiah(props.row.ByKKN?.Detail?.KKN_11) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByKKN.TBC) }}
+                {{ rupiah(props.row.ByKKN?.Detail?.KKN_12) }}
               </q-td>
               <q-td>
-                {{ rupiah(props.row.ByKKN.Malaria) }}
+                {{ rupiah(props.row.ByKKN?.Detail?.KKN_40) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.ByKKN?.Detail?.KKN_41) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.ByKKN?.Detail?.KKN_42) }}
               </q-td>
               <q-td>
                 {{ rupiah(props.row.ByKKN.TotalATM) }}
