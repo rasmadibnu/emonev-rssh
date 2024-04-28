@@ -26,11 +26,11 @@
         <td>TBC</td>
         <td>MALARIA</td>
         <td>Total ATM</td>
-        <td>11</td>
-        <td>12</td>
-        <td>40</td>
-        <td>41</td>
-        <td>42</td>
+        <td>11 KKN</td>
+        <td>12 KKN</td>
+        <td>40 KKN</td>
+        <td>41 KKN</td>
+        <td>42 KKN</td>
         <td>Total ATM</td>
         <td>AIDS</td>
         <td>TBC</td>
@@ -178,11 +178,11 @@
               <td>TBC</td>
               <td>MALARIA</td>
               <td>Total ATM</td>
-              <td>11</td>
-              <td>12</td>
-              <td>40</td>
-              <td>41</td>
-              <td>42</td>
+              <td>11 KKN</td>
+              <td>12 KKN</td>
+              <td>40 KKN</td>
+              <td>41 KKN</td>
+              <td>42 KKN</td>
               <td>Total ATM</td>
               <td>AIDS</td>
               <td>TBC</td>
