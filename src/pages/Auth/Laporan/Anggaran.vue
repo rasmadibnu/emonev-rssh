@@ -31,7 +31,7 @@
         <td>40 KKN</td>
         <td>41 KKN</td>
         <td>42 KKN</td>
-        <td>Total ATM</td>
+        <td>Total 5 KKN</td>
         <td>AIDS</td>
         <td>TBC</td>
         <td>MALARIA</td>
@@ -183,7 +183,7 @@
               <td>40 KKN</td>
               <td>41 KKN</td>
               <td>42 KKN</td>
-              <td>Total ATM</td>
+              <td>Total 5 KKN</td>
               <td>AIDS</td>
               <td>TBC</td>
               <td>MALARIA</td>
