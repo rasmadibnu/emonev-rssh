@@ -30,13 +30,12 @@
         <q-input
           v-if="Type == 'currency'"
           filled
-          mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
           :class="[Readonly ? 'tw-w-56' : '']"
           @focus="onFocus"
           @blur="onBlur"
-          :model-value="modelValue"
+          :model-value="formattedValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
           :readonly="Readonly"
@@ -117,10 +116,9 @@
           dense
           filled
           :class="[Readonly ? 'tw-w-56' : '']"
-          mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="modelValue"
+          :model-value="formattedValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -212,10 +210,9 @@
           dense
           filled
           :class="[Readonly ? 'tw-w-56' : '']"
-          mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="modelValue"
+          :model-value="formattedValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -304,10 +301,9 @@
           dense
           filled
           :class="[Readonly ? 'tw-w-56' : '']"
-          mask="###,###,###,###,###,###,###,###,###,###"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="modelValue"
+          :model-value="formattedValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -458,7 +454,7 @@
   </q-dialog>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 
 const props = defineProps({
   ResponseFieldID: Number,
@@ -540,6 +536,17 @@ function updateModelValue(val) {
     emit("onValueEmpty");
   }
 }
+
+const formattedValue = computed(() => {
+  return parseFloat(props.modelValue)
+    ?.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    })
+    .replace("Rp", "");
+});
 
 function onFocus() {
   if (props.Type == "currency" && props.modelValue == "0")

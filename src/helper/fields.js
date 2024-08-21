@@ -18,7 +18,11 @@ export function flattenFields(data) {
     }
 
     if (flattenedItem.Value) {
-      result.push(flattenedItem);
+      if (item.Type === "currency") {
+        result.push({ FieldID: item.ID, Value: item.Value.toString() });
+      } else {
+        result.push(flattenedItem);
+      }
     } else {
       if (
         (item.Type === "radio" || item.Type == "file") &&

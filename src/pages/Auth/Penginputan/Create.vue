@@ -411,6 +411,7 @@ export default defineComponent({
                 (f) => f.Code == e[this.config_excel.CodeKey]
               );
               if (findCode) {
+                console.log(e[this.config_excel.AnggaranKey]);
                 if (e[this.config_excel.AnggaranKey]) {
                   findCode.Value = e[this.config_excel.AnggaranKey];
                 }
