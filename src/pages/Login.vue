@@ -123,7 +123,7 @@ export default defineComponent({
           password: this.password,
         })
         .then((response) => {
-          this.loading = false;
+          this.loading = true;
           localStorage.setItem("token", response.data.data);
           this.authStore.token = response.data.data;
           this.authStore.getUser();

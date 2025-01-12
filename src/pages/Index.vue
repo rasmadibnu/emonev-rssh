@@ -25,23 +25,6 @@
             >
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Rekapitulasi Anggaran ATM
-                </q-card-section>
-                <q-card-section
-                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
-                >
-                  <apex
-                    type="bar"
-                    height="800"
-                    class="tw-w-full"
-                    :options="chartOptionsAmount"
-                    :series="seriesAmount"
-                    ref="chartAmount"
-                  ></apex>
-                </q-card-section>
-              </q-card>
-              <q-card flat>
-                <q-card-section class="text-primary tw-text-xl">
                   Persentase Anggaran ATM Terhadap Bidang Kesehatan
                 </q-card-section>
                 <q-card-section
@@ -54,6 +37,23 @@
                     :options="chartOptionsPrecentage"
                     :series="seriesPrecentage"
                     ref="chartPrecentage"
+                  ></apex>
+                </q-card-section>
+              </q-card>
+              <q-card flat>
+                <q-card-section class="text-primary tw-text-xl">
+                  Rekapitulasi Anggaran ATM
+                </q-card-section>
+                <q-card-section
+                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
+                >
+                  <apex
+                    type="bar"
+                    height="800"
+                    class="tw-w-full"
+                    :options="chartOptionsAmount"
+                    :series="seriesAmount"
+                    ref="chartAmount"
                   ></apex>
                 </q-card-section>
               </q-card>
@@ -1409,7 +1409,7 @@ export default defineComponent({
         dataLabels: {
           enabled: true,
           formatter: function (value) {
-            return suffix(value);
+            return rupiah(value);
           },
           style: {
             fontSize: "10px",
@@ -1451,7 +1451,7 @@ export default defineComponent({
           intersect: false,
           y: {
             formatter: function (value) {
-              return suffix(value);
+              return rupiah(value);
             },
           },
         },

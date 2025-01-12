@@ -35,7 +35,7 @@
           :class="[Readonly ? 'tw-w-56' : '']"
           @focus="onFocus"
           @blur="onBlur"
-          :model-value="formattedValue"
+          :model-value="modelValue"
           @update:model-value="(val) => updateModelValue(val)"
           :rules="[(val) => !!val && IsRequired]"
           :readonly="Readonly"
@@ -118,7 +118,7 @@
           :class="[Readonly ? 'tw-w-56' : '']"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="formattedValue"
+          :model-value="modelValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -212,7 +212,7 @@
           :class="[Readonly ? 'tw-w-56' : '']"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="formattedValue"
+          :model-value="modelValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -303,7 +303,7 @@
           :class="[Readonly ? 'tw-w-56' : '']"
           reverse-fill-mask
           prefix="Rp"
-          :model-value="formattedValue"
+          :model-value="modelValue"
           @focus="onFocus"
           @blur="onBlur"
           @update:model-value="(val) => updateModelValue(val)"
@@ -581,6 +581,12 @@ const add = () => {
     localChilds.value.push({ ...e, SortOrder: last.SortOrder + (index + 1) });
   });
 };
+
+const getMask = computed(() => {
+  return props.modelValue?.toString()?.includes(".")
+    ? "###,###,###,###,###,###,###,###,###,###.##"
+    : "###,###,###,###,###,###,###,###,###,###";
+});
 
 const triggerRemove = () => {
   emit("remove", props.Index, props.ParentID);
