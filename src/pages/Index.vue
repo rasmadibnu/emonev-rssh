@@ -24,16 +24,19 @@
               class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8 tw-min-h-screen"
             >
               <q-card flat>
-                <q-card-section class="text-primary tw-text-xl">
+                <q-card-section
+                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
+                >
                   Persentase Anggaran ATM Terhadap Bidang Kesehatan
+                  <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
+
                 <q-card-section
                   class="q-pt-none tw-overflow-x-scroll tw-w-auto"
                 >
                   <apex
                     type="bar"
-                    height="800"
-                    class="tw-w-full"
+                    height="1000"
                     :options="chartOptionsPrecentage"
                     :series="seriesPrecentage"
                     ref="chartPrecentage"
@@ -41,15 +44,18 @@
                 </q-card-section>
               </q-card>
               <q-card flat>
-                <q-card-section class="text-primary tw-text-xl">
+                <q-card-section
+                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
+                >
                   Rekapitulasi Anggaran ATM
+                  <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
                 <q-card-section
                   class="q-pt-none tw-overflow-x-scroll tw-w-auto"
                 >
                   <apex
                     type="bar"
-                    height="800"
+                    height="1000"
                     class="tw-w-full"
                     :options="chartOptionsAmount"
                     :series="seriesAmount"
@@ -58,15 +64,17 @@
                 </q-card-section>
               </q-card>
               <q-card flat>
-                <q-card-section class="text-primary tw-text-xl">
+                <q-card-section
+                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
+                >
                   Rekapitulasi Anggaran 5 KKN
+                  <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
                 <q-card-section
                   class="q-pt-none tw-overflow-x-scroll tw-w-auto"
                 >
                   <apex
                     type="bar"
-                    height="800"
                     class="tw-w-full"
                     :options="chartOptionsAmountKKN"
                     :series="seriesAmountKKN"
@@ -856,7 +864,7 @@
               no-caps
               class="text-white"
               active-class="text-bold"
-              @update:model-value="onChangeTab"
+              @update:model-value="onUpdateYear"
             >
               <q-tab name="Dashboard1" label="Rekapitulasi Anggaran ATM" />
               <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
@@ -1064,6 +1072,9 @@ export default defineComponent({
       progress_planning: ref([]),
       progress_partnership: ref([]),
       count: ref([]),
+
+      // Loading
+      loading_1: ref(false),
 
       series_penginputan: ref([0]),
       chart_penginputan: ref({
@@ -1404,6 +1415,7 @@ export default defineComponent({
           bar: {
             horizontal: true,
             endingShape: "rounded",
+            barHeight: "100%",
           },
         },
         dataLabels: {
@@ -1411,6 +1423,7 @@ export default defineComponent({
           formatter: function (value) {
             return rupiah(value);
           },
+          offsetX: 30,
           style: {
             fontSize: "10px",
             fontFamily: "Helvetica, Arial, sans-serif",
@@ -1504,6 +1517,7 @@ export default defineComponent({
           bar: {
             horizontal: true,
             endingShape: "rounded",
+            barHeight: "100%",
           },
         },
         dataLabels: {
@@ -1558,13 +1572,21 @@ export default defineComponent({
       },
       seriesAmountKKN: [
         {
-          name: "Anggaran",
+          name: "AIDS",
           data: [],
         },
         {
-          name: "Realisasi",
+          name: "TBC",
           data: [],
         },
+        {
+          name: "Malaria",
+          data: [],
+        },
+        // {
+        //   name: "Realisasi",
+        //   data: [],
+        // },
       ],
       chartOptionsAmountKKN: {
         chart: {
@@ -1603,18 +1625,19 @@ export default defineComponent({
             },
           },
         ],
-        colors: ["#FF6E31", "#243763"],
+        colors: ["#243763", "#FF6E31", "#9384D1"],
         plotOptions: {
           bar: {
             horizontal: true,
-            endingShape: "rounded",
+            barHeight: "90%", // Atur ukuran bar, semakin kecil jarak antar bar semakin besar
           },
         },
         dataLabels: {
           enabled: true,
           formatter: function (value) {
-            return suffix(value);
+            return rupiah(value);
           },
+          offsetX: 30,
           style: {
             fontSize: "10px",
             fontFamily: "Helvetica, Arial, sans-serif",
@@ -1655,7 +1678,7 @@ export default defineComponent({
           intersect: false,
           y: {
             formatter: function (value) {
-              return suffix(value);
+              return rupiah(value);
             },
           },
         },
@@ -2008,42 +2031,75 @@ export default defineComponent({
     },
 
     getBudget(val) {
+      this.loading_1 = true;
       const findYear = this.list_year.find((year) => year.value == val);
       this.$api
         .get("/result/" + findYear.label + "/percentage")
         .then((res) => {
-          this.seriesAmount[0].data = res.data.data.map((e) => e.budget);
-          this.seriesAmountKKN[0].data = res.data.data.map((e) => e.kkn);
-          this.seriesAmountKKN[1].data = res.data.data.map(
-            (e) => e.kkn_realization
+          const data = res.data.data;
+          // Sort data by budget for seriesAmount
+          const sortedByBudget = [...data].sort((a, b) => b.budget - a.budget);
+          this.seriesAmount[0].data = sortedByBudget.map((e) => e.budget);
+
+          // Sort data by percentage for seriesPrecentage
+          const sortedByPercentage = [...data].sort(
+            (a, b) => b.percentage - a.percentage
           );
-          this.seriesPrecentage[0].data = res.data.data.map(
+          this.seriesPrecentage[0].data = sortedByPercentage.map(
             (e) => e.percentage
           );
 
+          // Sort data by sum of kkn fields for seriesAmountKKN
+          const sortedByKKN = [...data].sort(
+            (a, b) =>
+              (b.kkn_detail?.aids || 0) +
+              (b.kkn_detail?.tbc || 0) +
+              (b.kkn_detail?.malaria || 0) -
+              ((a.kkn_detail?.aids || 0) +
+                (a.kkn_detail?.tbc || 0) +
+                (a.kkn_detail?.malaria || 0))
+          );
+
+          this.seriesAmountKKN[0].data = sortedByKKN.map(
+            (e) => e.kkn_detail?.aids
+          );
+          this.seriesAmountKKN[1].data = sortedByKKN.map(
+            (e) => e.kkn_detail?.tbc
+          );
+          this.seriesAmountKKN[2].data = sortedByKKN.map(
+            (e) => e.kkn_detail?.malaria
+          );
+
+          // Extract categories for each sorted data set
+          const categoriesBudget = sortedByBudget.map((e) => e.name);
+          const categoriesPercentage = sortedByPercentage.map((e) => e.name);
+          const categoriesKKN = sortedByKKN.map((e) => e.name);
+
+          // Update chart options with sorted categories
           ApexCharts.getChartByID("chartAmount").updateOptions({
-            xaxis: {
-              categories: res.data.data.map((e) => e.name),
-            },
+            xaxis: { categories: categoriesBudget },
+          });
+          ApexCharts.getChartByID("chartPrecentage").updateOptions({
+            xaxis: { categories: categoriesPercentage },
           });
 
-          ApexCharts.getChartByID("chartPrecentage").updateOptions({
-            xaxis: {
-              categories: res.data.data.map((e) => e.name),
-            },
-          });
+          // Hitung tinggi chart secara dinamis
+          var barHeight = 100; // Tinggi setiap bar dalam piksel
+          var chartHeight = categoriesKKN.length * barHeight;
 
           ApexCharts.getChartByID("chartAmountKKN").updateOptions({
-            xaxis: {
-              categories: res.data.data.map((e) => e.name),
+            xaxis: { categories: categoriesKKN },
+            chart: {
+              height: chartHeight,
             },
           });
+          this.loading_1 = false;
 
           return res;
         })
         .then((res) => {})
         .catch((err) => {
-          console.log(err);
+          this.loading_1 = false;
         });
     },
 
@@ -2420,23 +2476,6 @@ export default defineComponent({
     },
 
     onUpdateYear() {
-      this.getBudget(this.authStore.year_selected);
-      this.findPartnership(this.authStore.year_selected);
-      this.findPartnershipPerProvince(this.authStore.year_selected);
-      this.getPartnershipDetail(this.authStore.year_selected);
-      this.getProgess(this.authStore.year_selected);
-      this.getPlanning(this.authStore.year_selected);
-      this.getPartnerhsip(this.authStore.year_selected);
-      this.findProvince(this.province);
-      this.findProvinceTable(this.province);
-    },
-
-    updateProvinceKemirtraan() {
-      this.findPartnershipPerProvince(this.authStore.year_selected);
-      this.getPartnershipDetail(this.authStore.year_selected);
-    },
-
-    onChangeTab() {
       if (this.tab == "Dashboard1") {
         this.getBudget(this.authStore.year_selected);
       } else if (this.tab == "Dashboard2") {
@@ -2451,6 +2490,13 @@ export default defineComponent({
         this.getPlanning(this.authStore.year_selected);
         this.getPartnerhsip(this.authStore.year_selected);
       }
+      this.findProvince(this.province);
+      this.findProvinceTable(this.province);
+    },
+
+    updateProvinceKemirtraan() {
+      this.findPartnershipPerProvince(this.authStore.year_selected);
+      this.getPartnershipDetail(this.authStore.year_selected);
     },
   },
 });
