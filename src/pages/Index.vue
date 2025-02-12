@@ -136,7 +136,7 @@
             <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Persentase capaian kemitraan untuk ATM
+                  Persentase anggaran kemitraan untuk ATM
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <apex
@@ -165,7 +165,7 @@
               </div>
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
-                  Persentase capaian kemitraan untuk ATM
+                  Persentase anggaran kemitraan untuk ATM
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <apex
@@ -1272,18 +1272,7 @@ export default defineComponent({
           },
         },
         fill: {
-          type: "gradient",
-          gradient: {
-            shade: "transparent",
-            type: "horizontal",
-            shadeIntensity: 0.5,
-            gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
-            inverseColors: true,
-            opacityFrom: 0,
-            opacityTo: 1,
-            stops: [0, 70, 100],
-            colorStops: [],
-          },
+          opacity: 1,
         },
         dataLabels: {
           enabled: false,
@@ -1342,18 +1331,7 @@ export default defineComponent({
           },
         },
         fill: {
-          type: "gradient",
-          gradient: {
-            shade: "transparent",
-            type: "horizontal",
-            shadeIntensity: 0.5,
-            gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
-            inverseColors: true,
-            opacityFrom: 0,
-            opacityTo: 1,
-            stops: [0, 70, 100],
-            colorStops: [],
-          },
+          opacity: 1,
         },
         dataLabels: {
           enabled: false,
@@ -1701,11 +1679,19 @@ export default defineComponent({
             horizontal: false,
             columnWidth: "55%",
             endingShape: "rounded",
+            dataLabels: {
+              position: "top", // top, center, bottom
+            },
           },
         },
         dataLabels: {
           formatter: function (value) {
             return `${parseFloat(value).toFixed(0)}`;
+          },
+          offsetY: -20,
+          style: {
+            fontSize: "12px",
+            colors: ["#243763"],
           },
         },
 
@@ -1746,11 +1732,19 @@ export default defineComponent({
             horizontal: false,
             columnWidth: "55%",
             endingShape: "rounded",
+            dataLabels: {
+              position: "top",
+            },
           },
         },
         dataLabels: {
           formatter: function (value) {
-            return suffix(value);
+            return rupiah(value);
+          },
+          offsetY: -20,
+          style: {
+            fontSize: "12px",
+            colors: ["#243763"],
           },
         },
 
@@ -1791,11 +1785,19 @@ export default defineComponent({
             horizontal: false,
             columnWidth: "55%",
             endingShape: "rounded",
+            dataLabels: {
+              position: "top",
+            },
           },
         },
         dataLabels: {
           formatter: function (value) {
-            return suffix(value);
+            return rupiah(value);
+          },
+          offsetY: -20,
+          style: {
+            fontSize: "12px",
+            colors: ["#243763"],
           },
         },
         stroke: {
@@ -1833,7 +1835,7 @@ export default defineComponent({
         },
         dataLabels: {
           formatter: function (value) {
-            return suffix(value);
+            return rupiah(value);
           },
         },
         yaxis: {
