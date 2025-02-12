@@ -91,8 +91,11 @@
                 <q-card-section
                   class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
                 >
-                  <div class="text-primary tw-text-xl">
+                  <div
+                    class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center"
+                  >
                     Anggaran ATM Provinsi
+                    <q-spinner v-if="loading_2" color="primary" size="md" />
                   </div>
                   <q-select
                     :options="list_province"
@@ -101,6 +104,7 @@
                     map-options
                     emit-value
                     use-input
+                    :loading="loading_2"
                     @filter="filterProvince"
                     @update:model-value="updateProvince"
                   />
@@ -108,7 +112,6 @@
                 <q-card-section class="q-pt-none">
                   <apex
                     type="bar"
-                    height="350"
                     :options="chartOptionsProvince"
                     :series="seriesProvince"
                     ref="chartProvince"
@@ -122,6 +125,7 @@
                     :columns="province_table_column"
                     table-header-class="bg-secondary text-white"
                     separator="vertical"
+                    :loading="loading_3"
                   >
                   </q-table>
                 </q-card-section>
@@ -933,12 +937,6 @@ export default defineComponent({
         field: (row) => rupiah(row.Bidkes),
         sortable: true,
       },
-      {
-        name: "other",
-        label: "Anggaran ATM Sumber Lain",
-        field: (row) => rupiah(row.Other),
-        sortable: true,
-      },
     ];
 
     const columns_penginputan = [
@@ -1075,6 +1073,8 @@ export default defineComponent({
 
       // Loading
       loading_1: ref(false),
+      loading_2: ref(false),
+      loading_3: ref(false),
 
       series_penginputan: ref([0]),
       chart_penginputan: ref({
@@ -1523,7 +1523,7 @@ export default defineComponent({
         dataLabels: {
           enabled: true,
           formatter: function (value) {
-            return suffix(value);
+            return `${parseFloat(value).toFixed(2)}%`;
           },
           style: {
             fontSize: "10px",
@@ -1552,7 +1552,7 @@ export default defineComponent({
         xaxis: {
           labels: {
             formatter: function (value) {
-              return suffix(value);
+              return `${parseFloat(value).toFixed(2)}%`;
             },
           },
         },
@@ -1891,15 +1891,15 @@ export default defineComponent({
       }),
       seriesProvince: ref([
         {
-          name: "AIDS",
+          name: "Dinkes",
           data: [],
         },
         {
-          name: "TBC",
+          name: "Kemitraan",
           data: [],
         },
         {
-          name: "MALARIA",
+          name: "Total",
           data: [],
         },
         // {
@@ -1910,46 +1910,50 @@ export default defineComponent({
       chartOptionsProvince: ref({
         chart: {
           type: "bar",
-          height: 350,
           id: "chartProvince",
         },
         colors: ["#243763", "#FF6E31", "#9384D1"],
         plotOptions: {
           bar: {
-            horizontal: false,
-            columnWidth: "55%",
-            endingShape: "rounded",
+            horizontal: true,
+            barHeight: "90%",
           },
         },
         dataLabels: {
           formatter: function (value) {
-            return `${parseFloat(value).toFixed(2)}%`;
+            return rupiah(value);
           },
           style: {
             fontSize: "10px",
             fontFamily: "Helvetica, Arial, sans-serif",
             fontWeight: "bold",
-            colors: ["#fff"],
+            colors: ["#243763"],
           },
+          offsetX: 30,
           background: {
             enabled: true,
-            foreColor: "#000",
+            foreColor: "#fff",
             padding: 4,
             borderRadius: 2,
             borderWidth: 1,
-            borderColor: "#fff",
+            borderColor: "#243763",
             opacity: 1,
           },
         },
         yaxis: {
+          categories: [],
+        },
+        xaxis: {
           labels: {
             formatter: function (value) {
-              return `${parseFloat(value).toFixed(2)}%`;
+              return suffix(value);
             },
           },
         },
-        xaxis: {
-          categories: [],
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
         },
         fill: {
           opacity: 1,
@@ -2084,8 +2088,8 @@ export default defineComponent({
           });
 
           // Hitung tinggi chart secara dinamis
-          var barHeight = 100; // Tinggi setiap bar dalam piksel
-          var chartHeight = categoriesKKN.length * barHeight;
+          const barHeight = 120; // Tinggi setiap bar dalam piksel
+          const chartHeight = categoriesKKN.length * barHeight;
 
           ApexCharts.getChartByID("chartAmountKKN").updateOptions({
             xaxis: { categories: categoriesKKN },
@@ -2125,30 +2129,39 @@ export default defineComponent({
     },
 
     findProvince(val) {
+      this.loading_2 = true;
       const findYear = this.list_year.find(
         (year) => year.value == this.authStore.year_selected
       );
       return this.$api
         .get("/result/" + findYear.label + "/percentage/" + val)
         .then((res) => {
+          this.seriesProvince[0].data = res.data.data.map(
+            (province) => province.dinkes.Budget
+          );
+          this.seriesProvince[1].data = res.data.data.map(
+            (province) => province.partnership.Budget
+          );
+          this.seriesProvince[2].data = res.data.data.map(
+            (province) => province.total.Budget
+          );
+
+          // Hitung tinggi chart secara dinamis
+          const barHeight = 100; // Tinggi setiap bar dalam piksel
+          const chartHeight = res.data.data.length * barHeight;
+
           ApexCharts.getChartByID("chartProvince").updateOptions({
             xaxis: {
               categories: res.data.data.map((province) => province.name),
             },
+            chart: {
+              height: chartHeight,
+            },
           });
-          this.seriesProvince[0].data = res.data.data.map(
-            (province) => province.percentage.AIDS
-          );
-          this.seriesProvince[1].data = res.data.data.map(
-            (province) => province.percentage.Malaria
-          );
-          this.seriesProvince[2].data = res.data.data.map(
-            (province) => province.percentage.TBC
-          );
           // this.seriesProvince[3].data = res.data.data.map(
           //   (province) => province.percentage.Other
           // );
-
+          this.loading_2 = false;
           return res;
         })
         .catch((err) => {
@@ -2157,6 +2170,7 @@ export default defineComponent({
     },
 
     findProvinceTable(val) {
+      this.loading_3 = true;
       const findYear = this.list_year.find(
         (year) => year.value == this.authStore.year_selected
       );
@@ -2164,6 +2178,7 @@ export default defineComponent({
         .get("/result/" + findYear.label + "/detail/" + val)
         .then((res) => {
           this.province_table = res.data.data;
+          this.loading_3 = false;
         })
         .catch((err) => {
           console.log(err);
