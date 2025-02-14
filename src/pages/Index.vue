@@ -112,6 +112,18 @@
                 <q-card-section class="q-pt-none">
                   <apex
                     type="bar"
+                    :options="chartOptionsProvinceUPTD"
+                    :series="seriesProvinceUPTD"
+                    ref="chartProvinceUPTD"
+                  ></apex>
+                  <apex
+                    type="bar"
+                    :options="chartOptionsProvinceKKN"
+                    :series="seriesProvinceKKN"
+                    ref="chartProvinceKKN"
+                  ></apex>
+                  <apex
+                    type="bar"
                     :options="chartOptionsProvince"
                     :series="seriesProvince"
                     ref="chartProvince"
@@ -1236,6 +1248,32 @@ export default defineComponent({
         legend: {
           show: false,
         },
+        dataLabels: {
+          enabled: true,
+          formatter: function (value, opts) {
+            return rupiah(
+              opts.globals.collapsedSeries.length >= 2
+                ? opts.globals.collapsedSeries[1].data[opts.dataPointIndex]
+                : 0
+            );
+          },
+          offsetX: 30,
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
+          },
+        },
         tooltip: {
           enabled: true,
           followCursor: true,
@@ -1273,9 +1311,6 @@ export default defineComponent({
         },
         fill: {
           opacity: 1,
-        },
-        dataLabels: {
-          enabled: false,
         },
         xaxis: {
           labels: {
@@ -1334,7 +1369,30 @@ export default defineComponent({
           opacity: 1,
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
+          formatter: function (value, opts) {
+            return rupiah(
+              opts.globals.collapsedSeries.length >= 2
+                ? opts.globals.collapsedSeries[1].data[opts.dataPointIndex]
+                : 0
+            );
+          },
+          offsetX: 30,
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
+          },
         },
         xaxis: {
           labels: {
@@ -1891,6 +1949,34 @@ export default defineComponent({
           opacity: 1,
         },
       }),
+      seriesProvinceUPTD: ref([
+        {
+          name: "AIDS",
+          data: [],
+        },
+        {
+          name: "TBC",
+          data: [],
+        },
+        {
+          name: "Malaria",
+          data: [],
+        },
+        // {
+        //   name: "LAINNYA",
+        //   data: [],
+        // },
+      ]),
+      seriesProvinceKKN: ref([
+        {
+          name: "Total ATM",
+          data: [],
+        },
+        // {
+        //   name: "LAINNYA",
+        //   data: [],
+        // },
+      ]),
       seriesProvince: ref([
         {
           name: "Dinkes",
@@ -1909,10 +1995,10 @@ export default defineComponent({
         //   data: [],
         // },
       ]),
-      chartOptionsProvince: ref({
+      chartOptionsProvinceUPTD: ref({
         chart: {
           type: "bar",
-          id: "chartProvince",
+          id: "chartProvinceUPTD",
         },
         colors: ["#243763", "#FF6E31", "#9384D1"],
         plotOptions: {
@@ -1931,7 +2017,6 @@ export default defineComponent({
             fontWeight: "bold",
             colors: ["#243763"],
           },
-          offsetX: 30,
           background: {
             enabled: true,
             foreColor: "#fff",
@@ -1941,6 +2026,7 @@ export default defineComponent({
             borderColor: "#243763",
             opacity: 1,
           },
+          offsetX: 30,
         },
         yaxis: {
           categories: [],
@@ -1966,7 +2052,144 @@ export default defineComponent({
             vertical: 20,
           },
         },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (value) {
+              return rupiah(value);
+            },
+          },
+        },
       }),
+      chartOptionsProvinceKKN: ref({
+        chart: {
+          type: "bar",
+          id: "chartProvinceKKN",
+        },
+        colors: ["#243763", "#FF6E31", "#9384D1"],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: "90%",
+          },
+        },
+        dataLabels: {
+          formatter: function (value) {
+            return rupiah(value);
+          },
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+          },
+          offsetX: 30,
+        },
+        yaxis: {
+          categories: [],
+        },
+        xaxis: {
+          labels: {
+            formatter: function (value) {
+              return suffix(value);
+            },
+          },
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        fill: {
+          opacity: 1,
+        },
+        legend: {
+          position: "top",
+          itemMargin: {
+            vertical: 20,
+          },
+        },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (value) {
+              return rupiah(value);
+            },
+          },
+        },
+      }),
+      chartOptionsProvince: ref({
+        chart: {
+          type: "bar",
+          id: "chartProvince",
+        },
+        colors: ["#243763", "#FF6E31", "#9384D1"],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: "90%",
+          },
+        },
+        dataLabels: {
+          formatter: function (value) {
+            return rupiah(value);
+          },
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
+          },
+          offsetX: 30,
+        },
+        yaxis: {
+          categories: [],
+        },
+        xaxis: {
+          labels: {
+            formatter: function (value) {
+              return suffix(value);
+            },
+          },
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        fill: {
+          opacity: 1,
+        },
+        legend: {
+          position: "top",
+          itemMargin: {
+            vertical: 20,
+          },
+        },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (value) {
+              return rupiah(value);
+            },
+          },
+        },
+      }),
+
       year: ref(null),
 
       list_year: ref([]),
@@ -2148,6 +2371,20 @@ export default defineComponent({
             (province) => province.total.Budget
           );
 
+          this.seriesProvinceUPTD[0].data = res.data.data.map(
+            (province) => province.by_uptd.AIDS
+          );
+          this.seriesProvinceUPTD[1].data = res.data.data.map(
+            (province) => province.by_uptd.TBC
+          );
+          this.seriesProvinceUPTD[2].data = res.data.data.map(
+            (province) => province.by_uptd.Malaria
+          );
+
+          this.seriesProvinceKKN[0].data = res.data.data.map(
+            (province) => province.by_kkn.TotalATM
+          );
+
           // Hitung tinggi chart secara dinamis
           const barHeight = 100; // Tinggi setiap bar dalam piksel
           const chartHeight = res.data.data.length * barHeight;
@@ -2160,6 +2397,25 @@ export default defineComponent({
               height: chartHeight,
             },
           });
+
+          ApexCharts.getChartByID("chartProvinceUPTD").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((province) => province.name),
+            },
+            chart: {
+              height: chartHeight,
+            },
+          });
+
+          ApexCharts.getChartByID("chartProvinceKKN").updateOptions({
+            xaxis: {
+              categories: res.data.data.map((province) => province.name),
+            },
+            chart: {
+              height: chartHeight,
+            },
+          });
+
           // this.seriesProvince[3].data = res.data.data.map(
           //   (province) => province.percentage.Other
           // );
