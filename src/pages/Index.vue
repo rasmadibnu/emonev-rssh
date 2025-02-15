@@ -159,7 +159,7 @@
                   Dana SKPDN
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex type="bar" height="350" :options="chartOptionSKPDN" :series="seriesSKPDN" ref="chartSKPDN">
+                  <apex type="bar" :options="chartOptionSKPDN" :series="seriesSKPDN" ref="chartSKPDN">
                   </apex>
                 </q-card-section>
               </q-card>
@@ -1575,8 +1575,6 @@ export default defineComponent({
       chartOptionSKPDN: ref({
         chart: {
           type: "bar",
-          height: 350,
-          stacked: true,
           toolbar: {
             show: true,
           },
@@ -1589,11 +1587,27 @@ export default defineComponent({
           formatter: function (value) {
             return rupiah(value);
           },
+          offsetX: 30,
+          style: {
+            fontSize: "10px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
+          },
         },
-        yaxis: {
+        xaxis: {
           labels: {
             formatter: function (value) {
-              return suffix(value);
+              return isNaN(value) ? value : suffix(value);
             },
           },
         },
@@ -1620,7 +1634,8 @@ export default defineComponent({
         ],
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal: true,
+            barHeight: "100%",
             dataLabels: {
               total: {
                 enabled: true,
@@ -1632,7 +1647,12 @@ export default defineComponent({
             },
           },
         },
-        xaxis: {
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        yaxis: {
           categories: [],
         },
         legend: {
@@ -1641,6 +1661,16 @@ export default defineComponent({
         },
         fill: {
           opacity: 1,
+        },
+        tooltip: {
+          enabled: true,
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (value) {
+              return rupiah(value);
+            },
+          },
         },
       }),
       seriesProvinceUPTD: ref([
@@ -2294,6 +2324,8 @@ export default defineComponent({
             }
           }
 
+          console.log(outputData)
+
           this.seriesSKPDN = outputData;
 
           ApexCharts.getChartByID("chartVillageCount").updateOptions({
@@ -2305,8 +2337,16 @@ export default defineComponent({
           ApexCharts.getChartByID("chartCSR").updateOptions({
             xaxis: { categories: legends },
           });
+
+          const barHeight = 300; // Tinggi setiap bar dalam piksel
+          const chartHeight = data.length * barHeight;
+
+
           ApexCharts.getChartByID("chartSKPDN").updateOptions({
             xaxis: { categories: legends },
+            chart: {
+              height: chartHeight,
+            },
           });
         })
         .catch((err) => {
