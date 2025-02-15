@@ -2,9 +2,7 @@
   <q-layout v-scroll="onScroll" view="hHh lpR fFf">
     <q-header reveal v-model="isReveal" class="bg-white text-primary">
       <q-toolbar>
-        <div
-          class="tw-font-bold tw-py-3 text-center tw-flex tw-justify-center tw-flex-col tw-w-full"
-        >
+        <div class="tw-font-bold tw-py-3 text-center tw-flex tw-justify-center tw-flex-col tw-w-full">
           <div class="tw-text-4xl">
             <span class="text-secondary">e</span>Monev
           </div>
@@ -20,66 +18,36 @@
       <q-page class="tw-pt-36">
         <q-tab-panels v-model="tab" animated class="tw-bg-gray-50">
           <q-tab-panel name="Dashboard1">
-            <div
-              class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8 tw-min-h-screen"
-            >
+            <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8 tw-min-h-screen">
               <q-card flat>
-                <q-card-section
-                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
-                >
+                <q-card-section class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center">
                   Persentase Anggaran ATM Terhadap Bidang Kesehatan
                   <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
 
-                <q-card-section
-                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
-                >
-                  <apex
-                    type="bar"
-                    height="1000"
-                    :options="chartOptionsPrecentage"
-                    :series="seriesPrecentage"
-                    ref="chartPrecentage"
-                  ></apex>
+                <q-card-section class="q-pt-none tw-overflow-x-scroll tw-w-auto">
+                  <apex type="bar" height="1000" :options="chartOptionsPrecentage" :series="seriesPrecentage"
+                    ref="chartPrecentage"></apex>
                 </q-card-section>
               </q-card>
               <q-card flat>
-                <q-card-section
-                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
-                >
+                <q-card-section class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center">
                   Rekapitulasi Anggaran ATM
                   <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
-                <q-card-section
-                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
-                >
-                  <apex
-                    type="bar"
-                    height="1000"
-                    class="tw-w-full"
-                    :options="chartOptionsAmount"
-                    :series="seriesAmount"
-                    ref="chartAmount"
-                  ></apex>
+                <q-card-section class="q-pt-none tw-overflow-x-scroll tw-w-auto">
+                  <apex type="bar" height="1000" class="tw-w-full" :options="chartOptionsAmount" :series="seriesAmount"
+                    ref="chartAmount"></apex>
                 </q-card-section>
               </q-card>
               <q-card flat>
-                <q-card-section
-                  class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center"
-                >
+                <q-card-section class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center">
                   Rekapitulasi Anggaran 5 KKN
                   <q-spinner v-if="loading_1" color="primary" size="md" />
                 </q-card-section>
-                <q-card-section
-                  class="q-pt-none tw-overflow-x-scroll tw-w-auto"
-                >
-                  <apex
-                    type="bar"
-                    class="tw-w-full"
-                    :options="chartOptionsAmountKKN"
-                    :series="seriesAmountKKN"
-                    ref="chartAmountKKN"
-                  ></apex>
+                <q-card-section class="q-pt-none tw-overflow-x-scroll tw-w-auto">
+                  <apex type="bar" class="tw-w-full" :options="chartOptionsAmountKKN" :series="seriesAmountKKN"
+                    ref="chartAmountKKN"></apex>
                 </q-card-section>
               </q-card>
             </div>
@@ -87,58 +55,58 @@
 
           <q-tab-panel name="Dashboard2">
             <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
-              <q-card flat class="tw-mb-20">
-                <q-card-section
-                  class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
-                >
-                  <div
-                    class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center"
-                  >
+              <q-card flat class="tw-mb-10">
+                <q-card-section class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center">
+                  <div class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center">
                     Anggaran ATM Provinsi
                     <q-spinner v-if="loading_2" color="primary" size="md" />
                   </div>
-                  <q-select
-                    :options="list_province"
-                    label="Provinsi"
-                    v-model="province"
-                    map-options
-                    emit-value
-                    use-input
-                    :loading="loading_2"
-                    @filter="filterProvince"
-                    @update:model-value="updateProvince"
-                  />
+                  <q-select :options="list_province" label="Provinsi" v-model="province" map-options emit-value
+                    use-input :loading="loading_2" @filter="filterProvince" @update:model-value="updateProvince" />
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  <apex type="bar" :options="chartOptionsProvinceUPTD" :series="seriesProvinceUPTD"
+                    ref="chartProvinceUPTD"></apex>
+
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    :options="chartOptionsProvinceUPTD"
-                    :series="seriesProvinceUPTD"
-                    ref="chartProvinceUPTD"
-                  ></apex>
-                  <apex
-                    type="bar"
-                    :options="chartOptionsProvinceKKN"
-                    :series="seriesProvinceKKN"
-                    ref="chartProvinceKKN"
-                  ></apex>
-                  <apex
-                    type="bar"
-                    :options="chartOptionsProvince"
-                    :series="seriesProvince"
-                    ref="chartProvince"
-                  ></apex>
+                  <q-table flat :rows="province_table" hide-pagination :columns="province_table_column"
+                    table-header-class="bg-secondary text-white" separator="vertical" :loading="loading_2">
+                  </q-table>
+                </q-card-section>
+              </q-card>
+              <q-card flat class="tw-mb-10">
+                <q-card-section>
+                  <div class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center">
+                    Anggaran ATM 5 KKN
+                    <q-spinner v-if="loading_2" color="primary" size="md" />
+                  </div>
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <q-table
-                    flat
-                    :rows="province_table"
-                    hide-pagination
-                    :columns="province_table_column"
-                    table-header-class="bg-secondary text-white"
-                    separator="vertical"
-                    :loading="loading_3"
-                  >
+                  <apex type="bar" :options="chartOptionsProvinceKKN" :series="seriesProvinceKKN"
+                    ref="chartProvinceKKN">
+                  </apex>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <q-table flat :rows="province_table_kkn" hide-pagination :columns="province_table_column"
+                    table-header-class="bg-secondary text-white" separator="vertical" :loading="loading_2">
+                  </q-table>
+                </q-card-section>
+              </q-card>
+              <q-card flat class="tw-mb-20">
+                <q-card-section>
+                  <div class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center">
+                    Anggaran Dinas Kesehatan & Kemitraan
+                    <q-spinner v-if="loading_2" color="primary" size="md" />
+                  </div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <apex type="bar" :options="chartOptionsProvince" :series="seriesProvince" ref="chartProvince"></apex>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <q-table flat :rows="province_table_total" hide-pagination :columns="province_table_column"
+                    table-header-class="bg-secondary text-white" separator="vertical" :loading="loading_2">
                   </q-table>
                 </q-card-section>
               </q-card>
@@ -151,162 +119,84 @@
                   Persentase anggaran kemitraan untuk ATM
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="250"
-                    :options="chartOptions"
-                    :series="series"
-                    ref="chartPartnership"
-                  ></apex>
+                  <apex type="bar" height="250" :options="chartOptions" :series="series" ref="chartPartnership"></apex>
                 </q-card-section>
               </q-card>
-              <div
-                class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center"
-              >
+              <div class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center">
                 <div class="text-primary tw-text-xl">Per Provinsi</div>
-                <q-select
-                  :options="list_province"
-                  label="Provinsi"
-                  v-model="province_kemitraan"
-                  map-options
-                  emit-value
-                  use-input
-                  @filter="filterProvince"
-                  @update:model-value="updateProvinceKemirtraan"
-                />
+                <q-select :options="list_province" label="Provinsi" v-model="province_kemitraan" map-options emit-value
+                  use-input @filter="filterProvince" @update:model-value="updateProvinceKemirtraan" />
               </div>
               <q-card flat>
                 <q-card-section class="text-primary tw-text-xl">
                   Persentase anggaran kemitraan untuk ATM
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="250"
-                    :options="chartOptionsPerProvince"
-                    :series="seriesPerProvince"
-                    ref="chartPartnershipPerProvince"
-                  ></apex>
+                  <apex type="bar" height="250" :options="chartOptionsPerProvince" :series="seriesPerProvince"
+                    ref="chartPartnershipPerProvince"></apex>
                 </q-card-section>
                 <q-card-section class="text-primary tw-text-xl">
                   Jumlah Desa yang mendapatkan ATM
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="350"
-                    :options="chartOptionVillageCount"
-                    :series="seriesVillageCount"
-                    ref="chartVillageCount"
-                  ></apex>
+                  <apex type="bar" height="350" :options="chartOptionVillageCount" :series="seriesVillageCount"
+                    ref="chartVillageCount"></apex>
                 </q-card-section>
                 <q-card-section class="text-primary tw-text-xl">
                   Dana Desa
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="350"
-                    :options="chartOptionVillageFund"
-                    :series="seriesVillageFund"
-                    ref="chartVillageFund"
-                  ></apex>
+                  <apex type="bar" height="350" :options="chartOptionVillageFund" :series="seriesVillageFund"
+                    ref="chartVillageFund"></apex>
                 </q-card-section>
                 <q-card-section class="text-primary tw-text-xl">
                   Dana CSR
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="350"
-                    :options="chartOptionCSR"
-                    :series="seriesCSR"
-                    ref="chartCSR"
-                  ></apex>
+                  <apex type="bar" height="350" :options="chartOptionCSR" :series="seriesCSR" ref="chartCSR"></apex>
                 </q-card-section>
                 <q-card-section class="text-primary tw-text-xl">
                   Dana SKPDN
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                  <apex
-                    type="bar"
-                    height="350"
-                    :options="chartOptionSKPDN"
-                    :series="seriesSKPDN"
-                    ref="chartSKPDN"
-                  ></apex>
+                  <apex type="bar" height="350" :options="chartOptionSKPDN" :series="seriesSKPDN" ref="chartSKPDN">
+                  </apex>
                 </q-card-section>
               </q-card>
             </div>
           </q-tab-panel>
           <q-tab-panel name="Dashboard4">
             <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
-              <q-card
-                flat
-                class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4"
-              >
-                <div
-                  class="tw-col-span-12 tw-flex tw-justify-between tw-items-center"
-                >
+              <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+                <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
                   <div class="tw-text-xl tw-font-semibold">Anggaran</div>
                   <div></div>
                 </div>
-                <q-table
-                  flat
-                  class="tw-col-span-8"
-                  :columns="columns_penginputan"
-                  :rows="progress_penginputan"
-                >
+                <q-table flat class="tw-col-span-8" :columns="columns_penginputan" :rows="progress_penginputan">
                   <template v-slot:body="props">
                     <q-tr :props="props">
                       <q-td>
                         {{ props.row.Name }}
                       </q-td>
                       <td>
-                        <q-badge
-                          label="Completed"
-                          v-if="props.row.Status == 'Completed'"
-                          color="positive"
-                        />
-                        <q-badge
-                          label="Belum Input"
-                          v-else-if="props.row.Status == 'Belum Input'"
-                          color="negative"
-                        />
-                        <q-badge
-                          label="Progress"
-                          v-else-if="props.row.Status == 'Progress'"
-                          color="secondary"
-                        />
+                        <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+                        <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+                        <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
                       </td>
                       <q-td class="tw-flex tw-items-center">
-                        <div
-                          style="font-size: 0.8em"
-                          class="tw-mt-1 tw-mr-2 text-primary"
-                        >
+                        <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                           {{
                             parseFloat(props.row.Progress * 100).toFixed(0) +
                             "%"
                           }}
                         </div>
-                        <q-linear-progress
-                          rounded
-                          stripe
-                          size="25px"
-                          :value="props.row.Progress"
-                          color="accent"
-                          class="q-mt-sm"
-                        >
+                        <q-linear-progress rounded stripe size="25px" :value="props.row.Progress" color="accent"
+                          class="q-mt-sm">
                           <div class="absolute-full flex flex-center">
-                            <q-badge
-                              color="white"
-                              text-color="accent"
-                              :label="
-                                props.row.JumlahInput +
-                                '/' +
-                                props.row.Regencies.length
-                              "
-                            />
+                            <q-badge color="white" text-color="accent" :label="props.row.JumlahInput +
+                              '/' +
+                              props.row.Regencies.length
+                              " />
                           </div>
                         </q-linear-progress>
                       </q-td>
@@ -317,22 +207,14 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex
-                    type="radialBar"
-                    :options="chart_penginputan"
-                    :series="series_penginputan"
-                    ref="radialAnggaran"
-                  ></apex>
+                  <apex type="radialBar" :options="chart_penginputan" :series="series_penginputan" ref="radialAnggaran">
+                  </apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="positive" size="50px">
-                          <vx-icon
-                            iconName="TickCircle"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="TickCircle" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -350,11 +232,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="secondary" size="50px">
-                          <vx-icon
-                            iconName="Bookmark"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -372,11 +250,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="negative" size="50px">
-                          <vx-icon
-                            iconName="ClipboardClose"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="ClipboardClose" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -394,176 +268,98 @@
                   </q-list>
                 </div>
               </q-card>
-              <q-card
-                flat
-                class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4"
-              >
-                <div
-                  class="tw-col-span-12 tw-flex tw-justify-between tw-items-center"
-                >
+              <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+                <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
                   <div class="tw-text-xl tw-font-semibold">Kemitraan</div>
                   <div></div>
                 </div>
-                <q-table
-                  flat
-                  class="tw-col-span-8"
-                  :columns="columns_partnership"
-                  :rows="progress_partnership"
-                >
+                <q-table flat class="tw-col-span-8" :columns="columns_partnership" :rows="progress_partnership">
                   <template v-slot:body="props">
                     <q-tr :props="props">
                       <q-td>
                         {{ props.row.Name }}
                       </q-td>
                       <td>
-                        <q-badge
-                          label="Completed"
-                          v-if="props.row.Status == 'Completed'"
-                          color="positive"
-                        />
-                        <q-badge
-                          label="Belum Input"
-                          v-else-if="props.row.Status == 'Belum Input'"
-                          color="negative"
-                        />
-                        <q-badge
-                          label="Progress"
-                          v-else-if="props.row.Status == 'Progress'"
-                          color="secondary"
-                        />
+                        <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+                        <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+                        <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
                       </td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(props.row.ProgressSKPD * 100).toFixed(
                                 0
                               ) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressSKPD"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressSKPD" color="accent"
+                            class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputSKPD +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputSKPD +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
                       </q-td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(props.row.ProgressCSR * 100).toFixed(
                                 0
                               ) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressCSR"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressCSR" color="accent"
+                            class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputCSR +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputCSR +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
                       </q-td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(
                                 props.row.ProgressVillage * 100
                               ).toFixed(0) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressVillage"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressVillage"
+                            color="accent" class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputVillage +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputVillage +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
                       </q-td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(props.row.ProgressSK * 100).toFixed(
                                 0
                               ) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressSK"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressSK" color="accent"
+                            class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputSK +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputSK +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
@@ -575,22 +371,14 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex
-                    type="radialBar"
-                    :options="chart_parterhsip"
-                    :series="series_parterhsip"
-                    ref="radialPartnership"
-                  ></apex>
+                  <apex type="radialBar" :options="chart_parterhsip" :series="series_parterhsip"
+                    ref="radialPartnership"></apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="positive" size="50px">
-                          <vx-icon
-                            iconName="TickCircle"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="TickCircle" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -608,11 +396,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="secondary" size="50px">
-                          <vx-icon
-                            iconName="Bookmark"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -630,11 +414,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="negative" size="50px">
-                          <vx-icon
-                            iconName="ClipboardClose"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="ClipboardClose" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -652,110 +432,60 @@
                   </q-list>
                 </div>
               </q-card>
-              <q-card
-                flat
-                class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4"
-              >
-                <div
-                  class="tw-col-span-12 tw-flex tw-justify-between tw-items-center"
-                >
+              <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
+                <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
                   <div class="tw-text-xl tw-font-semibold">
                     Dokumen Perencanaan
                   </div>
                   <div></div>
                 </div>
-                <q-table
-                  flat
-                  class="tw-col-span-8"
-                  :columns="columns_planning"
-                  :rows="progress_planning"
-                >
+                <q-table flat class="tw-col-span-8" :columns="columns_planning" :rows="progress_planning">
                   <template v-slot:body="props">
                     <q-tr :props="props">
                       <q-td>
                         {{ props.row.Name }}
                       </q-td>
                       <td>
-                        <q-badge
-                          label="Completed"
-                          v-if="props.row.Status == 'Completed'"
-                          color="positive"
-                        />
-                        <q-badge
-                          label="Belum Input"
-                          v-else-if="props.row.Status == 'Belum Input'"
-                          color="negative"
-                        />
-                        <q-badge
-                          label="Progress"
-                          v-else-if="props.row.Status == 'Progress'"
-                          color="secondary"
-                        />
+                        <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+                        <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+                        <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
                       </td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(props.row.ProgressRKPD * 100).toFixed(
                                 0
                               ) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressRKPD"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressRKPD" color="accent"
+                            class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputRKPD +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputRKPD +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
                       </q-td>
                       <q-td>
                         <div class="tw-flex tw-items-center">
-                          <div
-                            style="font-size: 0.8em"
-                            class="tw-mt-1 tw-mr-2 text-primary"
-                          >
+                          <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                             {{
                               parseFloat(props.row.ProgressRenja * 100).toFixed(
                                 0
                               ) + "%"
                             }}
                           </div>
-                          <q-linear-progress
-                            rounded
-                            stripe
-                            size="25px"
-                            :value="props.row.ProgressRenja"
-                            color="accent"
-                            class="q-mt-sm"
-                          >
+                          <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressRenja" color="accent"
+                            class="q-mt-sm">
                             <div class="absolute-full flex flex-center">
-                              <q-badge
-                                color="white"
-                                text-color="accent"
-                                :label="
-                                  props.row.JumlahInputRenja +
-                                  '/' +
-                                  props.row.Regencies.length
-                                "
-                              />
+                              <q-badge color="white" text-color="accent" :label="props.row.JumlahInputRenja +
+                                '/' +
+                                props.row.Regencies.length
+                                " />
                             </div>
                           </q-linear-progress>
                         </div>
@@ -767,22 +497,14 @@
                   </template>
                 </q-table>
                 <div class="tw-col-span-4 tw-w-full">
-                  <apex
-                    type="radialBar"
-                    :options="chart_planning"
-                    :series="series_planning"
-                    ref="radialPlanning"
-                  ></apex>
+                  <apex type="radialBar" :options="chart_planning" :series="series_planning" ref="radialPlanning">
+                  </apex>
                   <q-separator />
                   <q-list>
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="positive" size="50px">
-                          <vx-icon
-                            iconName="TickCircle"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="TickCircle" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -800,11 +522,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="secondary" size="50px">
-                          <vx-icon
-                            iconName="Bookmark"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="Bookmark" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -822,11 +540,7 @@
                     <q-item class="tw-flex tw-justify-between tw-items-center">
                       <q-item-section avatar>
                         <q-avatar color="negative" size="50px">
-                          <vx-icon
-                            iconName="ClipboardClose"
-                            class="text-white"
-                            :size="'24'"
-                          />
+                          <vx-icon iconName="ClipboardClose" class="text-white" :size="'24'" />
                         </q-avatar>
                       </q-item-section>
 
@@ -850,38 +564,17 @@
 
         <q-page-sticky class="tw-z-50" expand position="top">
           <div class="bg-primary tw-w-full">
-            <div
-              class="tw-flex tw-justify-between text-white tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-py-3"
-            >
+            <div class="tw-flex tw-justify-between text-white tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-py-3">
               <div class="tw-flex tw-items-center tw-gap-4">
                 <span class="tw-text-gray-400">Tahun Terpilih</span> /
-                <q-select
-                  class="my-select"
-                  :options="list_year"
-                  v-model="authStore.year_selected"
-                  borderless
-                  dense
-                  map-options
-                  emit-value
-                  @update:model-value="onUpdateYear"
-                />
+                <q-select class="my-select" :options="list_year" v-model="authStore.year_selected" borderless dense
+                  map-options emit-value @update:model-value="onUpdateYear" />
               </div>
-              <q-btn
-                color="secondary"
-                :label="authStore.token ? 'Dashboard' : 'Masuk'"
-                :to="{ name: authStore.token ? 'beranda' : 'login' }"
-                unelevated
-                no-caps
-              />
+              <q-btn color="secondary" :label="authStore.token ? 'Dashboard' : 'Masuk'"
+                :to="{ name: authStore.token ? 'beranda' : 'login' }" unelevated no-caps />
             </div>
-            <q-tabs
-              v-model="tab"
-              align="justify"
-              no-caps
-              class="text-white"
-              active-class="text-bold"
-              @update:model-value="onUpdateYear"
-            >
+            <q-tabs v-model="tab" align="justify" no-caps class="text-white" active-class="text-bold"
+              @update:model-value="onUpdateYear">
               <q-tab name="Dashboard1" label="Rekapitulasi Anggaran ATM" />
               <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
               <q-tab name="Dashboard3" label="Rekapitulasi Kemitraan" />
@@ -900,6 +593,7 @@
 .my-select :deep(.q-field__native) {
   color: white;
 }
+
 .my-select :deep(.q-icon) {
   color: white;
 }
@@ -939,14 +633,14 @@ export default defineComponent({
       {
         name: "name",
         label: "",
-        field: "Name",
+        field: "name",
         align: "left",
         sortable: true,
       },
       {
         name: "bidkes",
         label: "Anggaran ATM Bidang Kesehatan",
-        field: (row) => rupiah(row.Bidkes),
+        field: (row) => rupiah(row.total),
         sortable: true,
       },
     ];
@@ -1286,16 +980,16 @@ export default defineComponent({
             <div class="tw-p-4">
               <div>
                 Presentase: ${parseFloat(
-                  series[seriesIndex][dataPointIndex]
-                ).toFixed(0)}%
+              series[seriesIndex][dataPointIndex]
+            ).toFixed(0)}%
               </div>
               <div>
                 Jumlah: ${w.globals.collapsedSeries[0].data[dataPointIndex]}
               </div>
               <div>
                 Anggaran: ${rupiah(
-                  w.globals.collapsedSeries[1].data[dataPointIndex]
-                )}
+              w.globals.collapsedSeries[1].data[dataPointIndex]
+            )}
               </div>
              </div>
              `;
@@ -1342,16 +1036,16 @@ export default defineComponent({
             <div class="tw-p-4">
               <div>
                 Presentase: ${parseFloat(
-                  series[seriesIndex][dataPointIndex]
-                ).toFixed(0)}%
+              series[seriesIndex][dataPointIndex]
+            ).toFixed(0)}%
               </div>
               <div>
                 Jumlah: ${w.globals.collapsedSeries[0].data[dataPointIndex]}
               </div>
               <div>
                 Anggaran: ${rupiah(
-                  w.globals.collapsedSeries[1].data[dataPointIndex]
-                )}
+              w.globals.collapsedSeries[1].data[dataPointIndex]
+            )}
               </div>
              </div>
              `;
@@ -1969,7 +1663,15 @@ export default defineComponent({
       ]),
       seriesProvinceKKN: ref([
         {
-          name: "Total ATM",
+          name: "AIDS",
+          data: [],
+        },
+        {
+          name: "TBC",
+          data: [],
+        },
+        {
+          name: "Malaria",
           data: [],
         },
         // {
@@ -2004,7 +1706,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "90%",
+            barHeight: "100%",
           },
         },
         dataLabels: {
@@ -2072,7 +1774,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "90%",
+            barHeight: "100%",
           },
         },
         dataLabels: {
@@ -2083,6 +1785,16 @@ export default defineComponent({
             fontSize: "10px",
             fontFamily: "Helvetica, Arial, sans-serif",
             fontWeight: "bold",
+            colors: ["#243763"],
+          },
+          background: {
+            enabled: true,
+            foreColor: "#fff",
+            padding: 4,
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: "#243763",
+            opacity: 1,
           },
           offsetX: 30,
         },
@@ -2130,7 +1842,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "90%",
+            barHeight: "100%",
           },
         },
         dataLabels: {
@@ -2199,6 +1911,9 @@ export default defineComponent({
       province_kemitraan: ref(null),
       tab: ref("Dashboard1"),
       province_table: ref([]),
+      province_table_kkn: ref([]),
+      province_table_total: ref([]),
+
     };
   },
   mounted() {
@@ -2326,7 +2041,7 @@ export default defineComponent({
 
           return res;
         })
-        .then((res) => {})
+        .then((res) => { })
         .catch((err) => {
           this.loading_1 = false;
         });
@@ -2350,7 +2065,7 @@ export default defineComponent({
 
     updateProvince(val) {
       this.findProvince(val);
-      this.findProvinceTable(val);
+      // this.findProvinceTable(val);
     },
 
     findProvince(val) {
@@ -2361,6 +2076,7 @@ export default defineComponent({
       return this.$api
         .get("/result/" + findYear.label + "/percentage/" + val)
         .then((res) => {
+
           this.seriesProvince[0].data = res.data.data.map(
             (province) => province.dinkes.Budget
           );
@@ -2382,8 +2098,37 @@ export default defineComponent({
           );
 
           this.seriesProvinceKKN[0].data = res.data.data.map(
-            (province) => province.by_kkn.TotalATM
+            (province) => province.by_kkn.AIDS
           );
+          this.seriesProvinceKKN[1].data = res.data.data.map(
+            (province) => province.by_kkn.TBC
+          );
+          this.seriesProvinceKKN[2].data = res.data.data.map(
+            (province) => province.by_kkn.Malaria
+          );
+
+          this.province_table = []
+          this.province_table_kkn = []
+          this.province_table_total = []
+
+
+          this.province_table = [
+            { name: "AIDS", total: res.data.data.map((province) => province.by_uptd.AIDS).reduce((a, b) => a + b) },
+            { name: "TBC", total: res.data.data.map((province) => province.by_uptd.TBC).reduce((a, b) => a + b) },
+            { name: "Malaria", total: res.data.data.map((province) => province.by_uptd.Malaria).reduce((a, b) => a + b) },
+            { name: "Total ATM", total: res.data.data.map((province) => province.by_uptd.TotalATM).reduce((a, b) => a + b) }
+          ];
+          this.province_table_kkn = [
+            { name: "AIDS", total: res.data.data.map((province) => province.by_kkn.AIDS).reduce((a, b) => a + b) },
+            { name: "TBC", total: res.data.data.map((province) => province.by_kkn.TBC).reduce((a, b) => a + b) },
+            { name: "Malaria", total: res.data.data.map((province) => province.by_kkn.Malaria).reduce((a, b) => a + b) },
+            { name: "Total ATM", total: res.data.data.map((province) => province.by_kkn.TotalATM).reduce((a, b) => a + b) }
+          ];
+          this.province_table_total = [
+            { name: "Dinas Kesehatan", total: res.data.data.map((province) => province.dinkes.Budget).reduce((a, b) => a + b) },
+            { name: "Kemitraan", total: res.data.data.map((province) => province.partnership.Budget).reduce((a, b) => a + b) },
+            { name: "Total", total: res.data.data.map((province) => province.total.Budget).reduce((a, b) => a + b) }
+          ];
 
           // Hitung tinggi chart secara dinamis
           const barHeight = 100; // Tinggi setiap bar dalam piksel
@@ -2481,9 +2226,9 @@ export default defineComponent({
       this.$api
         .get(
           "/forms/" +
-            findYear.label +
-            "/partnership?province_id=" +
-            this.province_kemitraan
+          findYear.label +
+          "/partnership?province_id=" +
+          this.province_kemitraan
         )
         .then((res) => {
           const data = res.data.data;
@@ -2523,9 +2268,9 @@ export default defineComponent({
       this.$api
         .get(
           "/forms/" +
-            findYear.label +
-            "/partnership/detail?province_id=" +
-            this.province_kemitraan
+          findYear.label +
+          "/partnership/detail?province_id=" +
+          this.province_kemitraan
         )
         .then((res) => {
           var data = res.data.data;
@@ -2753,7 +2498,7 @@ export default defineComponent({
         this.getBudget(this.authStore.year_selected);
       } else if (this.tab == "Dashboard2") {
         this.findProvince(this.province);
-        this.findProvinceTable(this.province);
+        // this.findProvinceTable(this.province);
       } else if (this.tab == "Dashboard3") {
         this.findPartnership(this.authStore.year_selected);
         this.findPartnershipPerProvince(this.authStore.year_selected);
@@ -2764,7 +2509,7 @@ export default defineComponent({
         this.getPartnerhsip(this.authStore.year_selected);
       }
       this.findProvince(this.province);
-      this.findProvinceTable(this.province);
+      // this.findProvinceTable(this.province);
     },
 
     updateProvinceKemirtraan() {
