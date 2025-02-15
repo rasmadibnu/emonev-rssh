@@ -1706,7 +1706,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "100%",
+            barHeight: "90%",
           },
         },
         dataLabels: {
@@ -1774,7 +1774,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "100%",
+            barHeight: "90%",
           },
         },
         dataLabels: {
@@ -1842,7 +1842,7 @@ export default defineComponent({
         plotOptions: {
           bar: {
             horizontal: true,
-            barHeight: "100%",
+            barHeight: "90%",
           },
         },
         dataLabels: {
@@ -2131,7 +2131,7 @@ export default defineComponent({
           ];
 
           // Hitung tinggi chart secara dinamis
-          const barHeight = 100; // Tinggi setiap bar dalam piksel
+          const barHeight = 140; // Tinggi setiap bar dalam piksel
           const chartHeight = res.data.data.length * barHeight;
 
           ApexCharts.getChartByID("chartProvince").updateOptions({
