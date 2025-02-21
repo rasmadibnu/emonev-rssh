@@ -372,6 +372,7 @@ onMounted(() => {
   }
 })
 
+
 const loading = ref(false)
 const getBudget = async (val) => {
   loading.value = true
@@ -441,6 +442,6 @@ const getBudget = async (val) => {
     })
     .catch((err) => {
       loading.value = false;
-    });
+    })
 }
 </script>

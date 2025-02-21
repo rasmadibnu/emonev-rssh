@@ -346,7 +346,6 @@ const findPartnership = async (year) => {
         tablePartnership.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
       })
 
-      console.log(seriesPartnership.value)
 
       ApexCharts.getChartByID("chartPartnership").updateSeries(seriesPartnership.value, true);
 

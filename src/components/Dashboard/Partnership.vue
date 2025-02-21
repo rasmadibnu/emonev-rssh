@@ -81,10 +81,12 @@ const seriesAll = ref([
   },
   {
     name: "Jumlah",
+    hidden: true,
     data: [],
   },
   {
     name: "Anggaran",
+    hidden: true,
     data: [],
   },
 ])
@@ -176,10 +178,12 @@ const seriesPerProvince = ref([
   },
   {
     name: "Jumlah",
+    hidden: true,
     data: [],
   },
   {
     name: "Anggaran",
+    hidden: true,
     data: [],
   },
 ])
@@ -726,7 +730,7 @@ const getPartnershipDetail = async (val) => {
       }
 
       seriesSKPDN.value = outputData;
-      ApexCharts.getChartByID("chartSKPDN").updateSeries(seriesSKPDN.value, true);
+      // ApexCharts.getChartByID("chartSKPDN").updateSeries(seriesSKPDN.value, true);
 
       ApexCharts.getChartByID("chartVillageCount").updateOptions({
         xaxis: { categories: legends },

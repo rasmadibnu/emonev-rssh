@@ -20,7 +20,6 @@
           <q-tab-panel name="Dashboard1">
             <index-dashboard />
           </q-tab-panel>
-
           <q-tab-panel name="Dashboard2">
             <province-dashboard />
           </q-tab-panel>
@@ -606,6 +605,10 @@ export default defineComponent({
     return {
       authStore,
       dsStore,
+
+
+      indexRef: ref(null),
+
       isReveal: ref(true),
       columns_penginputan,
       columns_planning,
