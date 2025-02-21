@@ -10,56 +10,30 @@
           <q-markup-table flat separator="none" class="tw-h-auto">
             <tbody>
               <tr class="q-tr--no-hover">
-                <td><div class="">-</div></td>
-                <td><div class="">Pilih Tahun Anggaran</div></td>
+                <td>
+                  <div class="">-</div>
+                </td>
+                <td>
+                  <div class="">Pilih Tahun Anggaran</div>
+                </td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    dense
-                    filled
-                    v-model="year"
-                    label="Pilih Tahun"
-                    :options="list_year"
-                    @update:model-value="getForm"
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select dense filled v-model="year" label="Pilih Tahun" :options="list_year"
+                    @update:model-value="getForm" map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    dense
-                    filled
-                    v-model="year"
-                    label="Pilih Tahun"
-                    :options="list_year"
-                    @update:model-value="getForm"
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select dense filled v-model="year" label="Pilih Tahun" :options="list_year"
+                    @update:model-value="getForm" map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="q-tr--no-hover">
                 <td>-</td>
                 <td>Pilih Provinsi</td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    ref="selectProvince"
-                    dense
-                    filled
-                    v-model="auth.province"
-                    label="Pilih Provinsi"
-                    :options="list_province"
-                    @filter="filterProvince"
-                    @update:model-value="setRegencies"
-                    :disable="auth.provinces.length == 1"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select ref="selectProvince" dense filled v-model="auth.province" label="Pilih Provinsi"
+                    :options="list_province" @filter="filterProvince" @update:model-value="setRegencies"
+                    :disable="auth.provinces.length == 1" use-input map-options emit-value :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
@@ -75,40 +49,18 @@
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    ref="selectProvince"
-                    dense
-                    filled
-                    v-model="auth.province"
-                    label="Pilih Provinsi"
-                    :options="list_province"
-                    @filter="filterProvince"
-                    @update:model-value="setRegencies"
-                    :disable="auth.provinces.length == 1"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select ref="selectProvince" dense filled v-model="auth.province" label="Pilih Provinsi"
+                    :options="list_province" @filter="filterProvince" @update:model-value="setRegencies"
+                    :disable="auth.provinces.length == 1" use-input map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="q-tr--no-hover">
                 <td>-</td>
                 <td>Pilih Kabupaten Kota</td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    dense
-                    filled
-                    v-model="regency"
-                    label="Pilih Kabupaten Kota"
-                    :options="list_regency"
-                    @filter="filterRegency"
-                    :disable="auth.province == null"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select dense filled v-model="regency" label="Pilih Kabupaten Kota" :options="list_regency"
+                    @filter="filterRegency" :disable="auth.province == null" use-input map-options emit-value
+                    :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
@@ -124,19 +76,9 @@
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    dense
-                    filled
-                    v-model="regency"
-                    label="Pilih Kabupaten Kota"
-                    :options="list_regency"
-                    @filter="filterRegency"
-                    :disable="auth.province == null"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select dense filled v-model="regency" label="Pilih Kabupaten Kota" :options="list_regency"
+                    @filter="filterRegency" :disable="auth.province == null" use-input map-options emit-value
+                    :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
@@ -156,33 +98,14 @@
                   <q-separator class="tw-w-full" />
                 </td>
               </tr>
-              <TRInput
-                v-for="(inp, index) in fields"
-                v-model="inp.Value"
-                v-bind="{ ...inp, Index: index, Token: auth.token }"
-                :key="inp.ID"
-                @onValueEmpty="flushChilds(inp)"
-              />
+              <TRInput v-for="(inp, index) in fields" v-model="inp.Value"
+                v-bind="{ ...inp, Index: index, Token: auth.token }" :key="inp.ID" @onValueEmpty="flushChilds(inp)" />
             </tbody>
           </q-markup-table>
           <div class="tw-flex tw-justify-center tw-mt-4 tw-gap-4">
-            <q-btn
-              outline
-              color="primary"
-              unelevated
-              label="Kembali"
-              :to="{ name: 'survey-index' }"
-              no-caps
-              :loading="loading"
-            />
-            <q-btn
-              type="submit"
-              color="primary"
-              unelevated
-              label="Simpan"
-              no-caps
-              :loading="loading"
-            />
+            <q-btn outline color="primary" unelevated label="Kembali" :to="{ name: 'survey-index' }" no-caps
+              :loading="loading" />
+            <q-btn type="submit" color="primary" unelevated label="Simpan" no-caps :loading="loading" />
           </div>
         </q-form>
       </q-card-section>
@@ -310,8 +233,8 @@ export default defineComponent({
       return this.$api
         .get(
           "/forms/" +
-            year +
-            '/survey?Relation={"Name": "Fields.Childs.Childs.Parent"}'
+          year +
+          '/survey?Relation={"Name": "Fields.Childs.Childs.Parent"}'
         )
         .then((res) => {
           this.forms = res.data.data.Fields.sort(
@@ -348,6 +271,10 @@ export default defineComponent({
             this.$q.notify({
               message: "Data berhasil tersimpan",
               color: "positive",
+            });
+            this.$router.push({
+              name: 'survey-edit',
+              params: { id: res.data.data.ID },
             });
             this.loading = false;
           })

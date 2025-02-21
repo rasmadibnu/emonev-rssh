@@ -5,13 +5,9 @@
         <td rowspan="3">Provinsi</td>
         <td rowspan="3">Kabupaten / Kota</td>
         <td colspan="3" rowspan="2" class="text-center">Dana Desa</td>
-        <td
-          colspan="3"
-          rowspan="2"
-          class="text-center"
-          style="border-right: 1px solid black"
-        >
-          Dana CSR
+        <td colspan="3" rowspan="2" class="text-center">Dana CSR</td>
+        <td colspan="3" rowspan="2" class="text-center" style="border-right: 1px solid black">
+          Dana LSM
         </td>
         <td colspan="21" align="center">SKPD Non Dinkes</td>
       </tr>
@@ -72,8 +68,17 @@
         <q-td>
           {{ data.CSR.Realization }}
         </q-td>
-        <q-td style="border-right: 1px solid black">
+        <q-td>
           {{ parseFloat(data.CSR.Precentage).toFixed(2) }}%
+        </q-td>
+        <q-td>
+          {{ data.LSM.Budget }}
+        </q-td>
+        <q-td>
+          {{ data.LSM.Realization }}
+        </q-td>
+        <q-td style="border-right: 1px solid black">
+          {{ parseFloat(data.LSM.Precentage).toFixed(2) }}%
         </q-td>
         <q-td>
           {{ data.SocialDepartment.Budget }}
@@ -138,13 +143,7 @@
       <q-card-section>
         <div class="tw-text-xl tw-mb-4">Rekapitulasi Kemitraan</div>
         <div class="tw-flex tw-justify-between tw-items-center tw-w-full">
-          <q-input
-            dense
-            placeholder="Cari..."
-            class="tw-w-64"
-            v-model="search"
-            filled
-          >
+          <q-input dense placeholder="Cari..." class="tw-w-64" v-model="search" filled>
             <template #prepend>
               <vx-icon iconName="SearchStatus" :size="20" />
             </template>
@@ -158,40 +157,21 @@
                 </div>
               </q-btn>
             </div>
-            <q-select
-              dense
-              filled
-              v-model="year_selected"
-              label="Pilih Tahun"
-              :options="list_year"
-              @update:model-value="getRecap"
-              map-options
-              emit-value
-              class="tw-w-36"
-            />
+            <q-select dense filled v-model="year_selected" label="Pilih Tahun" :options="list_year"
+              @update:model-value="getRecap" map-options emit-value class="tw-w-36" />
           </div>
         </div>
       </q-card-section>
       <q-card-section class="q-py-none">
-        <q-table
-          :rows="recap"
-          :loading="loading"
-          flat
-          :pagination="{ rowsPerPage: 10 }"
-          :filter="search"
-        >
+        <q-table :rows="recap" :loading="loading" flat :pagination="{ rowsPerPage: 10 }" :filter="search">
           <template v-slot:header>
             <tr class="text-center">
               <td rowspan="3">Provinsi</td>
               <td rowspan="3">Kabupaten / Kota</td>
               <td colspan="3" rowspan="2" class="text-center">Dana Desa</td>
-              <td
-                colspan="3"
-                rowspan="2"
-                class="text-center"
-                style="border-right: 1px solid black"
-              >
-                Dana CSR
+              <td colspan="3" rowspan="2" class="text-center">Dana CSR</td>
+              <td colspan="3" rowspan="2" class="text-center" style="border-right: 1px solid black">
+                Dana LSM
               </td>
               <td colspan="21">SKPD Non Dinkes</td>
             </tr>
@@ -204,6 +184,9 @@
               <td colspan="3" class="text-center">Dinas Lainnya</td>
             </tr>
             <tr class="text-center">
+              <td>Anggaran</td>
+              <td>Realisasi</td>
+              <td>Persentase</td>
               <td>Anggaran</td>
               <td>Realisasi</td>
               <td>Persentase</td>
@@ -254,8 +237,17 @@
               <q-td>
                 {{ rupiah(props.row.CSR.Realization) }}
               </q-td>
-              <q-td style="border-right: 1px solid black">
+              <q-td>
                 {{ parseFloat(props.row.CSR.Precentage).toFixed(2) }}%
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.LSM.Budget) }}
+              </q-td>
+              <q-td>
+                {{ rupiah(props.row.LSM.Realization) }}
+              </q-td>
+              <q-td style="border-right: 1px solid black">
+                {{ parseFloat(props.row.LSM.Precentage).toFixed(2) }}%
               </q-td>
               <q-td>
                 {{ rupiah(props.row.SocialDepartment.Budget) }}
