@@ -20,6 +20,19 @@
         </apex>
 
       </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-table flat :rows="tableBudget" hide-pagination :columns="columnBudget"
+          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading">
+          <template #body-cell-year="props">
+            <q-td :props="props">
+              <div class="tw-flex tw-gap-x-2 tw-items-center">
+                <div class="tw-h-4 tw-w-4" :style="{ backgroundColor: props.row.color }"></div>
+                {{ props.row.name }}
+              </div>
+            </q-td>
+          </template>
+        </q-table>
+      </q-card-section>
 
       <q-card-section class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center">
         <div class="text-primary tw-text-xl tw-flex tw-justify-between tw-items-center">
@@ -35,7 +48,7 @@
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table flat :rows="tablePartnership" hide-pagination :columns="columnPartnership"
-          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading">
+          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading2">
           <template #body-cell-year="props">
             <q-td :props="props">
               <div class="tw-flex tw-gap-x-2 tw-items-center">
