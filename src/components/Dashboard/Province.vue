@@ -137,6 +137,7 @@ const chartOptionsProvinceUPTD = ref({
   chart: {
     type: "bar",
     id: "chartProvinceUPTD",
+    stacked: true,
   },
   colors: ["#243763", "#FF6E31", "#9384D1"],
   plotOptions: {
@@ -146,6 +147,7 @@ const chartOptionsProvinceUPTD = ref({
     },
   },
   dataLabels: {
+    enabled: true,
     formatter: function (value) {
       return rupiah(value);
     },
@@ -166,10 +168,10 @@ const chartOptionsProvinceUPTD = ref({
     },
     offsetX: 30,
   },
-  yaxis: {
+  xaxis: {
     categories: [],
   },
-  xaxis: {
+  yaxis: {
     labels: {
       formatter: function (value) {
         return suffixRupiah(value);
