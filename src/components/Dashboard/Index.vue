@@ -274,6 +274,10 @@ const chartOptionUPTD = ref({
     type: "bar",
     id: "chartAmountUPTD",
     stacked: true,
+    zoom: {
+      enabled: true,
+      allowMouseWheelZoom: false,
+    },
     toolbar: {
       show: true,
       tools: {
