@@ -1,12 +1,12 @@
 <template>
   <q-layout v-scroll="onScroll" view="hHh lpR fFf">
-    <q-header reveal v-model="isReveal" class="bg-white text-primary">
+    <q-header reveal v-model="isReveal" class="bg-white ">
       <q-toolbar>
         <div class="tw-font-bold tw-py-3 text-center tw-flex tw-justify-center tw-flex-col tw-w-full">
-          <div class="tw-text-4xl">
+          <div class="tw-text-4xl text-primary">
             <span class="text-secondary">e</span>Monev
           </div>
-          <div class="tw-uppercase tw-text-xs md:tw-text-lg text-center">
+          <div class="tw-uppercase text-accent tw-text-xs md:tw-text-lg text-center">
             Sistem Informasi ADINKES<br />
             Monitoring Evaluasi Capaian RSSH - ATM
           </div>
@@ -656,7 +656,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
 
@@ -697,7 +697,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
 
@@ -738,7 +738,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
 

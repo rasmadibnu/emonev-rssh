@@ -156,7 +156,7 @@ const chartOptionsBudget = ref({
     height: 350,
     id: "chartBudget",
   },
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     // bar: {
     //   horizontal: false,
@@ -173,7 +173,7 @@ const chartOptionsBudget = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -181,7 +181,7 @@ const chartOptionsBudget = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -230,7 +230,7 @@ const chartOptionsPartnership = ref({
     height: 350,
     id: "chartPartnership",
   },
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     // bar: {
     //   horizontal: false,
@@ -246,7 +246,7 @@ const chartOptionsPartnership = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -254,7 +254,7 @@ const chartOptionsPartnership = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },

@@ -91,7 +91,7 @@ const chartOptionPrecentage = ref({
       },
     },
   ],
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -108,7 +108,7 @@ const chartOptionPrecentage = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -116,7 +116,7 @@ const chartOptionPrecentage = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -194,7 +194,7 @@ const chartOptionAmount = ref({
       },
     },
   ],
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -212,7 +212,7 @@ const chartOptionAmount = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -220,7 +220,7 @@ const chartOptionAmount = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -307,7 +307,7 @@ const chartOptionUPTD = ref({
       },
     },
   ],
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -324,7 +324,7 @@ const chartOptionUPTD = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -332,7 +332,7 @@ const chartOptionUPTD = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -418,7 +418,7 @@ const chartOptionKKN = ref({
       },
     },
   ],
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -435,7 +435,7 @@ const chartOptionKKN = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -443,7 +443,7 @@ const chartOptionKKN = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },

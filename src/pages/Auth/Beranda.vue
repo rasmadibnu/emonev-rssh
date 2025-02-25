@@ -4,16 +4,10 @@
     <div class="tw-grid md:tw-grid-cols-3 tw-gap-4">
       <q-card v-for="item in count" :key="item" flat class="tw-rounded-lg">
         <q-card-section class="tw-group tw-flex tw-justify-between">
-          <q-avatar
-            size="50px"
-            :style="{ backgroundColor: item.Color }"
-            class="tw-transition-all tw-duration-300 tw-transform group-hover:tw-rotate-12"
-          >
-            <vx-icon
-              :iconName="item.Icon"
-              class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out"
-              :size="24"
-            />
+          <q-avatar size="50px" :style="{ backgroundColor: item.Color }"
+            class="tw-transition-all tw-duration-300 tw-transform group-hover:tw-rotate-12">
+            <vx-icon :iconName="item.Icon"
+              class="text-white tw-transform tw-transition-transform tw-duration-500 tw-ease-in-out" :size="24" />
           </q-avatar>
           <div class="tw-text-right">
             <p class="tw-text-2xl tw-font-semibold">{{ item.Value }}</p>
@@ -24,73 +18,33 @@
     </div>
     <div class="tw-flex tw-justify-between tw-mt-4 tw-items-center">
       <div class="tw-text-xl tw-font-semibold">Progress</div>
-      <q-select
-        v-model="auth.year_selected"
-        :options="list_year"
-        dense
-        label="Tahun"
-        class="tw-w-44"
-        map-options
-        emit-value
-        @update:model-value="onUpdateYear"
-      />
+      <q-select v-model="auth.year_selected" :options="list_year" dense label="Tahun" class="tw-w-44" map-options
+        emit-value @update:model-value="onUpdateYear" />
     </div>
     <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
       <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
         <div class="tw-text-xl tw-font-semibold">Anggaran</div>
         <div></div>
       </div>
-      <q-table
-        flat
-        class="tw-col-span-8"
-        :columns="columns_penginputan"
-        :rows="progress_penginputan"
-      >
+      <q-table flat class="tw-col-span-8" :columns="columns_penginputan" :rows="progress_penginputan">
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
               {{ props.row.Name }}
             </q-td>
             <td>
-              <q-badge
-                label="Completed"
-                v-if="props.row.Status == 'Completed'"
-                color="positive"
-              />
-              <q-badge
-                label="Belum Input"
-                v-else-if="props.row.Status == 'Belum Input'"
-                color="negative"
-              />
-              <q-badge
-                label="Progress"
-                v-else-if="props.row.Status == 'Progress'"
-                color="secondary"
-              />
+              <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+              <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+              <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
             </td>
             <q-td class="tw-flex tw-items-center">
-              <div
-                style="font-size: 0.8em"
-                class="tw-mt-1 tw-mr-2 text-primary"
-              >
+              <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                 {{ parseFloat(props.row.Progress * 100).toFixed(0) + "%" }}
               </div>
-              <q-linear-progress
-                rounded
-                stripe
-                size="25px"
-                :value="props.row.Progress"
-                color="accent"
-                class="q-mt-sm"
-              >
+              <q-linear-progress rounded stripe size="25px" :value="props.row.Progress" color="accent" class="q-mt-sm">
                 <div class="absolute-full flex flex-center">
-                  <q-badge
-                    color="white"
-                    text-color="accent"
-                    :label="
-                      props.row.JumlahInput + '/' + props.row.Regencies.length
-                    "
-                  />
+                  <q-badge color="white" text-color="accent" :label="props.row.JumlahInput + '/' + props.row.Regencies.length
+                    " />
                 </div>
               </q-linear-progress>
             </q-td>
@@ -101,11 +55,7 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex
-          type="radialBar"
-          :options="chart_penginputan"
-          :series="series_penginputan"
-        ></apex>
+        <apex type="radialBar" :options="chart_penginputan" :series="series_penginputan"></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -147,11 +97,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="negative" size="50px">
-                <vx-icon
-                  iconName="ClipboardClose"
-                  class="text-white"
-                  :size="24"
-                />
+                <vx-icon iconName="ClipboardClose" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -174,154 +120,81 @@
         <div class="tw-text-xl tw-font-semibold">Kemitraan</div>
         <div></div>
       </div>
-      <q-table
-        flat
-        class="tw-col-span-8"
-        :columns="columns_partnership"
-        :rows="progress_partnership"
-      >
+      <q-table flat class="tw-col-span-8" :columns="columns_partnership" :rows="progress_partnership">
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
               {{ props.row.Name }}
             </q-td>
             <td>
-              <q-badge
-                label="Completed"
-                v-if="props.row.Status == 'Completed'"
-                color="positive"
-              />
-              <q-badge
-                label="Belum Input"
-                v-else-if="props.row.Status == 'Belum Input'"
-                color="negative"
-              />
-              <q-badge
-                label="Progress"
-                v-else-if="props.row.Status == 'Progress'"
-                color="secondary"
-              />
+              <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+              <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+              <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
             </td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{
                     parseFloat(props.row.ProgressSKPD * 100).toFixed(0) + "%"
                   }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressSKPD"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressSKPD" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputSKPD +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputSKPD +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
             </q-td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{ parseFloat(props.row.ProgressCSR * 100).toFixed(0) + "%" }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressCSR"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressCSR" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputCSR +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputCSR +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
             </q-td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{
                     parseFloat(props.row.ProgressVillage * 100).toFixed(0) + "%"
                   }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressVillage"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressVillage" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputVillage +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputVillage +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
             </q-td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{ parseFloat(props.row.ProgressSK * 100).toFixed(0) + "%" }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressSK"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressSK" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputSK +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputSK +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
@@ -333,11 +206,7 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex
-          type="radialBar"
-          :options="chart_parterhsip"
-          :series="series_parterhsip"
-        ></apex>
+        <apex type="radialBar" :options="chart_parterhsip" :series="series_parterhsip"></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -379,11 +248,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="negative" size="50px">
-                <vx-icon
-                  iconName="ClipboardClose"
-                  class="text-white"
-                  :size="24"
-                />
+                <vx-icon iconName="ClipboardClose" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -406,94 +271,49 @@
         <div class="tw-text-xl tw-font-semibold">Dokumen Perencanaan</div>
         <div></div>
       </div>
-      <q-table
-        flat
-        class="tw-col-span-8"
-        :columns="columns_planning"
-        :rows="progress_planning"
-      >
+      <q-table flat class="tw-col-span-8" :columns="columns_planning" :rows="progress_planning">
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
               {{ props.row.Name }}
             </q-td>
             <td>
-              <q-badge
-                label="Completed"
-                v-if="props.row.Status == 'Completed'"
-                color="positive"
-              />
-              <q-badge
-                label="Belum Input"
-                v-else-if="props.row.Status == 'Belum Input'"
-                color="negative"
-              />
-              <q-badge
-                label="Progress"
-                v-else-if="props.row.Status == 'Progress'"
-                color="secondary"
-              />
+              <q-badge label="Completed" v-if="props.row.Status == 'Completed'" color="positive" />
+              <q-badge label="Belum Input" v-else-if="props.row.Status == 'Belum Input'" color="negative" />
+              <q-badge label="Progress" v-else-if="props.row.Status == 'Progress'" color="secondary" />
             </td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{
                     parseFloat(props.row.ProgressRKPD * 100).toFixed(0) + "%"
                   }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressRKPD"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressRKPD" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputRKPD +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputRKPD +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
             </q-td>
             <q-td>
               <div class="tw-flex tw-items-center">
-                <div
-                  style="font-size: 0.8em"
-                  class="tw-mt-1 tw-mr-2 text-primary"
-                >
+                <div style="font-size: 0.8em" class="tw-mt-1 tw-mr-2 text-primary">
                   {{
                     parseFloat(props.row.ProgressRenja * 100).toFixed(0) + "%"
                   }}
                 </div>
-                <q-linear-progress
-                  rounded
-                  stripe
-                  size="25px"
-                  :value="props.row.ProgressRenja"
-                  color="accent"
-                  class="q-mt-sm"
-                >
+                <q-linear-progress rounded stripe size="25px" :value="props.row.ProgressRenja" color="accent"
+                  class="q-mt-sm">
                   <div class="absolute-full flex flex-center">
-                    <q-badge
-                      color="white"
-                      text-color="accent"
-                      :label="
-                        props.row.JumlahInputRenja +
-                        '/' +
-                        props.row.Regencies.length
-                      "
-                    />
+                    <q-badge color="white" text-color="accent" :label="props.row.JumlahInputRenja +
+                      '/' +
+                      props.row.Regencies.length
+                      " />
                   </div>
                 </q-linear-progress>
               </div>
@@ -505,11 +325,7 @@
         </template>
       </q-table>
       <div class="tw-col-span-4 tw-w-full">
-        <apex
-          type="radialBar"
-          :options="chart_planning"
-          :series="series_planning"
-        ></apex>
+        <apex type="radialBar" :options="chart_planning" :series="series_planning"></apex>
         <q-separator />
         <q-list>
           <q-item class="tw-flex tw-justify-between tw-items-center">
@@ -549,11 +365,7 @@
           <q-item class="tw-flex tw-justify-between tw-items-center">
             <q-item-section avatar>
               <q-avatar color="negative" size="50px">
-                <vx-icon
-                  iconName="ClipboardClose"
-                  class="text-white"
-                  :size="24"
-                />
+                <vx-icon iconName="ClipboardClose" class="text-white" :size="24" />
               </q-avatar>
             </q-item-section>
 
@@ -758,7 +570,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
 
@@ -799,7 +611,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
 
@@ -840,7 +652,7 @@ export default defineComponent({
           },
         },
 
-        colors: ["#243763"],
+        colors: ["#7a4790"],
         labels: ["- / -"],
       }),
     };

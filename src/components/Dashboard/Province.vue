@@ -137,9 +137,9 @@ const chartOptionsProvinceUPTD = ref({
   chart: {
     type: "bar",
     id: "chartProvinceUPTD",
-    stacked: true,
+    // stacked: true,
   },
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -155,7 +155,7 @@ const chartOptionsProvinceUPTD = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -163,15 +163,15 @@ const chartOptionsProvinceUPTD = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
     offsetX: 30,
   },
-  xaxis: {
+  yaxis: {
     categories: [],
   },
-  yaxis: {
+  xaxis: {
     labels: {
       formatter: function (value) {
         return suffixRupiah(value);
@@ -208,7 +208,7 @@ const chartOptionsProvinceKKN = ref({
     type: "bar",
     id: "chartProvinceKKN",
   },
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -223,7 +223,7 @@ const chartOptionsProvinceKKN = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -231,7 +231,7 @@ const chartOptionsProvinceKKN = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
     offsetX: 30,
@@ -276,7 +276,7 @@ const chartOptionsProvince = ref({
     type: "bar",
     id: "chartProvince",
   },
-  colors: ["#243763", "#FF6E31", "#9384D1"],
+  colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
       horizontal: true,
@@ -291,7 +291,7 @@ const chartOptionsProvince = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -299,7 +299,7 @@ const chartOptionsProvince = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
     offsetX: 30,

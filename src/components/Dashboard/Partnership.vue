@@ -113,7 +113,7 @@ const chartAllOptions = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -121,7 +121,7 @@ const chartAllOptions = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -150,7 +150,7 @@ const chartAllOptions = ref({
              `;
     },
   },
-  colors: ["#FF6E31", "#243763", "#9384d1"],
+  colors: ["#709600", "#7a4790", "#3082c8"],
   plotOptions: {
     bar: {
       // borderRadius: 4,
@@ -223,7 +223,7 @@ const chartOptionsPerProvince = ref({
              `;
     },
   },
-  colors: ["#FF6E31", "#243763", "#9384d1"],
+  colors: ["#709600", "#7a4790", "#3082c8"],
   plotOptions: {
     bar: {
       // borderRadius: 4,
@@ -248,7 +248,7 @@ const chartOptionsPerProvince = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -256,7 +256,7 @@ const chartOptionsPerProvince = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
@@ -282,7 +282,7 @@ const chartOptionVillageCount = ref({
     height: 350,
     id: "chartVillageCount",
   },
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -300,7 +300,7 @@ const chartOptionVillageCount = ref({
     offsetY: -20,
     style: {
       fontSize: "12px",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
   },
 
@@ -336,7 +336,7 @@ const chartOptionVillageFund = ref({
     height: 350,
     id: "chartVillageFund",
   },
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -354,7 +354,7 @@ const chartOptionVillageFund = ref({
     offsetY: -20,
     style: {
       fontSize: "12px",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
   },
 
@@ -390,7 +390,7 @@ const chartOptionCSR = ref({
     height: 350,
     id: "chartCSR",
   },
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -408,7 +408,7 @@ const chartOptionCSR = ref({
     offsetY: -20,
     style: {
       fontSize: "12px",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
   },
   stroke: {
@@ -443,7 +443,7 @@ const chartOptionLSM = ref({
     height: 350,
     id: "chartLSM",
   },
-  colors: ["#243763"],
+  colors: ["#7a4790"],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -461,7 +461,7 @@ const chartOptionLSM = ref({
     offsetY: -20,
     style: {
       fontSize: "12px",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
   },
   stroke: {
@@ -505,7 +505,7 @@ const chartOptionSKPDN = ref({
       fontSize: "10px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      colors: ["#243763"],
+      colors: ["#7a4790"],
     },
     background: {
       enabled: true,
@@ -513,7 +513,7 @@ const chartOptionSKPDN = ref({
       padding: 4,
       borderRadius: 2,
       borderWidth: 1,
-      borderColor: "#243763",
+      borderColor: "#7a4790",
       opacity: 1,
     },
   },
