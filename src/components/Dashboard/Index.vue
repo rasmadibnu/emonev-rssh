@@ -24,6 +24,11 @@
         <apex type="bar" class="tw-w-full" :options="chartOptionUPTD" :series="seriesUPTD" ref="chartAmountUPTD">
         </apex>
       </q-card-section>
+      <!-- <q-card-section class="q-pt-none tw-overflow-x-scroll tw-w-auto">
+        <apex type="bar" class="tw-w-full" :options="chartOptionUPTDPartnership" :series="seriesUPTDPartnership"
+          ref="chartAmountUPTDPartnership">
+        </apex>
+      </q-card-section> -->
     </q-card>
     <q-card flat>
       <q-card-section class="text-primary tw-text-xl tw-flex tw-justify-between tw-justify-items-center">
@@ -370,6 +375,118 @@ const chartOptionUPTD = ref({
   },
 })
 
+const seriesUPTDPartnership = ref([
+  {
+    name: "Dinkes",
+    data: [],
+  },
+  {
+    name: "Partnership",
+    data: [],
+  },
+])
+
+const chartOptionUPTDPartnership = ref({
+  chart: {
+    type: "bar",
+    id: "chartAmountUPTDPartnership",
+    stacked: true,
+    zoom: {
+      enabled: true,
+      allowMouseWheelZoom: false,
+    },
+    toolbar: {
+      show: true,
+      tools: {
+        download: '<img src="export.png" width="20">',
+        selection: true,
+        zoom: '<img src="search.png" width="20">',
+        zoomin: '<img src="zoomin.png" width="20">',
+        zoomout: '<img src="zoomout.png" width="20">',
+        pan: true,
+        reset: '<img src="reset.png" width="20">',
+      },
+    },
+  },
+  responsive: [
+    {
+      breakpoint: 480, // defines breakpoint for mobile devices
+      options: {
+        // set chart options for mobile devices
+        chart: {
+          width: "1000", // make chart width 100% on mobile
+        },
+      },
+    },
+    {
+      breakpoint: 600, // defines breakpoint for mobile devices
+      options: {
+        // set chart options for mobile devices
+        chart: {
+          width: "700", // make chart width 100% on mobile
+        },
+      },
+    },
+  ],
+  colors: ["#7a4790", "#709600", "#3082c8"],
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      barHeight: "100%",
+    },
+  },
+  dataLabels: {
+    enabled: false,
+    formatter: function (value) {
+      return rupiah(value);
+    },
+    offsetX: 30,
+    style: {
+      fontSize: "10px",
+      fontFamily: "Helvetica, Arial, sans-serif",
+      fontWeight: "bold",
+      colors: ["#7a4790"],
+    },
+    background: {
+      enabled: true,
+      foreColor: "#fff",
+      padding: 4,
+      borderRadius: 2,
+      borderWidth: 1,
+      borderColor: "#7a4790",
+      opacity: 1,
+    },
+  },
+  // stroke: {
+  //   show: true,
+  //   width: 2,
+  //   colors: ["transparent"],
+  // },
+  xaxis: {
+    tickPlacement: "on",
+  },
+  yaxis: {
+    labels: {
+      formatter: function (value) {
+        return suffixRupiah(value);
+      },
+    },
+  },
+  fill: {
+    opacity: 1,
+  },
+  tooltip: {
+    enabled: true,
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (value) {
+        return rupiah(value);
+      },
+    },
+  },
+})
+
 const seriesKKN = ref([
   {
     name: "AIDS",
@@ -543,6 +660,13 @@ const getBudget = async (val) => {
         (e) => e.budget?.Malaria
       );
 
+      seriesUPTDPartnership.value[0].data = sortedByBudget.map(
+        (e) => e.budget?.TotalATM
+      );
+      seriesUPTDPartnership.value[1].data = sortedByBudget.map(
+        (e) => e.partnership
+      );
+
       // Extract categories for each sorted data set
       const categoriesBudget = sortedByBudget.map((e) => e.name);
       const categoriesPercentage = sortedByPercentage.map((e) => e.name);
@@ -556,6 +680,10 @@ const getBudget = async (val) => {
       ApexCharts.getChartByID("chartAmountUPTD").updateOptions({
         xaxis: { categories: categoriesBudget },
       });
+
+      // ApexCharts.getChartByID("chartAmountUPTDPartnership").updateOptions({
+      //   xaxis: { categories: categoriesBudget },
+      // });
 
       ApexCharts.getChartByID("chartPrecentage").updateOptions({
         xaxis: { categories: categoriesPercentage },

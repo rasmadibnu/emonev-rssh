@@ -37,7 +37,7 @@
       <q-card-section class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center">
         <div class="text-primary tw-text-xl tw-flex tw-justify-between tw-items-center">
           Partnership Contribution
-          <q-spinner v-if="loading2" color="primary" size="md" />
+          <q-spinner v-if="loading" color="primary" size="md" />
         </div>
 
       </q-card-section>
@@ -48,7 +48,34 @@
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table flat :rows="tablePartnership" hide-pagination :columns="columnPartnership"
-          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading2">
+          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading">
+          <template #body-cell-year="props">
+            <q-td :props="props">
+              <div class="tw-flex tw-gap-x-2 tw-items-center">
+                <div class="tw-h-4 tw-w-4" :style="{ backgroundColor: props.row.color }"></div>
+                {{ props.row.name }}
+              </div>
+            </q-td>
+          </template>
+        </q-table>
+      </q-card-section>
+
+      <q-card-section class="tw-flex md:tw-flex-row tw-flex-col tw-justify-between tw-items-center">
+        <div class="text-primary tw-text-xl tw-flex tw-justify-between tw-items-center">
+          Total Anggaran ATM (Dinkes + Partnership)
+          <q-spinner v-if="loading" color="primary" size="md" />
+        </div>
+
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <apex type="bar" :options="chartOptionsDinkesPartnership" :series="seriesDinkesPartnership"
+          ref="chartDinkesPartnership">
+        </apex>
+
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-table flat :rows="tableDinkesPartnership" hide-pagination :columns="columnDinkesPartnership"
+          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading">
           <template #body-cell-year="props">
             <q-td :props="props">
               <div class="tw-flex tw-gap-x-2 tw-items-center">
@@ -143,6 +170,34 @@ const columnPartnership = [
     name: "total",
     label: "Total Dana Kemitraan",
     field: (row) => rupiah(row.total_partnership),
+    sortable: true,
+  },
+];
+
+const columnDinkesPartnership = [
+  {
+    name: "year",
+    label: "",
+    field: "name",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "dinkes",
+    label: "Dinkes",
+    field: (row) => rupiah(row.budget.TotalATM),
+    sortable: true,
+  },
+  {
+    name: "partnership",
+    label: "Partnership",
+    field: (row) => rupiah(row.total_partnership),
+    sortable: true,
+  },
+  {
+    name: "total",
+    label: "Total",
+    field: (row) => rupiah(row.budget.TotalATM + row.total_partnership),
     sortable: true,
   },
 ];
@@ -294,11 +349,85 @@ const chartOptionsPartnership = ref({
   },
 })
 
+const seriesDinkesPartnership = ref([
+])
+
+const chartOptionsDinkesPartnership = ref({
+  chart: {
+    type: "bar",
+    height: 350,
+    id: "chartDinkesPartnership",
+  },
+  colors: ["#7a4790", "#709600", "#3082c8"],
+  plotOptions: {
+    // bar: {
+    //   horizontal: false,
+    //   barHeight: "90%",
+    // },
+  },
+  dataLabels: {
+    enabled: false,
+    formatter: function (value) {
+      return rupiah(value);
+    },
+    style: {
+      fontSize: "10px",
+      fontFamily: "Helvetica, Arial, sans-serif",
+      fontWeight: "bold",
+      colors: ["#7a4790"],
+    },
+    background: {
+      enabled: true,
+      foreColor: "#fff",
+      padding: 4,
+      borderRadius: 2,
+      borderWidth: 1,
+      borderColor: "#7a4790",
+      opacity: 1,
+    },
+  },
+  xaxis: {
+    categories: ["Dinkes", "Partnership", "Total"],
+  },
+  yaxis: {
+    labels: {
+      formatter: function (value) {
+        return isNaN(value) ? value : suffixRupiah(value);
+      },
+    },
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ["transparent"],
+  },
+  fill: {
+    opacity: 1,
+  },
+  legend: {
+    position: "top",
+    itemMargin: {
+      vertical: 20,
+    },
+  },
+  tooltip: {
+    enabled: true,
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (value) {
+        return rupiah(value);
+      },
+    },
+  },
+})
+
 const loading = ref(false)
 const loading2 = ref(false)
 
 const tableBudget = ref([])
 const tablePartnership = ref([])
+const tableDinkesPartnership = ref([])
 
 const yearPast = ref(null)
 const yearPastInput = ref(null)
@@ -306,7 +435,7 @@ const yearPastInput = ref(null)
 const onChangeYear = () => {
   if (yearPast.value.label < dsStore.year.label)
     findBuget(dsStore.year.label)
-  findPartnership(dsStore.year.label)
+  // findPartnership(dsStore.year.label)
 }
 
 watch(() => dsStore.year, () => {
@@ -323,6 +452,8 @@ const findBuget = async (year) => {
   loading.value = true;
   seriesBudget.value = []
   tableBudget.value = []
+  seriesPartnership.value = []
+  tablePartnership.value = []
   await api
     .get("/result/" + yearPast.value.label + "-" + year + "/budget/year")
     .then((res) => {
@@ -332,9 +463,25 @@ const findBuget = async (year) => {
           data: [data.budget.AIDS, data.budget.TBC, data.budget.Malaria, data.budget.TotalATM]
         })
         tableBudget.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
+
+        seriesPartnership.value.push({
+          name: data.name,
+          data: [data.Village, data.CSR, data.SKPD, data.LSM, data.total_partnership]
+        })
+        tablePartnership.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
+
+        seriesDinkesPartnership.value.push({
+          name: data.name,
+          data: [data.budget.TotalATM, data.total_partnership, data.budget.TotalATM + data.total_partnership]
+        })
+        tableDinkesPartnership.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
       })
 
       ApexCharts.getChartByID("chartBudget").updateSeries(seriesBudget.value, true);
+
+      ApexCharts.getChartByID("chartPartnership").updateSeries(seriesPartnership.value, true);
+
+      ApexCharts.getChartByID("chartDinkesPartnership").updateSeries(seriesDinkesPartnership.value, true);
 
       loading.value = false;
       return res;
@@ -344,29 +491,29 @@ const findBuget = async (year) => {
     });
 }
 
-const findPartnership = async (year) => {
-  loading2.value = true;
-  seriesPartnership.value = []
-  tablePartnership.value = []
-  await api
-    .get("/result/" + yearPast.value.label + "-" + year + "/partnership/year")
-    .then((res) => {
-      res.data.data.map((data, index) => {
-        seriesPartnership.value.push({
-          name: data.name,
-          data: [data.Village, data.CSR, data.SKPD, data.LSM, data.total_partnership]
-        })
-        tablePartnership.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
-      })
+// const findPartnership = async (year) => {
+//   loading2.value = true;
+//   seriesPartnership.value = []
+//   tablePartnership.value = []
+//   await api
+//     .get("/result/" + yearPast.value.label + "-" + year + "/partnership/year")
+//     .then((res) => {
+//       res.data.data.map((data, index) => {
+//         seriesPartnership.value.push({
+//           name: data.name,
+//           data: [data.Village, data.CSR, data.SKPD, data.LSM, data.total_partnership]
+//         })
+//         tablePartnership.value.push({ ...data, color: chartOptionsBudget.value.colors[index] })
+//       })
 
 
-      ApexCharts.getChartByID("chartPartnership").updateSeries(seriesPartnership.value, true);
+//       ApexCharts.getChartByID("chartPartnership").updateSeries(seriesPartnership.value, true);
 
-      loading2.value = false;
-      return res;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+//       loading2.value = false;
+//       return res;
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
 </script>

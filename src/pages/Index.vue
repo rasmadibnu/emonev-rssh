@@ -30,6 +30,9 @@
             <trend-dashboard />
           </q-tab-panel>
           <q-tab-panel name="Dashboard5">
+            <trend-province-dashboard />
+          </q-tab-panel>
+          <q-tab-panel name="Dashboard6">
             <div class="tw-max-w-6xl xl:tw-mx-auto tw-mx-5 tw-space-y-8">
               <q-card flat class="tw-mt-4 md:tw-grid tw-grid-cols-12 tw-p-4 tw-gap-4">
                 <div class="tw-col-span-12 tw-flex tw-justify-between tw-items-center">
@@ -443,7 +446,8 @@
               <q-tab name="Dashboard2" label="Rekapitulasi Per Provinsi" />
               <q-tab name="Dashboard3" label="Rekapitulasi Kemitraan" />
               <q-tab name="Dashboard4" label="Trend Anggaran Nasional" />
-              <q-tab name="Dashboard5" label="Absensi" />
+              <!-- <q-tab name="Dashboard5" label="Trend Anggaran Per Provin" /> -->
+              <q-tab name="Dashboard6" label="Absensi" />
             </q-tabs>
           </div>
         </q-page-sticky>
@@ -473,6 +477,7 @@ import IndexDashboard from "src/components/Dashboard/Index.vue";
 import ProvinceDashboard from "src/components/Dashboard/Province.vue";
 import PartnershipDashboard from "src/components/Dashboard/Partnership.vue";
 import TrendDashboard from "src/components/Dashboard/Trend.vue";
+// import TrendProvinceDashboard from "src/components/Dashboard/TrendProvince.vue";
 
 import { useDashbaordStore } from "src/stores/dashboard";
 

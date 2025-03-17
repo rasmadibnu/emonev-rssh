@@ -11,7 +11,8 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <apex type="bar" :options="chartOptionsProvinceUPTD" :series="seriesProvinceUPTD" ref="chartProvinceUPTD">
+        <apex type="bar" height="600" :options="chartOptionsProvinceUPTD" :series="seriesProvinceUPTD"
+          ref="chartProvinceUPTD">
         </apex>
 
       </q-card-section>
@@ -29,7 +30,8 @@
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <apex type="bar" :options="chartOptionsProvinceKKN" :series="seriesProvinceKKN" ref="chartProvinceKKN">
+        <apex type="bar" height="600" :options="chartOptionsProvinceKKN" :series="seriesProvinceKKN"
+          ref="chartProvinceKKN">
         </apex>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -41,12 +43,31 @@
     <q-card flat class="tw-mb-20">
       <q-card-section>
         <div class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center">
+          Anggaran Kemitraan
+          <q-spinner v-if="loading" color="primary" size="md" />
+        </div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <apex type="bar" height="600" :options="chartOptionsProvincePartnership" :series="seriesProvincePartnership"
+          ref="chartProvincePartnership">
+        </apex>
+      </q-card-section>
+      <!-- <q-card-section class="q-pt-none">
+        <q-table flat :rows="province_table_total" hide-pagination :columns="province_table_column"
+          table-header-class="bg-secondary text-white" separator="vertical" :loading="loading">
+        </q-table>
+      </q-card-section> -->
+    </q-card>
+    <q-card flat class="tw-mb-20">
+      <q-card-section>
+        <div class="text-primary tw-text-xl tw-flex tw-gap-x-2 tw-items-center">
           Anggaran Dinas Kesehatan & Kemitraan
           <q-spinner v-if="loading" color="primary" size="md" />
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <apex type="bar" :options="chartOptionsProvince" :series="seriesProvince" ref="chartProvince"></apex>
+        <apex type="bar" height="600" :options="chartOptionsProvince" :series="seriesProvince" ref="chartProvince">
+        </apex>
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-table flat :rows="province_table_total" hide-pagination :columns="province_table_column"
@@ -133,21 +154,26 @@ const seriesProvince = ref([
   //   data: [],
   // },
 ])
+const seriesProvincePartnership = ref([
+  {
+    name: "Partnership",
+    data: [],
+  },
+])
 const chartOptionsProvinceUPTD = ref({
   chart: {
     type: "bar",
     id: "chartProvinceUPTD",
-    // stacked: true,
+    stacked: true,
   },
   colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
-      horizontal: true,
-      barHeight: "90%",
+      horizontal: false,
     },
   },
   dataLabels: {
-    enabled: true,
+    enabled: false,
     formatter: function (value) {
       return rupiah(value);
     },
@@ -169,20 +195,20 @@ const chartOptionsProvinceUPTD = ref({
     offsetX: 30,
   },
   yaxis: {
-    categories: [],
-  },
-  xaxis: {
     labels: {
       formatter: function (value) {
         return suffixRupiah(value);
       },
     },
   },
-  stroke: {
-    show: true,
-    width: 2,
-    colors: ["transparent"],
+  xaxis: {
+    categories: [],
   },
+  // stroke: {
+  //   show: true,
+  //   width: 2,
+  //   colors: ["transparent"],
+  // },
   fill: {
     opacity: 1,
   },
@@ -207,15 +233,16 @@ const chartOptionsProvinceKKN = ref({
   chart: {
     type: "bar",
     id: "chartProvinceKKN",
+    stacked: true,
   },
   colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
-      horizontal: true,
-      barHeight: "90%",
+      horizontal: false,
     },
   },
   dataLabels: {
+    enabled: false,
     formatter: function (value) {
       return rupiah(value);
     },
@@ -237,20 +264,20 @@ const chartOptionsProvinceKKN = ref({
     offsetX: 30,
   },
   yaxis: {
-    categories: [],
-  },
-  xaxis: {
     labels: {
       formatter: function (value) {
         return suffixRupiah(value);
       },
     },
   },
-  stroke: {
-    show: true,
-    width: 2,
-    colors: ["transparent"],
+  xaxis: {
+    categories: [],
   },
+  // stroke: {
+  //   show: true,
+  //   width: 2,
+  //   colors: ["transparent"],
+  // },
   fill: {
     opacity: 1,
   },
@@ -275,15 +302,16 @@ const chartOptionsProvince = ref({
   chart: {
     type: "bar",
     id: "chartProvince",
+    stacked: true,
   },
   colors: ["#7a4790", "#709600", "#3082c8"],
   plotOptions: {
     bar: {
-      horizontal: true,
-      barHeight: "90%",
+      horizontal: false,
     },
   },
   dataLabels: {
+    enabled: false,
     formatter: function (value) {
       return rupiah(value);
     },
@@ -305,20 +333,88 @@ const chartOptionsProvince = ref({
     offsetX: 30,
   },
   yaxis: {
-    categories: [],
-  },
-  xaxis: {
     labels: {
       formatter: function (value) {
         return suffixRupiah(value);
       },
     },
   },
-  stroke: {
-    show: true,
-    width: 2,
-    colors: ["transparent"],
+  xaxis: {
+    categories: [],
   },
+  // stroke: {
+  //   show: true,
+  //   width: 2,
+  //   colors: ["transparent"],
+  // },
+  fill: {
+    opacity: 1,
+  },
+  legend: {
+    position: "top",
+    itemMargin: {
+      vertical: 20,
+    },
+  },
+  tooltip: {
+    enabled: true,
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (value) {
+        return rupiah(value);
+      },
+    },
+  },
+})
+const chartOptionsProvincePartnership = ref({
+  chart: {
+    type: "bar",
+    id: "chartProvincePartnership",
+  },
+  colors: ["#7a4790"],
+  plotOptions: {
+    bar: {
+      horizontal: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+    formatter: function (value) {
+      return rupiah(value);
+    },
+    style: {
+      fontSize: "10px",
+      fontFamily: "Helvetica, Arial, sans-serif",
+      fontWeight: "bold",
+      colors: ["#7a4790"],
+    },
+    background: {
+      enabled: true,
+      foreColor: "#fff",
+      padding: 4,
+      borderRadius: 2,
+      borderWidth: 1,
+      borderColor: "#7a4790",
+      opacity: 1,
+    },
+    offsetX: 30,
+  },
+  yaxis: {
+    labels: {
+      formatter: function (value) {
+        return suffixRupiah(value);
+      },
+    },
+  },
+  xaxis: {
+    categories: [],
+  },
+  // stroke: {
+  //   show: true,
+  //   width: 2,
+  //   colors: ["transparent"],
+  // },
   fill: {
     opacity: 1,
   },
@@ -403,6 +499,9 @@ const findProvince = async (year) => {
       seriesProvinceKKN.value[2].data = res.data.data.map(
         (province) => province.by_kkn.Malaria
       );
+      seriesProvincePartnership.value[0].data = res.data.data.map(
+        (province) => province.partnership.Budget
+      );
 
       province_table.value = []
       province_table_kkn.value = []
@@ -435,27 +534,36 @@ const findProvince = async (year) => {
         xaxis: {
           categories: res.data.data.map((province) => province.name),
         },
-        chart: {
-          height: chartHeight,
-        },
+        // chart: {
+        //   height: chartHeight,
+        // },
       });
 
       ApexCharts.getChartByID("chartProvinceUPTD").updateOptions({
         xaxis: {
           categories: res.data.data.map((province) => province.name),
         },
-        chart: {
-          height: chartHeight,
-        },
+        // chart: {
+        //   height: chartHeight,
+        // },
       });
 
       ApexCharts.getChartByID("chartProvinceKKN").updateOptions({
         xaxis: {
           categories: res.data.data.map((province) => province.name),
         },
-        chart: {
-          height: chartHeight,
+        // chart: {
+        //   height: chartHeight,
+        // },
+      });
+
+      ApexCharts.getChartByID("chartProvincePartnership").updateOptions({
+        xaxis: {
+          categories: res.data.data.map((province) => province.name),
         },
+        // chart: {
+        //   height: chartHeight,
+        // },
       });
 
       // this.seriesProvince[3].data = res.data.data.map(
