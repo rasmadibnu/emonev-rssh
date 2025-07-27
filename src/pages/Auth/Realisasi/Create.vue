@@ -10,63 +10,37 @@
           <q-markup-table flat separator="none" class="tw-h-auto">
             <tbody>
               <tr class="q-tr--no-hover">
-                <td><div class="">-</div></td>
-                <td><div class="">Pilih Tahun Anggaran</div></td>
+                <td>
+                  <div class="">-</div>
+                </td>
+                <td>
+                  <div class="">Pilih Tahun Anggaran</div>
+                </td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    dense
-                    filled
-                    v-model="year"
-                    label="Pilih Tahun"
-                    :options="list_year"
-                    @update:model-value="getForm"
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select dense filled v-model="year" label="Pilih Tahun" :options="list_year"
+                    @update:model-value="getForm" map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    dense
-                    filled
-                    v-model="year"
-                    label="Pilih Tahun"
-                    :options="list_year"
-                    @update:model-value="getForm"
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select dense filled v-model="year" label="Pilih Tahun" :options="list_year"
+                    @update:model-value="getForm" map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="q-tr--no-hover">
                 <td>-</td>
                 <td>Pilih Provinsi</td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    ref="selectProvince"
-                    dense
-                    filled
-                    v-model="auth.province"
-                    label="Pilih Provinsi"
-                    :options="list_province"
-                    @filter="filterProvince"
-                    @update:model-value="setRegencies"
-                    :disable="auth.provinces.length == 1"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select ref="selectProvince" dense filled v-model="auth.province" label="Pilih Provinsi"
+                    :options="list_province" @filter="filterProvince" @update:model-value="setRegencies"
+                    :disable="auth.provinces.length == 1" use-input map-options emit-value :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -75,47 +49,25 @@
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    ref="selectProvince"
-                    dense
-                    filled
-                    v-model="auth.province"
-                    label="Pilih Provinsi"
-                    :options="list_province"
-                    @filter="filterProvince"
-                    @update:model-value="setRegencies"
-                    :disable="auth.provinces.length == 1"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  />
+                  <q-select ref="selectProvince" dense filled v-model="auth.province" label="Pilih Provinsi"
+                    :options="list_province" @filter="filterProvince" @update:model-value="setRegencies"
+                    :disable="auth.provinces.length == 1" use-input map-options emit-value :rules="[(val) => !!val]" />
                 </td>
               </tr>
               <tr class="q-tr--no-hover">
                 <td>-</td>
                 <td>Pilih Kabupaten Kota</td>
                 <td class="md:tw-block tw-hidden">
-                  <q-select
-                    dense
-                    filled
-                    v-model="regency"
-                    label="Pilih Kabupaten Kota"
-                    :options="list_regency"
-                    @filter="filterRegency"
-                    :disable="auth.province == null"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select dense filled v-model="regency" label="Pilih Kabupaten Kota" :options="list_regency"
+                    @filter="filterRegency" :disable="auth.province == null" use-input map-options emit-value
+                    :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -124,26 +76,16 @@
               </tr>
               <tr class="tw-table-row md:tw-hidden">
                 <td colspan="100%">
-                  <q-select
-                    dense
-                    filled
-                    v-model="regency"
-                    label="Pilih Kabupaten Kota"
-                    :options="list_regency"
-                    @filter="filterRegency"
-                    :disable="auth.province == null"
-                    use-input
-                    map-options
-                    emit-value
-                    :rules="[(val) => !!val]"
-                  >
+                  <q-select dense filled v-model="regency" label="Pilih Kabupaten Kota" :options="list_regency"
+                    @filter="filterRegency" :disable="auth.province == null" use-input map-options emit-value
+                    :rules="[(val) => !!val]">
                     <template v-slot:option="scope">
                       <q-item v-bind="scope.itemProps">
                         <q-item-section>
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -162,14 +104,8 @@
                   <td>Upload Excel</td>
                   <td></td>
                   <td class="md:tw-block tw-hidden" style="height: 100%">
-                    <q-file
-                      accept=".xlsx"
-                      outlined
-                      v-model="excel"
-                      label="Upload"
-                      :loading="loadingUpload"
-                      @update:model-value="onUpload"
-                    >
+                    <q-file accept=".xlsx" outlined v-model="excel" label="Upload" :loading="loadingUpload"
+                      @update:model-value="onUpload">
                       <template #prepend>
                         <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
@@ -178,14 +114,8 @@
                 </tr>
                 <tr class="tw-table-row md:tw-hidden">
                   <td colspan="100%">
-                    <q-file
-                      accept=".xlsx"
-                      outlined
-                      v-model="excel"
-                      label="Upload"
-                      :loading="loadingUpload"
-                      @update:model-value="onUpload"
-                    >
+                    <q-file accept=".xlsx" outlined v-model="excel" label="Upload" :loading="loadingUpload"
+                      @update:model-value="onUpload">
                       <template #prepend>
                         <vx-icon iconName="DocumentUpload" :size="22" />
                       </template>
@@ -194,33 +124,14 @@
                 </tr>
               </template>
 
-              <TRInput
-                v-for="(inp, index) in fields"
-                v-model="inp.Value"
-                v-bind="{ ...inp, Index: index, Token: auth.token }"
-                :key="inp.ID"
-                @onValueEmpty="flushChilds(inp)"
-              />
+              <TRInput v-for="(inp, index) in fields" v-model="inp.Value"
+                v-bind="{ ...inp, Index: index, Token: auth.token }" :key="inp.ID" @onValueEmpty="flushChilds(inp)" />
             </tbody>
           </q-markup-table>
           <div class="tw-flex tw-justify-center tw-mt-4 tw-gap-4">
-            <q-btn
-              outline
-              color="primary"
-              unelevated
-              label="Kembali"
-              :to="{ name: 'realisasi-index' }"
-              no-caps
-              :loading="loading"
-            />
-            <q-btn
-              type="submit"
-              color="primary"
-              unelevated
-              label="Simpan"
-              no-caps
-              :loading="loading"
-            />
+            <q-btn outline color="primary" unelevated label="Kembali" :to="{ name: 'realisasi-index' }" no-caps
+              :loading="loading" />
+            <q-btn type="submit" color="primary" unelevated label="Simpan" no-caps :loading="loading" />
           </div>
         </q-form>
       </q-card-section>
@@ -333,8 +244,8 @@ export default defineComponent({
       this.$api
         .get(
           "/forms/" +
-            year +
-            '/realization?Relation={"Name": "Fields.Childs.Childs.Parent"}'
+          year +
+          '/realization?Relation={"Name": "Fields.Childs.Childs.Parent"}'
         )
         .then((res) => {
           this.fields = res.data.data.Fields.sort(
@@ -406,13 +317,22 @@ export default defineComponent({
               defval: null,
             });
 
+            console.log(data);
             data.forEach((e) => {
-              const findCode = this.fields.find(
-                (f) => f.Code == e[this.config_excel.CodeKey]
+              const findCodeAnggaran = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey] && f.Flag == "A"
               );
-              if (findCode) {
+              if (findCodeAnggaran) {
+                if (e[this.config_excel.AnggaranKey]) {
+                  findCodeAnggaran.Value = e[this.config_excel.AnggaranKey];
+                }
+              }
+              const findCodeRealisasi = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey] && f.Flag == "R"
+              );
+              if (findCodeRealisasi) {
                 if (e[this.config_excel.RealisasiKey]) {
-                  findCode.Value = e[this.config_excel.RealisasiKey];
+                  findCodeRealisasi.Value = e[this.config_excel.RealisasiKey];
                 }
               }
             });

@@ -10,137 +10,151 @@
       </div>
     </td>
   </tr>
-  <tr class="q-tr--no-hover">
-    <td>
-      {{ Code }}
-    </td>
-    <td>{{ Label }}</td>
-    <td class="md:tw-block tw-hidden" style="height: 100%">
-      <template v-if="IsRequired">
-        <q-input v-if="Type == 'currency'" filled reverse-fill-mask prefix="Rp" :class="[Readonly ? 'tw-w-56' : '']"
-          @focus="onFocus" @blur="onBlur" :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)"
-          :rules="[(val) => !!val && IsRequired]" :readonly="Readonly" />
-        <q-input v-if="Type == 'text'" dense :class="[Readonly ? 'tw-w-56' : '']" filled :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]"
-          :readonly="Readonly" />
-        <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
-          mask="##############################" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]"
-          :readonly="Readonly" />
-        <div v-else-if="Type == 'radio'" class="q-gutter-sm">
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1" label="Ya" />
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
-            label="Tidak" />
-        </div>
-        <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
-          {
-            name: 'Authorization',
-            value: 'Bearer ' + Token,
-          },
-        ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
-          @uploaded="(info) => onUploaded(info)" multiple batch label="Unggah Dokumen" />
-        <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
-          label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
-        <q-btn v-if="Type == 'dynamic'" color="primary" :label="'dawwwww'" />
-        <div v-if="Error && !modelValue" class="text-negative">
-          {{ ErrorMessage }}
-        </div>
-      </template>
-      <template v-else>
-        <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
-          prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
-          @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
-        <q-input v-if="Type == 'text'" dense filled :class="[Readonly ? 'tw-w-56' : '']" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
-        <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
-          mask="##############################" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
-        <div v-else-if="Type == 'radio'" class="q-gutter-sm">
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1" label="Ya" />
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
-            label="Tidak" />
-        </div>
-        <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
-          {
-            name: 'Authorization',
-            value: 'Bearer ' + Token,
-          },
-        ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
-          @uploaded="(info) => onUploaded(info)" multiple batch label="Unggah Dokumen" />
-        <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
-          label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
-        <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
-          :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
-        <div v-if="Error && !modelValue" class="text-negative">
-          {{ ErrorMessage }}
-        </div>
-      </template>
+  <tr class="q-tr--no-hover" v-if="Type == 'title'">
+    <td colspan="100%">
+      <div class="tw-font-bold tw-text-xl text-primary tw-my-2">
+        {{ Label }}
+      </div>
     </td>
   </tr>
-  <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
-    <td colspan="100%" style="height: 100%">
-      <template v-if="IsRequired">
-        <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
-          prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
-          @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
-        <q-input v-if="Type == 'text'" dense filled :class="[Readonly ? 'tw-w-56' : '']" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
-        <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
-          mask="##############################" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
-        <div v-else-if="Type == 'radio'" class="q-gutter-sm">
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1" label="Ya" />
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
-            label="Tidak" />
-        </div>
-        <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
-          {
-            name: 'Authorization',
-            value: 'Bearer ' + Token,
-          },
-        ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
-          @uploaded="(info) => onUploaded(info)" @failed="(info) => onFailed(info)" multiple batch
-          label="Unggah Dokumen" />
-        <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
-          label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
-        <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
-          :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
-        <div v-if="Error && !modelValue" class="text-negative">
-          {{ ErrorMessage }}
-        </div>
-      </template>
-      <template v-else>
-        <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
-          prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
-          @update:model-value="(val) => updateModelValue(val)" />
-        <q-input v-if="Type == 'text'" dense :class="[Readonly ? 'tw-w-56' : '']" filled :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" />
-        <q-input v-if="Type == 'numeric'" dense filled :class="[Readonly ? 'tw-w-56' : '']"
-          mask="##############################" :model-value="modelValue"
-          @update:model-value="(val) => updateModelValue(val)" />
-        <div v-else-if="Type == 'radio'" class="q-gutter-sm">
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1" label="Ya" />
-          <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
-            label="Tidak" />
-        </div>
-        <q-uploader v-else-if="Type == 'file'" size="sm" :url="$api_url + '/attachments'" :headers="[
-          {
-            name: 'Authorization',
-            value: 'Bearer ' + Token,
-          },
-        ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
-          @uploaded="(info) => onUploaded(info)" @failed="(info) => onFailed(info)" multiple batch
-          label="Unggah Dokumen" />
-        <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
-          label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
-        <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
-          :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
-        <div v-if="Error && !modelValue" class="text-negative">
-          {{ ErrorMessage }}
-        </div>
-      </template>
-    </td>
-  </tr>
+  <template v-else>
+    <tr class="q-tr--no-hover">
+      <td>
+        {{ Code }}
+      </td>
+      <td>{{ Label }}</td>
+      <td class="md:tw-block tw-hidden" style="height: 100%">
+        <template v-if="IsRequired">
+          <q-input v-if="Type == 'currency'" filled reverse-fill-mask prefix="Rp" :class="[Readonly ? 'tw-w-56' : '']"
+            @focus="onFocus" @blur="onBlur" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]"
+            :readonly="Readonly" />
+          <q-input v-if="Type == 'text'" dense :class="[Readonly ? 'tw-w-56' : '']" filled :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]"
+            :readonly="Readonly" />
+          <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
+            mask="##############################" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]"
+            :readonly="Readonly" />
+          <div v-else-if="Type == 'radio'" class="q-gutter-sm">
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1"
+              label="Ya" />
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
+              label="Tidak" />
+          </div>
+          <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
+            {
+              name: 'Authorization',
+              value: 'Bearer ' + Token,
+            },
+          ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
+            @uploaded="(info) => onUploaded(info)" multiple batch label="Unggah Dokumen" />
+          <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
+            label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
+          <q-btn v-if="Type == 'dynamic'" color="primary" :label="'dawwwww'" />
+          <div v-if="Error && !modelValue" class="text-negative">
+            {{ ErrorMessage }}
+          </div>
+        </template>
+        <template v-else>
+          <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
+            prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
+            @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
+          <q-input v-if="Type == 'text'" dense filled :class="[Readonly ? 'tw-w-56' : '']" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
+          <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
+            mask="##############################" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :readonly="Readonly" />
+          <div v-else-if="Type == 'radio'" class="q-gutter-sm">
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1"
+              label="Ya" />
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
+              label="Tidak" />
+          </div>
+          <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
+            {
+              name: 'Authorization',
+              value: 'Bearer ' + Token,
+            },
+          ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
+            @uploaded="(info) => onUploaded(info)" multiple batch label="Unggah Dokumen" />
+          <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
+            label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
+          <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
+            :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
+          <div v-if="Error && !modelValue" class="text-negative">
+            {{ ErrorMessage }}
+          </div>
+        </template>
+      </td>
+    </tr>
+    <tr class="q-tr--no-hover tw-table-row md:tw-hidden">
+      <td colspan="100%" style="height: 100%">
+        <template v-if="IsRequired">
+          <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
+            prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
+          <q-input v-if="Type == 'text'" dense filled :class="[Readonly ? 'tw-w-56' : '']" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
+          <q-input v-if="Type == 'numeric'" dense :class="[Readonly ? 'tw-w-56' : '']" filled
+            mask="##############################" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" :rules="[(val) => !!val && IsRequired]" />
+          <div v-else-if="Type == 'radio'" class="q-gutter-sm">
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1"
+              label="Ya" />
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
+              label="Tidak" />
+          </div>
+          <q-uploader v-else-if="Type == 'file'" :url="$api_url + '/attachments'" :headers="[
+            {
+              name: 'Authorization',
+              value: 'Bearer ' + Token,
+            },
+          ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
+            @uploaded="(info) => onUploaded(info)" @failed="(info) => onFailed(info)" multiple batch
+            label="Unggah Dokumen" />
+          <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
+            label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
+          <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
+            :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
+          <div v-if="Error && !modelValue" class="text-negative">
+            {{ ErrorMessage }}
+          </div>
+        </template>
+        <template v-else>
+          <q-input v-if="Type == 'currency'" dense filled :class="[Readonly ? 'tw-w-56' : '']" reverse-fill-mask
+            prefix="Rp" :model-value="modelValue" @focus="onFocus" @blur="onBlur"
+            @update:model-value="(val) => updateModelValue(val)" />
+          <q-input v-if="Type == 'text'" dense :class="[Readonly ? 'tw-w-56' : '']" filled :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" />
+          <q-input v-if="Type == 'numeric'" dense filled :class="[Readonly ? 'tw-w-56' : '']"
+            mask="##############################" :model-value="modelValue"
+            @update:model-value="(val) => updateModelValue(val)" />
+          <div v-else-if="Type == 'radio'" class="q-gutter-sm">
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="1"
+              label="Ya" />
+            <q-radio :model-value="modelValue" @update:model-value="(val) => updateModelValue(val)" val="0"
+              label="Tidak" />
+          </div>
+          <q-uploader v-else-if="Type == 'file'" size="sm" :url="$api_url + '/attachments'" :headers="[
+            {
+              name: 'Authorization',
+              value: 'Bearer ' + Token,
+            },
+          ]" style="max-width: 300px" flat bordered auto-upload field-name="data_files"
+            @uploaded="(info) => onUploaded(info)" @failed="(info) => onFailed(info)" multiple batch
+            label="Unggah Dokumen" />
+          <q-btn v-if="Type == 'file' && modelValue != '' && modelValue" color="secondary" padding="0" class="tw-mt-2"
+            label="Dokumen yang diunggah" icon="attachment" no-caps flat @click="list_dialog = true" />
+          <q-btn v-if="Type == 'dynamic'" color="primary" :label="Label" flat
+            :icon="clicked ? 'expand_less' : 'expand_more'" no-caps @click="clickDynamic" />
+          <div v-if="Error && !modelValue" class="text-negative">
+            {{ ErrorMessage }}
+          </div>
+        </template>
+      </td>
+    </tr>
+  </template>
   <template v-if="(modelValue && Childs) || (Type == 'dynamic' && clicked)">
     <template v-if="modelValue != '0'">
       <template v-if="clicked">
@@ -178,7 +192,7 @@
                 <q-item-label>Dokumen {{ index + 1 }}</q-item-label>
                 <q-item-label class="text-primary" caption>{{
                   file.substring(file.length, 8)
-                }}</q-item-label>
+                  }}</q-item-label>
               </q-item-section>
             </q-item>
           </template>
