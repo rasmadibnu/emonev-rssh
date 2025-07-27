@@ -40,7 +40,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -67,7 +67,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -85,7 +85,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -317,7 +317,6 @@ export default defineComponent({
               defval: null,
             });
 
-            console.log(data);
             data.forEach((e) => {
               const findCodeAnggaran = this.fields.find(
                 (f) => f.Code == e[this.config_excel.CodeKey] && f.Flag == "A"

@@ -41,7 +41,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -69,7 +69,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -87,7 +87,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -336,12 +336,20 @@ export default defineComponent({
             });
 
             data.forEach((e) => {
-              const findCode = this.fields.find(
-                (f) => f.Code == e[this.config_excel.CodeKey]
+              const findCodeAnggaran = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey] && f.Flag == "A"
               );
-              if (findCode) {
+              if (findCodeAnggaran) {
+                if (e[this.config_excel.AnggaranKey]) {
+                  findCodeAnggaran.Value = e[this.config_excel.AnggaranKey];
+                }
+              }
+              const findCodeRealisasi = this.fields.find(
+                (f) => f.Code == e[this.config_excel.CodeKey] && f.Flag == "R"
+              );
+              if (findCodeRealisasi) {
                 if (e[this.config_excel.RealisasiKey]) {
-                  findCode.Value = e[this.config_excel.RealisasiKey];
+                  findCodeRealisasi.Value = e[this.config_excel.RealisasiKey];
                 }
               }
             });
