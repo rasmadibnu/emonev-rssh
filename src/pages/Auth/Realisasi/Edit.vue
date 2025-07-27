@@ -41,7 +41,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -69,7 +69,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -87,7 +87,7 @@
                           <q-item-label>{{ scope.opt.label }}</q-item-label>
                           <q-item-label caption>{{
                             scope.opt.province
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
@@ -199,9 +199,10 @@ export default defineComponent({
           this.auth.province = res.data.data.RegencyCity.ProvinceID;
           this.auth.setRegencies(res.data.data.RegencyCity.ProvinceID);
           this.list_regency = this.auth.regency;
-          this.fields = res.data.data.FieldResponse.map((e) => {
-            return { Value: e.Value, ResponseFieldID: e.ID, ...e.Field };
-          }).sort((a, b) => a.SortOrder - b.SortOrder);
+          this.getForm(this.year, res.data.data.FieldResponse);
+          // this.fields = res.data.data.FieldResponse.map((e) => {
+          //   return { Value: e.Value, ResponseFieldID: e.ID, ...e.Field };
+          // }).sort((a, b) => a.SortOrder - b.SortOrder);
         })
         .catch((err) => {
           console.log(err);
@@ -253,13 +254,16 @@ export default defineComponent({
         );
       });
     },
-    getForm(val) {
+    getForm(val, answer) {
       this.loading = true;
       const year = this.list_year.find((year) => year.value == val).label;
       this.$api
         .get("/forms/" + year + '/realization?Relation={"Name": "Fields"}')
         .then((res) => {
-          this.fields = res.data.data.Fields.Fields.sort(
+          this.fields = res.data.data.Fields.map((item) => {
+            const findCode = answer.find((ans) => ans.Field.ID === item.ID)
+            return { Value: findCode?.Value, ResponseFieldID: findCode?.ID, ...item }
+          }).sort(
             (a, b) => a.SortOrder - b.SortOrder
           );
           this.loading = false;
