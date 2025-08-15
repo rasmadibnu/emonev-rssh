@@ -136,7 +136,7 @@ const chartAllOptions = ref({
               <div>
                 Presentase: ${parseFloat(
         series[seriesIndex][dataPointIndex]
-      ).toFixed(0)}%
+      ).toFixed(2)}%
               </div>
               <div>
                 Jumlah: ${w.globals.collapsedSeries[0]?.data[dataPointIndex]}
@@ -636,7 +636,7 @@ const findPartnership = async (val) => {
         xaxis: {
           labels: {
             formatter: function (value) {
-              return `${parseFloat(value).toFixed(0)}%`;
+              return `${parseFloat(value).toFixed(2)}%`;
             },
           },
           categories: categories,
