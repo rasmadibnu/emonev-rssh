@@ -17,7 +17,7 @@ COPY . .
 
 
 # Build for SPA production
-RUN yarn quasar build
+RUN npx quasar build
 
 # Production stage
 FROM nginx:stable-alpine
