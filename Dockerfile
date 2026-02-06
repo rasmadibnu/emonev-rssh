@@ -1,19 +1,15 @@
 # Build stage
 FROM node:22-alpine AS builder
 
-ENV NODE_OPTIONS=--dns-result-order=ipv4first
 
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates \
- && update-ca-certificates
-
 # Copy package files
-COPY package.json yarn.lock ./
+COPY package.json ./
 
-RUN yarn config set registry https://registry.npmjs.org \
- && yarn config set network-timeout 600000 \
- && yarn install --frozen-lockfile
+RUN npm config set registry https://registry.npmjs.org \
+ && npm install --no-audit --no-fund
+
 
 
 # Copy application code
