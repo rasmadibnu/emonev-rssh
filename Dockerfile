@@ -1,15 +1,16 @@
 # Build stage
-FROM node:22-alpine AS builder
-
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
 # Copy package files
-COPY package.json ./
+COPY package.json yarn.lock ./
 
-RUN npm config set registry https://registry.npmjs.org \
- && npm install --no-audit --no-fund
+# Install dependencies
+RUN yarn install
 
+# Install dependencies (locked & reproducible)
+RUN yarn install --frozen-lockfile
 
 
 # Copy application code
@@ -17,7 +18,7 @@ COPY . .
 
 
 # Build for SPA production
-RUN npx quasar build
+RUN yarn quasar build
 
 # Production stage
 FROM nginx:stable-alpine
