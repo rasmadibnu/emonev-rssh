@@ -5,6 +5,9 @@ ENV NODE_OPTIONS=--dns-result-order=ipv4first
 
 WORKDIR /app
 
+RUN apk add --no-cache ca-certificates \
+ && update-ca-certificates
+
 # Copy package files
 COPY package.json yarn.lock ./
 
