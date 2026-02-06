@@ -16,6 +16,8 @@ RUN yarn install --frozen-lockfile
 # Copy application code
 COPY . .
 
+COPY .env .
+
 # Build for SPA production
 RUN yarn quasar build
 
