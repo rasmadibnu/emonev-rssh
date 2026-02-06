@@ -1,16 +1,16 @@
 # Build stage
 FROM node:22-alpine AS builder
 
+ENV NODE_OPTIONS=--dns-result-order=ipv4first
+
 WORKDIR /app
 
 # Copy package files
 COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN yarn install
-
-# Install dependencies (locked & reproducible)
-RUN yarn install --frozen-lockfile
+RUN yarn config set registry https://registry.npmjs.org \
+ && yarn config set network-timeout 600000 \
+ && yarn install --frozen-lockfile
 
 
 # Copy application code
