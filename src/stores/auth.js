@@ -43,9 +43,10 @@ export const useAuthStore = defineStore("auth", {
           this.regency_ids = res.data.data.Group.Details.map(
             (e) => e.RegencyCityID
           );
+          return api.get("/menus");
         })
         .then((res) => {
-          this.setMenus();
+          this.setMenus(res.data.data);
           this.setProvince();
         })
         .catch((err) => {
@@ -68,48 +69,61 @@ export const useAuthStore = defineStore("auth", {
       return this.menus.map((e) => e.Url).includes(name);
     },
 
-    setMenus() {
+    sortMenus(items = []) {
+      return [...items]
+        .sort((a, b) => (a.Ord || 0) - (b.Ord || 0))
+        .map((item) => ({
+          ...item,
+          Childs: this.sortMenus(item.Childs || []),
+        }));
+    },
+
+    collectAssignedMenuIds(childs = [], ids = new Set()) {
+      childs.forEach((child) => {
+        ids.add(child.ID);
+        if (child.Childs?.length > 0) {
+          this.collectAssignedMenuIds(child.Childs, ids);
+        }
+      });
+
+      return ids;
+    },
+
+    filterMenusByPermission(menus = [], assignedIds = new Set()) {
+      return menus.reduce((filtered, menu) => {
+        const childs = this.filterMenusByPermission(
+          menu.Childs || [],
+          assignedIds
+        );
+
+        if (assignedIds.has(menu.ID) || childs.length > 0) {
+          filtered.push({
+            ...menu,
+            Childs: childs,
+          });
+        }
+
+        return filtered;
+      }, []);
+    },
+
+    setMenus(allMenus = []) {
       this.menus = [];
       const raw_menus = [];
-      const menus = [];
+      const assignedIds = new Set();
 
       this.user.Roles.forEach((role) => {
         role?.Menus?.forEach((menu) => {
           raw_menus.push(menu);
-          const findMenu = menus.findIndex((e) => e.ID === menu.ID);
-          if (findMenu == -1) {
-            menus.push(menu);
-          }
+          assignedIds.add(menu.ID);
+          this.collectAssignedMenuIds(menu.Childs || [], assignedIds);
         });
       });
 
       this.raw_menus = raw_menus;
-
-      menus.forEach((item) => {
-        if (item.ParentID === 0) {
-          // If parent_id is 0, it is a top-level item
-          this.menus.push(item);
-        } else {
-          // Find the parent in the organized data
-          const parent = this.menus.find(
-            (parentItem) => parentItem.ID === item.ParentID
-          );
-
-          if (parent) {
-            // If the parent is found, append the item to its children
-
-            if (!parent.Childs) {
-              parent.Childs = [];
-            }
-            const find = parent.Childs.find((child) => child.ID == item.ID);
-            if (!find) {
-              parent.Childs.push(item);
-            }
-          }
-        }
-      });
-
-      this.menus = this.menus.sort((a, b) => a.Ord - b.Ord);
+      this.menus = this.sortMenus(
+        this.filterMenusByPermission(allMenus, assignedIds)
+      );
     },
 
     setProvince() {

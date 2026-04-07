@@ -131,6 +131,7 @@
             clickable
             class="tw-px-2 text-primary"
             @click="toggleAdministrator"
+            v-if="hasAdministratorMenu"
           >
             <q-item-section avatar>
               <vx-icon iconName="ArrowLeft2" :size="24" />
@@ -143,9 +144,7 @@
 
           <essential-link
             class="tw-px-8 tw-text-gray-400"
-            v-for="menu in authStore.menus.filter(
-              (e) => e.Code == 'administrator'
-            )[0].Childs"
+            v-for="menu in administratorChilds"
             v-bind="menu"
             v-bind:key="menu"
           />
@@ -263,17 +262,50 @@ export default defineComponent({
   mounted() {
     this.is_administrator =
       localStorage.getItem("is_open") == "true" ? true : false;
+    this.syncAdministratorState();
+  },
+  watch: {
+    "authStore.menus": {
+      handler() {
+        this.syncAdministratorState();
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    administratorMenus() {
+      return this.authStore.menus.filter((e) => e.Code == "administrator");
+    },
+    hasAdministratorMenu() {
+      return this.administratorMenus.length > 0;
+    },
+    administratorChilds() {
+      return this.administratorMenus[0]?.Childs || [];
+    },
   },
   methods: {
     logout() {
       localStorage.removeItem("token");
+      localStorage.removeItem("is_open");
       this.authStore.token = null;
       this.$router.push({ name: "login" });
     },
 
     toggleAdministrator() {
+      if (!this.hasAdministratorMenu) {
+        this.is_administrator = false;
+        localStorage.setItem("is_open", false);
+        return;
+      }
+
       this.is_administrator = !this.is_administrator;
       localStorage.setItem("is_open", this.is_administrator);
+    },
+    syncAdministratorState() {
+      if (!this.hasAdministratorMenu && this.is_administrator) {
+        this.is_administrator = false;
+        localStorage.setItem("is_open", false);
+      }
     },
   },
 });
